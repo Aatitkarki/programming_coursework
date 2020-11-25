@@ -1,3 +1,8 @@
+
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -26,21 +31,272 @@ public class DashboardPage extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDialogAbout = new javax.swing.JDialog();
+        lblAbt = new javax.swing.JLabel();
+        panelBg = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        btnSales = new javax.swing.JButton();
+        btnInventory = new javax.swing.JButton();
+        btnNew = new javax.swing.JButton();
+        btnInvoice = new javax.swing.JButton();
+        btnVendor = new javax.swing.JButton();
+        btnVendor1 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTblInventory = new javax.swing.JTable();
+        mnuBarEmployee = new javax.swing.JMenuBar();
+        jMnuFile = new javax.swing.JMenu();
+        jMnuItmNew = new javax.swing.JMenuItem();
+        jMnuItmOpen = new javax.swing.JMenuItem();
+        jMnuItmSave = new javax.swing.JMenuItem();
+        jMnuItmSaveAs = new javax.swing.JMenuItem();
+        jMnuTools = new javax.swing.JMenu();
+        jMnuAbt = new javax.swing.JMenu();
+        jMnuItmAbout = new javax.swing.JMenuItem();
+        jMnuItmExit = new javax.swing.JMenuItem();
+
+        jDialogAbout.setTitle("About");
+
+        lblAbt.setText("<html><center>Mobile Inventory Management<br>Developed by:<br>Anish Chaudhary<br>Ashesh Rai<br>Roshani Karki<br>Suresh Karki</center></html>");
+
+        javax.swing.GroupLayout jDialogAboutLayout = new javax.swing.GroupLayout(jDialogAbout.getContentPane());
+        jDialogAbout.getContentPane().setLayout(jDialogAboutLayout);
+        jDialogAboutLayout.setHorizontalGroup(
+            jDialogAboutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialogAboutLayout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(lblAbt)
+                .addContainerGap(50, Short.MAX_VALUE))
+        );
+        jDialogAboutLayout.setVerticalGroup(
+            jDialogAboutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialogAboutLayout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(lblAbt)
+                .addContainerGap(97, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Mobile Inventory Management");
+        setBackground(new java.awt.Color(255, 250, 250));
+
+        panelBg.setBackground(new java.awt.Color(0, 0, 51));
+
+        jPanel1.setBackground(new java.awt.Color(0, 0, 51));
+        jPanel1.setForeground(new java.awt.Color(0, 0, 102));
+
+        btnSales.setBackground(new java.awt.Color(0, 0, 51));
+        btnSales.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btnSales.setForeground(new java.awt.Color(255, 255, 255));
+        btnSales.setText("Sales");
+        btnSales.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        btnInventory.setBackground(new java.awt.Color(0, 0, 51));
+        btnInventory.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btnInventory.setForeground(new java.awt.Color(255, 255, 255));
+        btnInventory.setText("Inventory");
+        btnInventory.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        btnNew.setBackground(new java.awt.Color(0, 0, 51));
+        btnNew.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btnNew.setForeground(new java.awt.Color(255, 255, 255));
+        btnNew.setText("Add");
+        btnNew.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        btnInvoice.setBackground(new java.awt.Color(0, 0, 51));
+        btnInvoice.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btnInvoice.setForeground(new java.awt.Color(255, 255, 255));
+        btnInvoice.setText("Invoice");
+        btnInvoice.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        btnVendor.setBackground(new java.awt.Color(0, 0, 51));
+        btnVendor.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btnVendor.setForeground(new java.awt.Color(255, 255, 255));
+        btnVendor.setText("Logout");
+        btnVendor.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVendor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVendorActionPerformed(evt);
+            }
+        });
+
+        btnVendor1.setBackground(new java.awt.Color(0, 0, 51));
+        btnVendor1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btnVendor1.setForeground(new java.awt.Color(255, 255, 255));
+        btnVendor1.setText("Vendor");
+        btnVendor1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(22, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSales, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnInventory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnVendor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnVendor1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnNew)
+                .addGap(25, 25, 25)
+                .addComponent(btnSales)
+                .addGap(25, 25, 25)
+                .addComponent(btnInvoice)
+                .addGap(25, 25, 25)
+                .addComponent(btnInventory)
+                .addGap(25, 25, 25)
+                .addComponent(btnVendor1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addComponent(btnVendor)
+                .addContainerGap())
+        );
+
+        jTblInventory.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Model Number", "Name", "Brand", "OS", "Range", "Cost", "Discount"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTblInventory);
+
+        javax.swing.GroupLayout panelBgLayout = new javax.swing.GroupLayout(panelBg);
+        panelBg.setLayout(panelBgLayout);
+        panelBgLayout.setHorizontalGroup(
+            panelBgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBgLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 674, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelBgLayout.setVerticalGroup(
+            panelBgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBgLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelBgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(panelBgLayout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 20, Short.MAX_VALUE))))
+        );
+
+        jMnuFile.setText("File");
+
+        jMnuItmNew.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        jMnuItmNew.setText("New");
+        jMnuFile.add(jMnuItmNew);
+
+        jMnuItmOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        jMnuItmOpen.setText("Open");
+        jMnuItmOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMnuItmOpenActionPerformed(evt);
+            }
+        });
+        jMnuFile.add(jMnuItmOpen);
+
+        jMnuItmSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        jMnuItmSave.setText("Save");
+        jMnuFile.add(jMnuItmSave);
+
+        jMnuItmSaveAs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMnuItmSaveAs.setText("Save As");
+        jMnuFile.add(jMnuItmSaveAs);
+
+        mnuBarEmployee.add(jMnuFile);
+
+        jMnuTools.setText("Tools");
+        mnuBarEmployee.add(jMnuTools);
+
+        jMnuAbt.setText("About");
+
+        jMnuItmAbout.setText("About");
+        jMnuItmAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMnuItmAboutActionPerformed(evt);
+            }
+        });
+        jMnuAbt.add(jMnuItmAbout);
+
+        jMnuItmExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMnuItmExit.setText("Exit");
+        jMnuItmExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMnuItmExitActionPerformed(evt);
+            }
+        });
+        jMnuAbt.add(jMnuItmExit);
+
+        mnuBarEmployee.add(jMnuAbt);
+
+        setJMenuBar(mnuBarEmployee);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(panelBg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(panelBg, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMnuItmExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmExitActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_jMnuItmExitActionPerformed
+
+    private void jMnuItmAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmAboutActionPerformed
+        // TODO add your handling code here:
+        jDialogAbout.setLocationRelativeTo(null);
+        jDialogAbout.setSize(300,200);
+        
+        jDialogAbout.setVisible(true);
+    }//GEN-LAST:event_jMnuItmAboutActionPerformed
+
+    private void jMnuItmOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmOpenActionPerformed
+        // TODO add your handling code here:
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("csv", "txt");
+        JFileChooser jChooser = new JFileChooser();
+        jChooser.setDialogTitle("Open");
+        jChooser.setAcceptAllFileFilterUsed(false);
+        jChooser.setFileFilter(filter);
+        jChooser.showOpenDialog(null);
+        
+        File file = jChooser.getSelectedFile();
+        String filename = file.getAbsolutePath();
+    }//GEN-LAST:event_jMnuItmOpenActionPerformed
+
+    private void btnVendorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendorActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_btnVendorActionPerformed
 
     /**
      * @param args the command line arguments
@@ -78,5 +334,27 @@ public class DashboardPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnInventory;
+    private javax.swing.JButton btnInvoice;
+    private javax.swing.JButton btnNew;
+    private javax.swing.JButton btnSales;
+    private javax.swing.JButton btnVendor;
+    private javax.swing.JButton btnVendor1;
+    private javax.swing.JDialog jDialogAbout;
+    private javax.swing.JMenu jMnuAbt;
+    private javax.swing.JMenu jMnuFile;
+    private javax.swing.JMenuItem jMnuItmAbout;
+    private javax.swing.JMenuItem jMnuItmExit;
+    private javax.swing.JMenuItem jMnuItmNew;
+    private javax.swing.JMenuItem jMnuItmOpen;
+    private javax.swing.JMenuItem jMnuItmSave;
+    private javax.swing.JMenuItem jMnuItmSaveAs;
+    private javax.swing.JMenu jMnuTools;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTblInventory;
+    private javax.swing.JLabel lblAbt;
+    private javax.swing.JMenuBar mnuBarEmployee;
+    private javax.swing.JPanel panelBg;
     // End of variables declaration//GEN-END:variables
 }
