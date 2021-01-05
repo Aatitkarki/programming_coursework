@@ -1111,11 +1111,9 @@ public class DashboardPage extends javax.swing.JFrame {
 
     private void btnVendorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendorActionPerformed
         dispose();
-<<<<<<< HEAD
-        LoginPage login = new LoginPage();
-=======
-        new Login().setVisible(true);
->>>>>>> f5a63f83838c97398b0ae9452f3c5310bcaa19c9
+//        LoginPage login = new LoginPage();
+//
+//        new Login().setVisible(true);
     }//GEN-LAST:event_btnVendorActionPerformed
 
     private void jMnuItmSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmSaveAsActionPerformed
@@ -1240,7 +1238,7 @@ public class DashboardPage extends javax.swing.JFrame {
         tfModelName.setText(null);
         comboBrand.setSelectedIndex(0);
         comboOs.setSelectedIndex(0);
-        btnGrpRange.clearSelection();
+//        btnGrpRange.clearSelection();
         radioBtnHigh.setSelected(true);
         tfCostPrice.setText(null);
         tfSellingPrice.setText(null);
@@ -1623,7 +1621,10 @@ public class DashboardPage extends javax.swing.JFrame {
                 }
                 else {
                     emptyRowFlag = true;
-                }
+                } 
+//                LoginPage login = new LoginPage();
+//
+//       
             }   while(nextRow < rowCount && !emptyRowFlag);
             if(nextRow < rowCount) {
                 int colCount = tblInventory.getColumnCount();
