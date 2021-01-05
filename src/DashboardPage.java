@@ -1,6 +1,14 @@
 
+import java.awt.Toolkit;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.TimerTask;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import java.util.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /*
@@ -14,11 +22,17 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author suresh
  */
 public class DashboardPage extends javax.swing.JFrame {
-
+    int indexEditInv;
+    boolean tableSelection = true;
+    String path = "";
+    private ArrayList <InventoryManagement> arraylistInventory = new ArrayList <InventoryManagement> ();
+    private ArrayList <Sales> arraylistSales = new ArrayList <Sales> ();
+    
     /**
      * Creates new form DashboardPage
      */
     public DashboardPage() {
+        setIcon();
         initComponents();
     }
 
@@ -33,19 +47,95 @@ public class DashboardPage extends javax.swing.JFrame {
 
         jDialogAbout = new javax.swing.JDialog();
         lblAbt = new javax.swing.JLabel();
+        frameAddInventory = new javax.swing.JFrame();
+        panelAddInventory = new javax.swing.JPanel();
+        lblModelNo = new javax.swing.JLabel();
+        lblModelName = new javax.swing.JLabel();
+        lblBrand = new javax.swing.JLabel();
+        lblOS = new javax.swing.JLabel();
+        lblRange = new javax.swing.JLabel();
+        lblCostPrice = new javax.swing.JLabel();
+        lblSellingPrice = new javax.swing.JLabel();
+        tfModelNo = new javax.swing.JTextField();
+        tfModelName = new javax.swing.JTextField();
+        comboBrand = new javax.swing.JComboBox<>();
+        comboOs = new javax.swing.JComboBox<>();
+        radioBtnHigh = new javax.swing.JRadioButton();
+        radioBtnMid = new javax.swing.JRadioButton();
+        radioBtnLow = new javax.swing.JRadioButton();
+        tfCostPrice = new javax.swing.JTextField();
+        jButtonAddInventory = new javax.swing.JButton();
+        jButtonClearInventory = new javax.swing.JButton();
+        lblQuantity = new javax.swing.JLabel();
+        tfQuantity = new javax.swing.JTextField();
+        tfSellingPrice = new javax.swing.JTextField();
+        frameAddSales = new javax.swing.JFrame();
+        panelAddSales = new javax.swing.JPanel();
+        lblCust = new javax.swing.JLabel();
+        lblDate = new javax.swing.JLabel();
+        lblModelNoSales = new javax.swing.JLabel();
+        lblBrandSales = new javax.swing.JLabel();
+        lblSalePrice = new javax.swing.JLabel();
+        tfCustomer = new javax.swing.JTextField();
+        tfDate = new javax.swing.JTextField();
+        tfQuantitySales = new javax.swing.JTextField();
+        jBtnAddSales = new javax.swing.JButton();
+        jBtnClearSales = new javax.swing.JButton();
+        tfBrandSales = new javax.swing.JTextField();
+        tfModelNumberSales = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        tfSales = new javax.swing.JTextField();
+        frameSearch = new javax.swing.JFrame();
+        panelSearch = new javax.swing.JPanel();
+        lblSearch = new javax.swing.JLabel();
+        tfSearch = new javax.swing.JTextField();
+        radioBtnCostPrice = new javax.swing.JRadioButton();
+        jButtonSearchArray = new javax.swing.JButton();
+        jButtonSearchCancel = new javax.swing.JButton();
+        frameEditInventory = new javax.swing.JFrame();
+        panelEditInventory = new javax.swing.JPanel();
+        lblEditInvModelNo = new javax.swing.JLabel();
+        lblEditInvModelName = new javax.swing.JLabel();
+        lblEditInvBrand = new javax.swing.JLabel();
+        lblEditInvOS = new javax.swing.JLabel();
+        lblEditInvRange = new javax.swing.JLabel();
+        lblEditInvCostPrice = new javax.swing.JLabel();
+        lblEditInvSellingPrice = new javax.swing.JLabel();
+        tfEditInvModelNo = new javax.swing.JTextField();
+        tfEditInvModelName = new javax.swing.JTextField();
+        comboEditInvBrand = new javax.swing.JComboBox<>();
+        comboEditInvOs = new javax.swing.JComboBox<>();
+        radioBtnEditInvHigh = new javax.swing.JRadioButton();
+        radioBtnEditInvMid = new javax.swing.JRadioButton();
+        radioBtnEditInvLow = new javax.swing.JRadioButton();
+        tfEditInvCostPrice = new javax.swing.JTextField();
+        jButtonEditInventorySave = new javax.swing.JButton();
+        jButtonEditInventoryCancel = new javax.swing.JButton();
+        lblEditInvQuantity = new javax.swing.JLabel();
+        tfEditInvQuantity = new javax.swing.JTextField();
+        tfEditInvSellingPrice = new javax.swing.JTextField();
+        lblEditInvMsg = new javax.swing.JLabel();
+        btnGrpEditInventory = new javax.swing.ButtonGroup();
+        btnGrpAddInventory = new javax.swing.ButtonGroup();
         panelBg = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        btnSales = new javax.swing.JButton();
-        btnInventory = new javax.swing.JButton();
-        btnNew = new javax.swing.JButton();
+        panelButtons = new javax.swing.JPanel();
+        btnEdit = new javax.swing.JButton();
         btnInvoice = new javax.swing.JButton();
+        btnNew = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
         btnVendor = new javax.swing.JButton();
-        btnVendor1 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTblInventory = new javax.swing.JTable();
+        btnSearch = new javax.swing.JButton();
+        tabbedPaneTbl = new javax.swing.JTabbedPane();
+        tblPnlInventory = new javax.swing.JPanel();
+        scrlPaneInventory = new javax.swing.JScrollPane();
+        tblInventory = new javax.swing.JTable();
+        tblPnlSales = new javax.swing.JPanel();
+        scrlPaneSales = new javax.swing.JScrollPane();
+        tblSales = new javax.swing.JTable();
         mnuBarEmployee = new javax.swing.JMenuBar();
         jMnuFile = new javax.swing.JMenu();
         jMnuItmNew = new javax.swing.JMenuItem();
+        jMnuItmImport = new javax.swing.JMenuItem();
         jMnuItmOpen = new javax.swing.JMenuItem();
         jMnuItmSave = new javax.swing.JMenuItem();
         jMnuItmSaveAs = new javax.swing.JMenuItem();
@@ -75,38 +165,682 @@ public class DashboardPage extends javax.swing.JFrame {
                 .addContainerGap(97, Short.MAX_VALUE))
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        frameAddInventory.setTitle("Add an entry");
+        frameAddInventory.setAlwaysOnTop(true);
+        frameAddInventory.setMinimumSize(new java.awt.Dimension(400, 480));
+        frameAddInventory.setPreferredSize(new java.awt.Dimension(400, 480));
+        frameAddInventory.setResizable(false);
+
+        panelAddInventory.setBackground(new java.awt.Color(0, 0, 51));
+        panelAddInventory.setForeground(new java.awt.Color(255, 255, 255));
+
+        lblModelNo.setForeground(new java.awt.Color(255, 255, 255));
+        lblModelNo.setText("Model Number :");
+
+        lblModelName.setForeground(new java.awt.Color(255, 255, 255));
+        lblModelName.setText("Model Name :");
+
+        lblBrand.setForeground(new java.awt.Color(255, 255, 255));
+        lblBrand.setText("Brand :");
+
+        lblOS.setForeground(new java.awt.Color(255, 255, 255));
+        lblOS.setText("Operating System :");
+
+        lblRange.setForeground(new java.awt.Color(255, 255, 255));
+        lblRange.setText("Range :");
+
+        lblCostPrice.setForeground(new java.awt.Color(255, 255, 255));
+        lblCostPrice.setText("Cost Price :");
+
+        lblSellingPrice.setForeground(new java.awt.Color(255, 255, 255));
+        lblSellingPrice.setText("Selling Price :");
+        lblSellingPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                lblSellingPriceKeyTyped(evt);
+            }
+        });
+
+        comboBrand.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Samsung", "Apple", "Huawei", "Motorola", "Sony" }));
+        comboBrand.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBrandActionPerformed(evt);
+            }
+        });
+
+        comboOs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "iOS", "Android", "Symbian", "Others" }));
+
+        btnGrpAddInventory.add(radioBtnHigh);
+        radioBtnHigh.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnHigh.setSelected(true);
+        radioBtnHigh.setText("High");
+
+        btnGrpAddInventory.add(radioBtnMid);
+        radioBtnMid.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnMid.setText("Mid");
+
+        btnGrpAddInventory.add(radioBtnLow);
+        radioBtnLow.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnLow.setText("Low");
+
+        tfCostPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfCostPriceKeyTyped(evt);
+            }
+        });
+
+        jButtonAddInventory.setBackground(new java.awt.Color(0, 0, 51));
+        jButtonAddInventory.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonAddInventory.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonAddInventory.setText("Add");
+        jButtonAddInventory.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonAddInventory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddInventoryActionPerformed(evt);
+            }
+        });
+
+        jButtonClearInventory.setBackground(new java.awt.Color(0, 0, 51));
+        jButtonClearInventory.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonClearInventory.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonClearInventory.setText("Clear");
+        jButtonClearInventory.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonClearInventory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonClearInventoryActionPerformed(evt);
+            }
+        });
+
+        lblQuantity.setForeground(new java.awt.Color(255, 255, 255));
+        lblQuantity.setText("Quantity :");
+
+        tfQuantity.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfQuantityKeyTyped(evt);
+            }
+        });
+
+        tfSellingPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfSellingPriceKeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelAddInventoryLayout = new javax.swing.GroupLayout(panelAddInventory);
+        panelAddInventory.setLayout(panelAddInventoryLayout);
+        panelAddInventoryLayout.setHorizontalGroup(
+            panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAddInventoryLayout.createSequentialGroup()
+                .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelAddInventoryLayout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblModelNo)
+                            .addComponent(lblModelName)
+                            .addComponent(lblRange)
+                            .addComponent(lblCostPrice)
+                            .addComponent(lblSellingPrice)
+                            .addComponent(lblBrand)
+                            .addComponent(lblOS)
+                            .addComponent(lblQuantity))
+                        .addGap(35, 35, 35))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAddInventoryLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButtonAddInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(14, 14, 14)))
+                .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tfModelNo)
+                    .addComponent(tfCostPrice)
+                    .addComponent(comboBrand, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tfModelName)
+                    .addGroup(panelAddInventoryLayout.createSequentialGroup()
+                        .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelAddInventoryLayout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(jButtonClearInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelAddInventoryLayout.createSequentialGroup()
+                                .addComponent(radioBtnHigh, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(radioBtnMid)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(radioBtnLow))
+                            .addComponent(comboOs, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(tfQuantity)
+                    .addComponent(tfSellingPrice, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(70, 70, 70))
+        );
+        panelAddInventoryLayout.setVerticalGroup(
+            panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAddInventoryLayout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panelAddInventoryLayout.createSequentialGroup()
+                        .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(panelAddInventoryLayout.createSequentialGroup()
+                                .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblModelNo)
+                                    .addComponent(tfModelNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(20, 20, 20)
+                                .addComponent(lblModelName))
+                            .addComponent(tfModelName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblBrand)
+                            .addComponent(comboBrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblOS)
+                            .addComponent(comboOs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblRange)
+                            .addComponent(radioBtnHigh)
+                            .addComponent(radioBtnMid)
+                            .addComponent(radioBtnLow))
+                        .addGap(20, 20, 20)
+                        .addComponent(lblCostPrice))
+                    .addComponent(tfCostPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelAddInventoryLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblSellingPrice)
+                            .addComponent(tfSellingPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblQuantity)
+                            .addComponent(tfQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(50, 50, 50))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAddInventoryLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonAddInventory)
+                            .addComponent(jButtonClearInventory))
+                        .addContainerGap())))
+        );
+
+        javax.swing.GroupLayout frameAddInventoryLayout = new javax.swing.GroupLayout(frameAddInventory.getContentPane());
+        frameAddInventory.getContentPane().setLayout(frameAddInventoryLayout);
+        frameAddInventoryLayout.setHorizontalGroup(
+            frameAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelAddInventory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        frameAddInventoryLayout.setVerticalGroup(
+            frameAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelAddInventory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        frameAddSales.setTitle("Add an entry");
+        frameAddSales.setAlwaysOnTop(true);
+        frameAddSales.setMinimumSize(new java.awt.Dimension(398, 375));
+        frameAddSales.setResizable(false);
+
+        panelAddSales.setBackground(new java.awt.Color(0, 0, 51));
+        panelAddSales.setForeground(new java.awt.Color(255, 255, 255));
+
+        lblCust.setForeground(new java.awt.Color(255, 255, 255));
+        lblCust.setText("Customer :");
+
+        lblDate.setForeground(new java.awt.Color(255, 255, 255));
+        lblDate.setText("Date :");
+
+        lblModelNoSales.setForeground(new java.awt.Color(255, 255, 255));
+        lblModelNoSales.setText("Model Number :");
+
+        lblBrandSales.setForeground(new java.awt.Color(255, 255, 255));
+        lblBrandSales.setText("Brand :");
+
+        lblSalePrice.setForeground(new java.awt.Color(255, 255, 255));
+        lblSalePrice.setText("Total:");
+
+        tfDate.setToolTipText("dd-mm-yy (e.g.22-10-2010 )");
+        tfDate.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfDateKeyTyped(evt);
+            }
+        });
+
+        tfQuantitySales.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfQuantitySalesKeyTyped(evt);
+            }
+        });
+
+        jBtnAddSales.setBackground(new java.awt.Color(0, 0, 51));
+        jBtnAddSales.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jBtnAddSales.setForeground(new java.awt.Color(255, 255, 255));
+        jBtnAddSales.setText("Add");
+        jBtnAddSales.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        jBtnClearSales.setBackground(new java.awt.Color(0, 0, 51));
+        jBtnClearSales.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jBtnClearSales.setForeground(new java.awt.Color(255, 255, 255));
+        jBtnClearSales.setText("Clear");
+        jBtnClearSales.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jBtnClearSales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnClearSalesActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Quantity :");
+
+        tfSales.setEditable(false);
+
+        javax.swing.GroupLayout panelAddSalesLayout = new javax.swing.GroupLayout(panelAddSales);
+        panelAddSales.setLayout(panelAddSalesLayout);
+        panelAddSalesLayout.setHorizontalGroup(
+            panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAddSalesLayout.createSequentialGroup()
+                .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelAddSalesLayout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblCust)
+                            .addComponent(lblDate)
+                            .addComponent(lblModelNoSales)
+                            .addComponent(lblBrandSales)
+                            .addComponent(jLabel1)
+                            .addComponent(lblSalePrice))
+                        .addGap(35, 35, 35))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAddSalesLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jBtnAddSales, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(14, 14, 14)))
+                .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tfCustomer)
+                    .addComponent(tfQuantitySales)
+                    .addComponent(tfDate)
+                    .addGroup(panelAddSalesLayout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(jBtnClearSales, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 77, Short.MAX_VALUE))
+                    .addComponent(tfBrandSales, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(tfModelNumberSales)
+                    .addComponent(tfSales))
+                .addGap(70, 70, 70))
+        );
+        panelAddSalesLayout.setVerticalGroup(
+            panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAddSalesLayout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panelAddSalesLayout.createSequentialGroup()
+                        .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(panelAddSalesLayout.createSequentialGroup()
+                                .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblCust)
+                                    .addComponent(tfCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(20, 20, 20)
+                                .addComponent(lblDate))
+                            .addComponent(tfDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(17, 17, 17)
+                        .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblModelNoSales)
+                            .addComponent(tfModelNumberSales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(17, 17, 17)
+                        .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblBrandSales)
+                            .addComponent(tfBrandSales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(17, 17, 17)
+                        .addComponent(tfQuantitySales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1))
+                .addGap(17, 17, 17)
+                .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(tfSales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblSalePrice))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 104, Short.MAX_VALUE)
+                .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jBtnAddSales)
+                    .addComponent(jBtnClearSales))
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout frameAddSalesLayout = new javax.swing.GroupLayout(frameAddSales.getContentPane());
+        frameAddSales.getContentPane().setLayout(frameAddSalesLayout);
+        frameAddSalesLayout.setHorizontalGroup(
+            frameAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelAddSales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        frameAddSalesLayout.setVerticalGroup(
+            frameAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelAddSales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        frameSearch.setTitle("Search");
+        frameSearch.setMinimumSize(new java.awt.Dimension(290, 210));
+        frameSearch.setResizable(false);
+
+        panelSearch.setBackground(new java.awt.Color(0, 0, 51));
+
+        lblSearch.setForeground(new java.awt.Color(255, 255, 255));
+        lblSearch.setText("Search :");
+
+        radioBtnCostPrice.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnCostPrice.setText("Cost Price");
+
+        jButtonSearchArray.setBackground(new java.awt.Color(0, 0, 51));
+        jButtonSearchArray.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonSearchArray.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonSearchArray.setText("Search");
+        jButtonSearchArray.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSearchArrayActionPerformed(evt);
+            }
+        });
+
+        jButtonSearchCancel.setBackground(new java.awt.Color(0, 0, 51));
+        jButtonSearchCancel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonSearchCancel.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonSearchCancel.setText("Cancel");
+
+        javax.swing.GroupLayout panelSearchLayout = new javax.swing.GroupLayout(panelSearch);
+        panelSearch.setLayout(panelSearchLayout);
+        panelSearchLayout.setHorizontalGroup(
+            panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSearchLayout.createSequentialGroup()
+                .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelSearchLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(radioBtnCostPrice)
+                            .addGroup(panelSearchLayout.createSequentialGroup()
+                                .addComponent(lblSearch)
+                                .addGap(50, 50, 50)
+                                .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(panelSearchLayout.createSequentialGroup()
+                        .addGap(67, 67, 67)
+                        .addComponent(jButtonSearchArray)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonSearchCancel)))
+                .addContainerGap(40, Short.MAX_VALUE))
+        );
+        panelSearchLayout.setVerticalGroup(
+            panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSearchLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSearch)
+                    .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addComponent(radioBtnCostPrice)
+                .addGap(40, 40, 40)
+                .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonSearchArray)
+                    .addComponent(jButtonSearchCancel))
+                .addContainerGap(30, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout frameSearchLayout = new javax.swing.GroupLayout(frameSearch.getContentPane());
+        frameSearch.getContentPane().setLayout(frameSearchLayout);
+        frameSearchLayout.setHorizontalGroup(
+            frameSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        frameSearchLayout.setVerticalGroup(
+            frameSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        frameEditInventory.setTitle("Add an entry");
+        frameEditInventory.setAlwaysOnTop(true);
+        frameEditInventory.setMinimumSize(new java.awt.Dimension(400, 520));
+        frameEditInventory.setPreferredSize(new java.awt.Dimension(400, 520));
+        frameEditInventory.setResizable(false);
+
+        panelEditInventory.setBackground(new java.awt.Color(0, 0, 51));
+        panelEditInventory.setForeground(new java.awt.Color(255, 255, 255));
+
+        lblEditInvModelNo.setForeground(new java.awt.Color(255, 255, 255));
+        lblEditInvModelNo.setText("Model Number :");
+
+        lblEditInvModelName.setForeground(new java.awt.Color(255, 255, 255));
+        lblEditInvModelName.setText("Model Name :");
+
+        lblEditInvBrand.setForeground(new java.awt.Color(255, 255, 255));
+        lblEditInvBrand.setText("Brand :");
+
+        lblEditInvOS.setForeground(new java.awt.Color(255, 255, 255));
+        lblEditInvOS.setText("Operating System :");
+
+        lblEditInvRange.setForeground(new java.awt.Color(255, 255, 255));
+        lblEditInvRange.setText("Range :");
+
+        lblEditInvCostPrice.setForeground(new java.awt.Color(255, 255, 255));
+        lblEditInvCostPrice.setText("Cost Price :");
+
+        lblEditInvSellingPrice.setForeground(new java.awt.Color(255, 255, 255));
+        lblEditInvSellingPrice.setText("Selling Price :");
+
+        comboEditInvBrand.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Samsung", "Apple", "Huawei", "Motorola", "Sony" }));
+
+        comboEditInvOs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "iOS", "Android", "Symbian", "Others" }));
+
+        btnGrpEditInventory.add(radioBtnEditInvHigh);
+        radioBtnEditInvHigh.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnEditInvHigh.setText("High");
+
+        btnGrpEditInventory.add(radioBtnEditInvMid);
+        radioBtnEditInvMid.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnEditInvMid.setText("Mid");
+
+        btnGrpEditInventory.add(radioBtnEditInvLow);
+        radioBtnEditInvLow.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnEditInvLow.setText("Low");
+
+        tfEditInvCostPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfEditInvCostPriceKeyTyped(evt);
+            }
+        });
+
+        jButtonEditInventorySave.setBackground(new java.awt.Color(0, 0, 51));
+        jButtonEditInventorySave.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonEditInventorySave.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonEditInventorySave.setText("Save");
+        jButtonEditInventorySave.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonEditInventorySave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditInventorySaveActionPerformed(evt);
+            }
+        });
+
+        jButtonEditInventoryCancel.setBackground(new java.awt.Color(0, 0, 51));
+        jButtonEditInventoryCancel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonEditInventoryCancel.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonEditInventoryCancel.setText("Cancel");
+        jButtonEditInventoryCancel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonEditInventoryCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditInventoryCancelActionPerformed(evt);
+            }
+        });
+
+        lblEditInvQuantity.setForeground(new java.awt.Color(255, 255, 255));
+        lblEditInvQuantity.setText("Quantity :");
+
+        tfEditInvQuantity.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfEditInvQuantityKeyTyped(evt);
+            }
+        });
+
+        tfEditInvSellingPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfEditInvSellingPriceKeyTyped(evt);
+            }
+        });
+
+        lblEditInvMsg.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblEditInvMsg.setForeground(new java.awt.Color(255, 255, 255));
+        lblEditInvMsg.setText("No Changes Detected");
+
+        javax.swing.GroupLayout panelEditInventoryLayout = new javax.swing.GroupLayout(panelEditInventory);
+        panelEditInventory.setLayout(panelEditInventoryLayout);
+        panelEditInventoryLayout.setHorizontalGroup(
+            panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelEditInventoryLayout.createSequentialGroup()
+                .addGroup(panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelEditInventoryLayout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addGroup(panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblEditInvModelNo)
+                            .addComponent(lblEditInvModelName)
+                            .addComponent(lblEditInvRange)
+                            .addComponent(lblEditInvCostPrice)
+                            .addComponent(lblEditInvSellingPrice)
+                            .addComponent(lblEditInvBrand)
+                            .addComponent(lblEditInvOS)
+                            .addComponent(lblEditInvQuantity))
+                        .addGap(35, 35, 35))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEditInventoryLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButtonEditInventorySave, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(14, 14, 14)))
+                .addGroup(panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tfEditInvModelNo)
+                    .addComponent(tfEditInvCostPrice)
+                    .addComponent(comboEditInvBrand, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tfEditInvModelName)
+                    .addGroup(panelEditInventoryLayout.createSequentialGroup()
+                        .addGroup(panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelEditInventoryLayout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(jButtonEditInventoryCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelEditInventoryLayout.createSequentialGroup()
+                                .addComponent(radioBtnEditInvHigh, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(radioBtnEditInvMid)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(radioBtnEditInvLow))
+                            .addComponent(comboEditInvOs, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(tfEditInvQuantity)
+                    .addComponent(tfEditInvSellingPrice, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(70, 70, 70))
+            .addGroup(panelEditInventoryLayout.createSequentialGroup()
+                .addGap(128, 128, 128)
+                .addComponent(lblEditInvMsg)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelEditInventoryLayout.setVerticalGroup(
+            panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelEditInventoryLayout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addGroup(panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panelEditInventoryLayout.createSequentialGroup()
+                        .addGroup(panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(panelEditInventoryLayout.createSequentialGroup()
+                                .addGroup(panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblEditInvModelNo)
+                                    .addComponent(tfEditInvModelNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(20, 20, 20)
+                                .addComponent(lblEditInvModelName))
+                            .addComponent(tfEditInvModelName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblEditInvBrand)
+                            .addComponent(comboEditInvBrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblEditInvOS)
+                            .addComponent(comboEditInvOs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblEditInvRange)
+                            .addComponent(radioBtnEditInvHigh)
+                            .addComponent(radioBtnEditInvMid)
+                            .addComponent(radioBtnEditInvLow))
+                        .addGap(20, 20, 20)
+                        .addComponent(lblEditInvCostPrice))
+                    .addComponent(tfEditInvCostPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelEditInventoryLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblEditInvSellingPrice)
+                            .addComponent(tfEditInvSellingPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblEditInvQuantity)
+                            .addComponent(tfEditInvQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(50, 50, 50))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEditInventoryLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonEditInventorySave)
+                            .addComponent(jButtonEditInventoryCancel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
+                .addComponent(lblEditInvMsg)
+                .addGap(43, 43, 43))
+        );
+
+        javax.swing.GroupLayout frameEditInventoryLayout = new javax.swing.GroupLayout(frameEditInventory.getContentPane());
+        frameEditInventory.getContentPane().setLayout(frameEditInventoryLayout);
+        frameEditInventoryLayout.setHorizontalGroup(
+            frameEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelEditInventory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        frameEditInventoryLayout.setVerticalGroup(
+            frameEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelEditInventory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("Mobile Inventory Management");
         setBackground(new java.awt.Color(255, 250, 250));
 
         panelBg.setBackground(new java.awt.Color(0, 0, 51));
 
-        jPanel1.setBackground(new java.awt.Color(0, 0, 51));
-        jPanel1.setForeground(new java.awt.Color(0, 0, 102));
+        panelButtons.setBackground(new java.awt.Color(0, 0, 51));
+        panelButtons.setForeground(new java.awt.Color(0, 0, 102));
 
-        btnSales.setBackground(new java.awt.Color(0, 0, 51));
-        btnSales.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        btnSales.setForeground(new java.awt.Color(255, 255, 255));
-        btnSales.setText("Sales");
-        btnSales.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        btnInventory.setBackground(new java.awt.Color(0, 0, 51));
-        btnInventory.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        btnInventory.setForeground(new java.awt.Color(255, 255, 255));
-        btnInventory.setText("Inventory");
-        btnInventory.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        btnNew.setBackground(new java.awt.Color(0, 0, 51));
-        btnNew.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        btnNew.setForeground(new java.awt.Color(255, 255, 255));
-        btnNew.setText("Add");
-        btnNew.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEdit.setBackground(new java.awt.Color(0, 0, 51));
+        btnEdit.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btnEdit.setForeground(new java.awt.Color(255, 255, 255));
+        btnEdit.setText("Edit");
+        btnEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
 
         btnInvoice.setBackground(new java.awt.Color(0, 0, 51));
         btnInvoice.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnInvoice.setForeground(new java.awt.Color(255, 255, 255));
         btnInvoice.setText("Invoice");
         btnInvoice.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnInvoice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInvoiceActionPerformed(evt);
+            }
+        });
+
+        btnNew.setBackground(new java.awt.Color(0, 0, 51));
+        btnNew.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btnNew.setForeground(new java.awt.Color(255, 255, 255));
+        btnNew.setText("Add");
+        btnNew.setToolTipText("Click Inventory/Sales to Add entries to them.");
+        btnNew.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(0, 0, 51));
+        btnDelete.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setText("Delete");
+        btnDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         btnVendor.setBackground(new java.awt.Color(0, 0, 51));
         btnVendor.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -119,65 +853,133 @@ public class DashboardPage extends javax.swing.JFrame {
             }
         });
 
-        btnVendor1.setBackground(new java.awt.Color(0, 0, 51));
-        btnVendor1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        btnVendor1.setForeground(new java.awt.Color(255, 255, 255));
-        btnVendor1.setText("Vendor");
-        btnVendor1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSearch.setBackground(new java.awt.Color(0, 0, 51));
+        btnSearch.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btnSearch.setForeground(new java.awt.Color(255, 255, 255));
+        btnSearch.setText("Search");
+        btnSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelButtonsLayout = new javax.swing.GroupLayout(panelButtons);
+        panelButtons.setLayout(panelButtonsLayout);
+        panelButtonsLayout.setHorizontalGroup(
+            panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelButtonsLayout.createSequentialGroup()
                 .addContainerGap(22, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSales, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnInventory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnInvoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnVendor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnVendor1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnSearch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        panelButtonsLayout.setVerticalGroup(
+            panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelButtonsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnNew)
                 .addGap(25, 25, 25)
-                .addComponent(btnSales)
+                .addComponent(btnEdit)
+                .addGap(25, 25, 25)
+                .addComponent(btnDelete)
                 .addGap(25, 25, 25)
                 .addComponent(btnInvoice)
                 .addGap(25, 25, 25)
-                .addComponent(btnInventory)
-                .addGap(25, 25, 25)
-                .addComponent(btnVendor1)
+                .addComponent(btnSearch)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addComponent(btnVendor)
                 .addContainerGap())
         );
 
-        jTblInventory.setModel(new javax.swing.table.DefaultTableModel(
+        tabbedPaneTbl.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tabbedPaneTblStateChanged(evt);
+            }
+        });
+
+        tblInventory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Model Number", "Name", "Brand", "OS", "Range", "Cost", "Discount"
+                "Model Number", "Name", "Brand", "OS", "Range", "Cost Price", "Selling Price", "Quantity"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTblInventory);
+        tblInventory.setRowHeight(20);
+        scrlPaneInventory.setViewportView(tblInventory);
+
+        javax.swing.GroupLayout tblPnlInventoryLayout = new javax.swing.GroupLayout(tblPnlInventory);
+        tblPnlInventory.setLayout(tblPnlInventoryLayout);
+        tblPnlInventoryLayout.setHorizontalGroup(
+            tblPnlInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scrlPaneInventory, javax.swing.GroupLayout.DEFAULT_SIZE, 685, Short.MAX_VALUE)
+        );
+        tblPnlInventoryLayout.setVerticalGroup(
+            tblPnlInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scrlPaneInventory, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
+        );
+
+        tabbedPaneTbl.addTab("Inventory", tblPnlInventory);
+
+        tblSales.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Customer", "Date", "Model Number", "Brand", "Quantity", "Discount", "Total Sales"
+            }
+        ));
+        tblSales.setRowHeight(20);
+        scrlPaneSales.setViewportView(tblSales);
+
+        javax.swing.GroupLayout tblPnlSalesLayout = new javax.swing.GroupLayout(tblPnlSales);
+        tblPnlSales.setLayout(tblPnlSalesLayout);
+        tblPnlSalesLayout.setHorizontalGroup(
+            tblPnlSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scrlPaneSales, javax.swing.GroupLayout.DEFAULT_SIZE, 685, Short.MAX_VALUE)
+        );
+        tblPnlSalesLayout.setVerticalGroup(
+            tblPnlSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scrlPaneSales, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
+        );
+
+        tabbedPaneTbl.addTab("Sales", tblPnlSales);
 
         javax.swing.GroupLayout panelBgLayout = new javax.swing.GroupLayout(panelBg);
         panelBg.setLayout(panelBgLayout);
@@ -185,27 +987,31 @@ public class DashboardPage extends javax.swing.JFrame {
             panelBgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBgLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 674, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(tabbedPaneTbl))
         );
         panelBgLayout.setVerticalGroup(
             panelBgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBgLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelBgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(panelBgLayout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 20, Short.MAX_VALUE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(tabbedPaneTbl)
         );
 
         jMnuFile.setText("File");
 
         jMnuItmNew.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         jMnuItmNew.setText("New");
+        jMnuItmNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMnuItmNewActionPerformed(evt);
+            }
+        });
         jMnuFile.add(jMnuItmNew);
+
+        jMnuItmImport.setText("Import");
+        jMnuFile.add(jMnuItmImport);
 
         jMnuItmOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         jMnuItmOpen.setText("Open");
@@ -218,10 +1024,20 @@ public class DashboardPage extends javax.swing.JFrame {
 
         jMnuItmSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         jMnuItmSave.setText("Save");
+        jMnuItmSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMnuItmSaveActionPerformed(evt);
+            }
+        });
         jMnuFile.add(jMnuItmSave);
 
         jMnuItmSaveAs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         jMnuItmSaveAs.setText("Save As");
+        jMnuItmSaveAs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMnuItmSaveAsActionPerformed(evt);
+            }
+        });
         jMnuFile.add(jMnuItmSaveAs);
 
         mnuBarEmployee.add(jMnuFile);
@@ -282,7 +1098,7 @@ public class DashboardPage extends javax.swing.JFrame {
 
     private void jMnuItmOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmOpenActionPerformed
         // TODO add your handling code here:
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("csv", "txt");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
         JFileChooser jChooser = new JFileChooser();
         jChooser.setDialogTitle("Open");
         jChooser.setAcceptAllFileFilterUsed(false);
@@ -296,8 +1112,572 @@ public class DashboardPage extends javax.swing.JFrame {
     private void btnVendorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendorActionPerformed
         // TODO add your handling code here:
         dispose();
+        LoginPage login = new LoginPage();
     }//GEN-LAST:event_btnVendorActionPerformed
 
+    private void jMnuItmSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmSaveAsActionPerformed
+        // TODO add your handling code here:
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
+        JFileChooser jFileSaver = new JFileChooser("some path");
+        jFileSaver.setDialogTitle("Save as");
+        jFileSaver.setDialogType(JFileChooser.SAVE_DIALOG);
+        jFileSaver.setFileFilter(filter);
+        // Stuff like setting the required file extension, the title, ...
+        int result = jFileSaver.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            path = jFileSaver.getSelectedFile().toString();
+            path += ".csv";
+            File newFile = new File(path);
+            boolean check;
+            try{
+                check = newFile.createNewFile();
+                if (check) {
+                    JOptionPane.showMessageDialog(rootPane, "Saved.", "Success", JOptionPane.PLAIN_MESSAGE);
+                    FileWriter fw = new FileWriter(path);
+                    fw.write("Model Number,Name,Brand,OS,Range,Cost,Discount");
+                    fw.close();
+                }
+                else {
+                   int confirmation = JOptionPane.showConfirmDialog(rootPane, "File already exists. Overwrite?", "Overwrite?", JOptionPane.YES_NO_OPTION);
+                   switch (confirmation){
+                        case JOptionPane.YES_OPTION:
+                            FileWriter fw = new FileWriter(path, false);
+                            fw.write("Model Number,Name,Brand,OS,Range,Cost,Discount");
+                            fw.close();
+                            break;
+                        case JOptionPane.NO_OPTION:
+                            DashboardPage dash = new DashboardPage();
+                            dash.jMnuItmNewActionPerformed(evt);
+                            break;
+                        case JOptionPane.CLOSED_OPTION:
+                            break;
+                   }
+                }
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(rootPane, ex, "Error",JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jMnuItmSaveAsActionPerformed
+
+    private void jMnuItmNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmNewActionPerformed
+        // TODO add your handling code here:
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
+        JFileChooser jFileNew = new JFileChooser("some path");
+        jFileNew.setDialogTitle("New");
+        jFileNew.setDialogType(JFileChooser.SAVE_DIALOG);
+        jFileNew.setFileFilter(filter);
+        // Stuff like setting the required file extension, the title, ...
+        int result = jFileNew.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            path = jFileNew.getSelectedFile().toString();
+            path += ".csv";
+            File newFile = new File(path);
+            boolean check;
+            try {
+                check = newFile.createNewFile();
+                if (check) {
+                    JOptionPane.showMessageDialog(rootPane, "New File Created.", "Success", JOptionPane.PLAIN_MESSAGE);
+                    FileWriter fw = new FileWriter(path);
+                    fw.write("Model Number,Name,Brand,OS,Range,Cost,Discount");
+                    fw.close();
+                }
+                else {
+                    int confirmation = JOptionPane.showConfirmDialog(rootPane, "File already exists. Overwrite?");
+                    switch (confirmation) {
+                        case JOptionPane.YES_OPTION:
+                            FileWriter fw = new FileWriter(path, false);
+                            fw.write("Model Number,Name,Brand,OS,Range,Cost,Discount");
+                            fw.close();
+                            JOptionPane.showMessageDialog(rootPane, "File overwritten.", "Success", JOptionPane.PLAIN_MESSAGE);
+                            break;
+                        case JOptionPane.NO_OPTION:
+                            DashboardPage dash = new DashboardPage();
+                            dash.jMnuItmNewActionPerformed(evt);
+                            break;
+                        case JOptionPane.CLOSED_OPTION:
+                            break;
+                    }
+                }
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(rootPane, ex, "Error",JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jMnuItmNewActionPerformed
+
+    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
+        // TODO add your handling code here:
+        if (tableSelection == true) {
+            if (arraylistInventory.size() < 12) {
+                frameAddInventory.setVisible(true);
+                frameAddInventory.setLocationRelativeTo(null);
+            }
+            else {
+                int confirmation = JOptionPane.showConfirmDialog(rootPane, "Max limit for table reached. Create new file?", "New File?", JOptionPane.YES_NO_OPTION);
+                   switch (confirmation){
+                        case JOptionPane.YES_OPTION:
+                            jMnuItmNewActionPerformed(evt);
+                            break;
+                        case JOptionPane.NO_OPTION:
+                            break;
+                        case JOptionPane.CLOSED_OPTION:
+                            break;
+                   }
+
+            }
+        }
+        else {
+            frameAddSales.setVisible(true);
+            frameAddSales.setLocationRelativeTo(null);
+        }
+    }//GEN-LAST:event_btnNewActionPerformed
+
+    private void jButtonClearInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearInventoryActionPerformed
+        // TODO add your handling code here:
+        tfModelNo.setText(null);
+        tfModelName.setText(null);
+        comboBrand.setSelectedIndex(0);
+        comboOs.setSelectedIndex(0);
+        btnGrpRange.clearSelection();
+        radioBtnHigh.setSelected(true);
+        tfCostPrice.setText(null);
+        tfSellingPrice.setText(null);
+    }//GEN-LAST:event_jButtonClearInventoryActionPerformed
+
+    private void jMnuItmSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmSaveActionPerformed
+        // TODO add your handling code here:
+        if (path != "" && path != null) {
+        }
+        else{
+           jMnuItmSaveAsActionPerformed(evt); 
+        }
+    }//GEN-LAST:event_jMnuItmSaveActionPerformed
+
+    private void btnInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInvoiceActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_btnInvoiceActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        // TODO add your handling code here:
+        if (tableSelection == true) {
+            indexEditInv = tblInventory.getSelectedRow();
+            if (indexEditInv >= 0) {
+                lblEditInvMsg.setVisible(false);
+                frameEditInventory.setVisible(true);
+                frameEditInventory.setLocationRelativeTo(null);
+                InventoryManagement imOld = arraylistInventory.get(indexEditInv);
+                String modelNoOld = imOld.getModelNo();
+                String modelNameOld = imOld.getModelName();
+                String brandOld = imOld.getBrand();
+                String osOld = imOld.getOs();
+                String rangeOld = imOld.getRange();
+                String costOld = String.valueOf(imOld.getCost());
+                String sellingPriceOld = String.valueOf(imOld.getSellingPrice());
+                String quantityOld = String.valueOf(imOld.getQuantity());
+                
+                tfEditInvModelNo.setText(modelNoOld);
+                tfEditInvModelName.setText(modelNameOld);
+                
+                if (brandOld.equals("Samsung")) {
+                    comboEditInvBrand.setSelectedIndex(1);
+                }
+                else if (brandOld.equals("Apple")) {
+                    comboEditInvBrand.setSelectedIndex(2);
+                }
+                else if (brandOld.equals("Huawei")) {
+                    comboEditInvBrand.setSelectedIndex(3);
+                }
+                else if (brandOld.equals("Motorola")) {
+                    comboEditInvBrand.setSelectedIndex(4);
+                }
+                else if (brandOld.equals("Sony")) {
+                    comboEditInvBrand.setSelectedIndex(5);
+                }
+                
+                if (osOld.equals("iOS")) {
+                    comboEditInvOs.setSelectedIndex(1);
+                }
+                else if (osOld.equals("Android")) {
+                    comboEditInvOs.setSelectedIndex(2);
+                }
+                else if (osOld.equals("Symbian")) {
+                    comboEditInvOs.setSelectedIndex(3);
+                }
+                else if (osOld.equals("Others")) {
+                    comboEditInvOs.setSelectedIndex(4);
+                }
+                
+                if (rangeOld.equals("High")) {
+                    radioBtnEditInvHigh.setSelected(true);
+                }
+                else if (rangeOld.equals("Mid")) {
+                    radioBtnEditInvMid.setSelected(true);
+                }
+                else {
+                    radioBtnEditInvLow.setSelected(true);
+                }
+                
+                tfEditInvCostPrice.setText(costOld);
+                
+                tfEditInvSellingPrice.setText(sellingPriceOld);
+                
+                tfEditInvQuantity.setText(quantityOld);
+                
+            }
+            else {
+                JOptionPane.showMessageDialog(rootPane, "No row selected.", "Error", 0);
+            }
+        }
+        
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void jBtnClearSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnClearSalesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBtnClearSalesActionPerformed
+
+    private void tfCostPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCostPriceKeyTyped
+        // TODO add your handling code here:
+        char key = evt.getKeyChar();
+        if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_tfCostPriceKeyTyped
+
+    private void tfQuantityKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfQuantityKeyTyped
+        // TODO add your handling code here:
+        char key = evt.getKeyChar();
+        if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_tfQuantityKeyTyped
+
+    private void tfQuantitySalesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfQuantitySalesKeyTyped
+        // TODO add your handling code here:
+        char key = evt.getKeyChar();
+        if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_tfQuantitySalesKeyTyped
+
+    private void tfDateKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfDateKeyTyped
+        // TODO add your handling code here:
+        char key = evt.getKeyChar();
+        if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE || key == '-')) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_tfDateKeyTyped
+
+    private void tabbedPaneTblStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabbedPaneTblStateChanged
+        // TODO add your handling code here:
+        if (tabbedPaneTbl.getSelectedIndex() == 0) {
+            tableSelection = true;
+        }
+        else {
+            tableSelection = false;
+        }
+    }//GEN-LAST:event_tabbedPaneTblStateChanged
+
+    private void jButtonAddInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddInventoryActionPerformed
+        // TODO add your handling code here:
+        String modelNo = tfModelNo.getText().trim();
+        String modelName = tfModelName.getText().trim();
+        String brand = comboBrand.getSelectedItem().toString().trim();
+        String os = comboOs.getSelectedItem().toString().trim();
+        String range = radioBtnHigh.isSelected() == true ? "High" : radioBtnMid.isSelected() == true ? "Mid" : radioBtnLow.isSelected() == true ? "Low" : null;
+        String costPrice = tfCostPrice.getText().trim();
+        String sellingPrice = tfSellingPrice.getText().trim();
+        String quantity = tfQuantity.getText().trim();
+        
+        int costPricePojo = Integer.parseInt(costPrice);
+        int sellingPricePojo = Integer.parseInt(sellingPrice);
+        int quantityPojo = Integer.parseInt(quantity);
+        
+            
+        if (arraylistInventory.size() > 0 && arraylistInventory.size() < 12) {
+            InventoryManagement im = new InventoryManagement(modelNo, modelName, brand, os, range, costPricePojo, sellingPricePojo, quantityPojo);
+            arraylistInventory.add(im);
+            sort();
+            clearTable();
+            addToTable();
+        }
+        else {
+            InventoryManagement im = new InventoryManagement(modelNo, modelName, brand, os, range, costPricePojo, sellingPricePojo, quantityPojo);
+            arraylistInventory.add(im);
+            addToTable();
+        }
+        frameAddInventory.dispose();
+    }//GEN-LAST:event_jButtonAddInventoryActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        if (tableSelection == true) {
+            if (tblInventory.getSelectedRow() >= 0) {
+                arraylistInventory.remove(tblInventory.getSelectedRow());
+                clearTable();
+                addToTable();
+            }
+            else {
+                JOptionPane.showMessageDialog(rootPane, "No row selected.", "Error", 0);
+            }
+        }
+        else {
+            if (tblSales.getSelectedRow() >= 0) {
+                arraylistSales.remove(tblSales.getSelectedRow());
+                clearTable();
+                addToTable();
+            }
+            else {
+                JOptionPane.showMessageDialog(rootPane, "No row selected.", "Error", 0);
+            }
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void comboBrandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBrandActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBrandActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+        frameSearch.setVisible(true);
+        frameSearch.setLocationRelativeTo(null);
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void tfSellingPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSellingPriceKeyTyped
+        // TODO add your handling code here:
+        char key = evt.getKeyChar();
+        if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_tfSellingPriceKeyTyped
+
+    private void jButtonSearchArrayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchArrayActionPerformed
+        // TODO add your handling code here:
+        int search = Integer.parseInt(tfSearch.getText().trim());
+        int index = binarySearchInventory(0, arraylistInventory.size() - 1, search);
+        if (index == -1) {
+            System.out.println("Error! No match found");
+        }
+        else {
+            System.out.println("Index: " + index);
+            InventoryManagement im = arraylistInventory.get(index);
+            System.out.println(im.getModelName());
+        }
+    }//GEN-LAST:event_jButtonSearchArrayActionPerformed
+
+    private void lblSellingPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lblSellingPriceKeyTyped
+        // TODO add your handling code here:
+        char key = evt.getKeyChar();
+        if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_lblSellingPriceKeyTyped
+
+    private void tfEditInvCostPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfEditInvCostPriceKeyTyped
+        // TODO add your handling code here:
+        char key = evt.getKeyChar();
+        if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_tfEditInvCostPriceKeyTyped
+
+    private void jButtonEditInventorySaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditInventorySaveActionPerformed
+        // TODO add your handling code here:
+        String modelNo = tfEditInvModelNo.getText().trim();
+        String modelName = tfEditInvModelName.getText().trim();
+        String brand = comboEditInvBrand.getSelectedItem().toString().trim();
+        String os = comboEditInvOs.getSelectedItem().toString().trim();
+        String range = radioBtnEditInvHigh.isSelected() == true ? "High" : radioBtnMid.isSelected() == true ? "Mid" : radioBtnLow.isSelected() == true ? "Low" : null;
+        String costPrice = tfEditInvCostPrice.getText().trim();
+        String sellingPrice = tfEditInvSellingPrice.getText().trim();
+        String quantity = tfEditInvQuantity.getText().trim();
+        
+        int costPricePojo = Integer.parseInt(costPrice);
+        int sellingPricePojo = Integer.parseInt(sellingPrice);
+        int quantityPojo = Integer.parseInt(quantity);
+        
+        InventoryManagement im = arraylistInventory.get(indexEditInv);
+        if (modelNo.equalsIgnoreCase(im.getModelNo()) && modelName.equalsIgnoreCase(im.getModelName()) && brand.equalsIgnoreCase(im.getBrand()) && 
+        os.equalsIgnoreCase(im.getOs()) && range.equalsIgnoreCase(im.getRange()) && costPricePojo == im.getCost() && sellingPricePojo == im.getSellingPrice() &&
+        quantityPojo == im.getQuantity()) {
+            lblEditInvMsg.setVisible(true);
+            TimerTask task = new TimerTask () {
+                public void run() {
+                    lblEditInvMsg.setVisible(false);
+                }
+            };
+            long delay = 1000L;
+            Timer timer = new Timer("Timer#1");
+            timer.schedule(task, delay);
+        }
+        else {
+            im.setModelNo(modelNo);
+            im.setModelName(modelName);
+            im.setBrand(brand);
+            im.setOs(os);
+            im.setRange(range);
+            im.setCost(costPricePojo);
+            im.setSellingPrice(sellingPricePojo);
+            im.setQuantity(quantityPojo);
+            JOptionPane.showMessageDialog(rootPane, "Edit Saved.", "Success!", 1);
+        }
+    }//GEN-LAST:event_jButtonEditInventorySaveActionPerformed
+
+    private void jButtonEditInventoryCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditInventoryCancelActionPerformed
+        // TODO add your handling code here:
+        frameEditInventory.dispose();
+    }//GEN-LAST:event_jButtonEditInventoryCancelActionPerformed
+
+    private void tfEditInvQuantityKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfEditInvQuantityKeyTyped
+        // TODO add your handling code here:
+        char key = evt.getKeyChar();
+        if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_tfEditInvQuantityKeyTyped
+
+    private void tfEditInvSellingPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfEditInvSellingPriceKeyTyped
+        // TODO add your handling code here:
+        char key = evt.getKeyChar();
+        if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_tfEditInvSellingPriceKeyTyped
+
+    
+    private void sort () {
+        ArrayList <InventoryManagement> pH = new ArrayList <InventoryManagement>();
+        for (int i = 0; i < arraylistInventory.size(); i++) {
+            for (int j = i + 1 ; j < arraylistInventory.size(); j++) {
+                InventoryManagement imFirst = arraylistInventory.get(i);
+                InventoryManagement imSecond = arraylistInventory.get(j);
+                if (imFirst.getCost() > imSecond.getCost()) {
+                    Collections.swap(arraylistInventory, i, j);
+                }
+            }
+        }
+    }
+    
+    private void addToTable () {
+        if (tableSelection == true) {
+            String [] arrayForTable = {null, null, null, null, null, null, null, null};
+            for (InventoryManagement im : arraylistInventory) {
+                arrayForTable[0] = im.getModelNo();
+                arrayForTable[1] = im.getModelName();
+                arrayForTable[2] = im.getBrand();
+                arrayForTable[3] = im.getOs();
+                arrayForTable[4] = im.getRange();
+                arrayForTable[5] = String.valueOf(im.getCost());
+                arrayForTable[6] = String.valueOf(im.getSellingPrice());
+                arrayForTable[7] = String.valueOf(im.getQuantity());
+            
+                int rowCount = tblInventory.getRowCount();
+                int nextRow = 0;
+                boolean emptyRowFlag = false;
+                String s;
+        
+                do{
+                s = (String) tblInventory.getValueAt(nextRow, 0);
+                if(s != null && s.length() != 0) {
+                    nextRow++;
+                }
+                else {
+                    emptyRowFlag = true;
+                }
+            }   while(nextRow < rowCount && !emptyRowFlag);
+            if(nextRow < rowCount) {
+                int colCount = tblInventory.getColumnCount();
+                for (int i = 0; i < colCount; i++) {
+                    tblInventory.setValueAt(arrayForTable[i], nextRow, i);
+                }
+            
+            }
+            else {
+                JOptionPane.showMessageDialog(rootPane, "No empty rows found!", "Error", 0);
+                }
+            }
+        }
+        else {
+            String [] arrayForTable = {null, null, null, null, null, null, null, null};
+            for (Sales sales : arraylistSales) {
+                arrayForTable[0] = sales.getModelNo();
+                arrayForTable[1] = sales.getModelName();
+                arrayForTable[2] = sales.getBrand();
+                arrayForTable[3] = sales.getOs();
+                arrayForTable[4] = sales.getCustomerName();
+                arrayForTable[5] = String.valueOf(sales.getDiscount());
+                arrayForTable[6] = String.valueOf(sales.getQuantity());
+                arrayForTable[7] = String.valueOf(sales.getTotal());
+            
+                int rowCount = tblInventory.getRowCount();
+                int nextRow = 0;
+                boolean emptyRowFlag = false;
+                String s;
+        
+                do{
+                s = (String) tblInventory.getValueAt(nextRow, 0);
+                if(s != null && s.length() != 0) {
+                    nextRow++;
+                }
+                else {
+                    emptyRowFlag = true;
+                }
+            }   while(nextRow < rowCount && !emptyRowFlag);
+            if(nextRow < rowCount) {
+                int colCount = tblInventory.getColumnCount();
+                for (int i = 0; i < colCount; i++) {
+                    tblInventory.setValueAt(arrayForTable[i], nextRow, i);
+                }
+            
+            }
+            else {
+                JOptionPane.showMessageDialog(rootPane, "No empty rows found!", "Error", 0);
+                }
+            }
+        }
+    }
+    
+    private void clearTable() {
+        if (tableSelection == true) {
+            int rowCount = tblInventory.getRowCount();
+            int colCount = tblInventory.getColumnCount();
+            for (int i = rowCount - 1; i >=0; i--) {
+                for (int j = 0; j < colCount; j++) {
+                tblInventory.setValueAt(null, i, j);
+                }
+            }
+        }
+        else {
+            int rowCount = tblSales.getRowCount();
+            int colCount = tblSales.getColumnCount();
+            for (int i = rowCount - 1; i >=0; i--) {
+                for (int j = 0; j < colCount; j++) {
+                tblSales.setValueAt(null, i, j);
+                }
+            }
+        }
+    }
+    
+    private int binarySearchInventory(int low, int high, int search) {
+        
+        if (high >= low) {
+            int mid = (low+high) / 2;
+            InventoryManagement im = arraylistInventory.get(mid);
+            System.out.println(im.getCost());
+            if (im.getCost() == search) 
+                return mid;
+            
+            if (im.getCost() > search) 
+                return binarySearchInventory(low, mid - 1, search);
+            
+            
+            return binarySearchInventory(mid + 1, high, search);
+            
+        }
+        return -1;
+    }
+    private void setIcon() {
+        setIconImage (Toolkit.getDefaultToolkit().getImage(getClass().getResource("")));
+    }
     /**
      * @param args the command line arguments
      */
@@ -334,27 +1714,103 @@ public class DashboardPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnInventory;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnEdit;
+    private javax.swing.ButtonGroup btnGrpAddInventory;
+    private javax.swing.ButtonGroup btnGrpEditInventory;
     private javax.swing.JButton btnInvoice;
     private javax.swing.JButton btnNew;
-    private javax.swing.JButton btnSales;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnVendor;
-    private javax.swing.JButton btnVendor1;
+    private javax.swing.JComboBox<String> comboBrand;
+    private javax.swing.JComboBox<String> comboEditInvBrand;
+    private javax.swing.JComboBox<String> comboEditInvOs;
+    private javax.swing.JComboBox<String> comboOs;
+    private javax.swing.JFrame frameAddInventory;
+    private javax.swing.JFrame frameAddSales;
+    private javax.swing.JFrame frameEditInventory;
+    private javax.swing.JFrame frameSearch;
+    private javax.swing.JButton jBtnAddSales;
+    private javax.swing.JButton jBtnClearSales;
+    private javax.swing.JButton jButtonAddInventory;
+    private javax.swing.JButton jButtonClearInventory;
+    private javax.swing.JButton jButtonEditInventoryCancel;
+    private javax.swing.JButton jButtonEditInventorySave;
+    private javax.swing.JButton jButtonSearchArray;
+    private javax.swing.JButton jButtonSearchCancel;
     private javax.swing.JDialog jDialogAbout;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMnuAbt;
     private javax.swing.JMenu jMnuFile;
     private javax.swing.JMenuItem jMnuItmAbout;
     private javax.swing.JMenuItem jMnuItmExit;
+    private javax.swing.JMenuItem jMnuItmImport;
     private javax.swing.JMenuItem jMnuItmNew;
     private javax.swing.JMenuItem jMnuItmOpen;
     private javax.swing.JMenuItem jMnuItmSave;
     private javax.swing.JMenuItem jMnuItmSaveAs;
     private javax.swing.JMenu jMnuTools;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTblInventory;
     private javax.swing.JLabel lblAbt;
+    private javax.swing.JLabel lblBrand;
+    private javax.swing.JLabel lblBrandSales;
+    private javax.swing.JLabel lblCostPrice;
+    private javax.swing.JLabel lblCust;
+    private javax.swing.JLabel lblDate;
+    private javax.swing.JLabel lblEditInvBrand;
+    private javax.swing.JLabel lblEditInvCostPrice;
+    private javax.swing.JLabel lblEditInvModelName;
+    private javax.swing.JLabel lblEditInvModelNo;
+    private javax.swing.JLabel lblEditInvMsg;
+    private javax.swing.JLabel lblEditInvOS;
+    private javax.swing.JLabel lblEditInvQuantity;
+    private javax.swing.JLabel lblEditInvRange;
+    private javax.swing.JLabel lblEditInvSellingPrice;
+    private javax.swing.JLabel lblModelName;
+    private javax.swing.JLabel lblModelNo;
+    private javax.swing.JLabel lblModelNoSales;
+    private javax.swing.JLabel lblOS;
+    private javax.swing.JLabel lblQuantity;
+    private javax.swing.JLabel lblRange;
+    private javax.swing.JLabel lblSalePrice;
+    private javax.swing.JLabel lblSearch;
+    private javax.swing.JLabel lblSellingPrice;
     private javax.swing.JMenuBar mnuBarEmployee;
+    private javax.swing.JPanel panelAddInventory;
+    private javax.swing.JPanel panelAddSales;
     private javax.swing.JPanel panelBg;
+    private javax.swing.JPanel panelButtons;
+    private javax.swing.JPanel panelEditInventory;
+    private javax.swing.JPanel panelSearch;
+    private javax.swing.JRadioButton radioBtnCostPrice;
+    private javax.swing.JRadioButton radioBtnEditInvHigh;
+    private javax.swing.JRadioButton radioBtnEditInvLow;
+    private javax.swing.JRadioButton radioBtnEditInvMid;
+    private javax.swing.JRadioButton radioBtnHigh;
+    private javax.swing.JRadioButton radioBtnLow;
+    private javax.swing.JRadioButton radioBtnMid;
+    private javax.swing.JScrollPane scrlPaneInventory;
+    private javax.swing.JScrollPane scrlPaneSales;
+    private javax.swing.JTabbedPane tabbedPaneTbl;
+    private javax.swing.JTable tblInventory;
+    private javax.swing.JPanel tblPnlInventory;
+    private javax.swing.JPanel tblPnlSales;
+    private javax.swing.JTable tblSales;
+    private javax.swing.JTextField tfBrandSales;
+    private javax.swing.JTextField tfCostPrice;
+    private javax.swing.JTextField tfCustomer;
+    private javax.swing.JTextField tfDate;
+    private javax.swing.JTextField tfEditInvCostPrice;
+    private javax.swing.JTextField tfEditInvModelName;
+    private javax.swing.JTextField tfEditInvModelNo;
+    private javax.swing.JTextField tfEditInvQuantity;
+    private javax.swing.JTextField tfEditInvSellingPrice;
+    private javax.swing.JTextField tfModelName;
+    private javax.swing.JTextField tfModelNo;
+    private javax.swing.JTextField tfModelNumberSales;
+    private javax.swing.JTextField tfQuantity;
+    private javax.swing.JTextField tfQuantitySales;
+    private javax.swing.JTextField tfSales;
+    private javax.swing.JTextField tfSearch;
+    private javax.swing.JTextField tfSellingPrice;
     // End of variables declaration//GEN-END:variables
 }
