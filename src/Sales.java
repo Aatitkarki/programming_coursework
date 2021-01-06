@@ -50,7 +50,7 @@ class Sales {
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
 	}
-	public void setCost(int total) {
+	public void setTotal(int total) {
 		this.total = total;
 	}
 	public void setDiscount(int discount) {

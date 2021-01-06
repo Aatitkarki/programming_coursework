@@ -1,14 +1,23 @@
-
 import java.awt.Toolkit;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.TimerTask;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.util.Timer;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /*
@@ -19,7 +28,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
- * @author suresh
+ * @author anish, ashesh, roshani, suresh
  */
 public class DashboardPage extends javax.swing.JFrame {
     int indexEditInv;
@@ -135,11 +144,11 @@ public class DashboardPage extends javax.swing.JFrame {
         mnuBarEmployee = new javax.swing.JMenuBar();
         jMnuFile = new javax.swing.JMenu();
         jMnuItmNew = new javax.swing.JMenuItem();
-        jMnuItmImport = new javax.swing.JMenuItem();
         jMnuItmOpen = new javax.swing.JMenuItem();
         jMnuItmSave = new javax.swing.JMenuItem();
         jMnuItmSaveAs = new javax.swing.JMenuItem();
         jMnuTools = new javax.swing.JMenu();
+        jMnuItmAddBrand = new javax.swing.JMenuItem();
         jMnuAbt = new javax.swing.JMenu();
         jMnuItmAbout = new javax.swing.JMenuItem();
         jMnuItmExit = new javax.swing.JMenuItem();
@@ -168,7 +177,6 @@ public class DashboardPage extends javax.swing.JFrame {
         frameAddInventory.setTitle("Add an entry");
         frameAddInventory.setAlwaysOnTop(true);
         frameAddInventory.setMinimumSize(new java.awt.Dimension(400, 480));
-        frameAddInventory.setPreferredSize(new java.awt.Dimension(400, 480));
         frameAddInventory.setResizable(false);
 
         panelAddInventory.setBackground(new java.awt.Color(0, 0, 51));
@@ -200,14 +208,9 @@ public class DashboardPage extends javax.swing.JFrame {
             }
         });
 
-        comboBrand.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Samsung", "Apple", "Huawei", "Motorola", "Sony" }));
-        comboBrand.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboBrandActionPerformed(evt);
-            }
-        });
+        comboBrand.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
 
-        comboOs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "iOS", "Android", "Symbian", "Others" }));
+        comboOs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "iOS", "Android", "Symbian", "Others" }));
 
         btnGrpAddInventory.add(radioBtnHigh);
         radioBtnHigh.setForeground(new java.awt.Color(255, 255, 255));
@@ -586,7 +589,6 @@ public class DashboardPage extends javax.swing.JFrame {
         frameEditInventory.setTitle("Add an entry");
         frameEditInventory.setAlwaysOnTop(true);
         frameEditInventory.setMinimumSize(new java.awt.Dimension(400, 520));
-        frameEditInventory.setPreferredSize(new java.awt.Dimension(400, 520));
         frameEditInventory.setResizable(false);
 
         panelEditInventory.setBackground(new java.awt.Color(0, 0, 51));
@@ -788,9 +790,14 @@ public class DashboardPage extends javax.swing.JFrame {
             .addComponent(panelEditInventory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setTitle("Mobile Inventory Management");
         setBackground(new java.awt.Color(255, 250, 250));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         panelBg.setBackground(new java.awt.Color(0, 0, 51));
 
@@ -1010,11 +1017,8 @@ public class DashboardPage extends javax.swing.JFrame {
         });
         jMnuFile.add(jMnuItmNew);
 
-        jMnuItmImport.setText("Import");
-        jMnuFile.add(jMnuItmImport);
-
         jMnuItmOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        jMnuItmOpen.setText("Open");
+        jMnuItmOpen.setText("Import/Open");
         jMnuItmOpen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMnuItmOpenActionPerformed(evt);
@@ -1043,6 +1047,15 @@ public class DashboardPage extends javax.swing.JFrame {
         mnuBarEmployee.add(jMnuFile);
 
         jMnuTools.setText("Tools");
+
+        jMnuItmAddBrand.setText("Add Brand");
+        jMnuItmAddBrand.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMnuItmAddBrandActionPerformed(evt);
+            }
+        });
+        jMnuTools.add(jMnuItmAddBrand);
+
         mnuBarEmployee.add(jMnuTools);
 
         jMnuAbt.setText("About");
@@ -1098,15 +1111,28 @@ public class DashboardPage extends javax.swing.JFrame {
 
     private void jMnuItmOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmOpenActionPerformed
         // TODO add your handling code here:
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
-        JFileChooser jChooser = new JFileChooser();
-        jChooser.setDialogTitle("Open");
-        jChooser.setAcceptAllFileFilterUsed(false);
-        jChooser.setFileFilter(filter);
-        jChooser.showOpenDialog(null);
+        String dir = System.getProperty("user.dir");
+        if (System.getProperty("os.name").contains("Windows")) {
+            dir += "\\resources\\CSV Files";
+        }
+        else{
+            dir += "/resources/CSV Files";
+        }
+        try {
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
+            JFileChooser jChooser = new JFileChooser(dir);
+            jChooser.setDialogTitle("Open");
+            jChooser.setAcceptAllFileFilterUsed(false);
+            jChooser.setFileFilter(filter);
+            jChooser.showOpenDialog(null);
         
-        File file = jChooser.getSelectedFile();
-        String filename = file.getAbsolutePath();
+            File file = jChooser.getSelectedFile();
+            String filename = file.getAbsolutePath();
+            path = filename;
+        }
+        catch(NullPointerException npe) {
+            
+        }
     }//GEN-LAST:event_jMnuItmOpenActionPerformed
 
     private void btnVendorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendorActionPerformed
@@ -1118,8 +1144,15 @@ public class DashboardPage extends javax.swing.JFrame {
 
     private void jMnuItmSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmSaveAsActionPerformed
         // TODO add your handling code here:
+        String dir = System.getProperty("user.dir");
+        if (System.getProperty("os.name").contains("Windows")) {
+            dir += "\\resources\\CSV Files";
+        }
+        else{
+            dir += "/resources/CSV Files";
+        }
         FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
-        JFileChooser jFileSaver = new JFileChooser("some path");
+        JFileChooser jFileSaver = new JFileChooser(dir);
         jFileSaver.setDialogTitle("Save as");
         jFileSaver.setDialogType(JFileChooser.SAVE_DIALOG);
         jFileSaver.setFileFilter(filter);
@@ -1162,8 +1195,9 @@ public class DashboardPage extends javax.swing.JFrame {
 
     private void jMnuItmNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmNewActionPerformed
         // TODO add your handling code here:
+        String dir = System.getProperty("user.dir");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
-        JFileChooser jFileNew = new JFileChooser("some path");
+        JFileChooser jFileNew = new JFileChooser(dir);
         jFileNew.setDialogTitle("New");
         jFileNew.setDialogType(JFileChooser.SAVE_DIALOG);
         jFileNew.setFileFilter(filter);
@@ -1213,7 +1247,7 @@ public class DashboardPage extends javax.swing.JFrame {
                 frameAddInventory.setLocationRelativeTo(null);
             }
             else {
-                int confirmation = JOptionPane.showConfirmDialog(rootPane, "Max limit for table reached. Create new file?", "New File?", JOptionPane.YES_NO_OPTION);
+                int confirmation = JOptionPane.showConfirmDialog(rootPane, "Max limit for inventory table reached. Create new file?", "New File?", JOptionPane.YES_NO_OPTION);
                    switch (confirmation){
                         case JOptionPane.YES_OPTION:
                             jMnuItmNewActionPerformed(evt);
@@ -1227,8 +1261,22 @@ public class DashboardPage extends javax.swing.JFrame {
             }
         }
         else {
-            frameAddSales.setVisible(true);
-            frameAddSales.setLocationRelativeTo(null);
+            if (arraylistSales.size() < 12) {
+                frameAddSales.setVisible(true);
+                frameAddSales.setLocationRelativeTo(null);
+            }
+            else {
+                int confirmation = JOptionPane.showConfirmDialog(rootPane, "Max limit for sales table reached. Create new file?", "New File?", JOptionPane.YES_NO_OPTION);
+                   switch (confirmation){
+                        case JOptionPane.YES_OPTION:
+                            jMnuItmNewActionPerformed(evt);
+                            break;
+                        case JOptionPane.NO_OPTION:
+                            break;
+                        case JOptionPane.CLOSED_OPTION:
+                            break;
+                   }
+            }
         }
     }//GEN-LAST:event_btnNewActionPerformed
 
@@ -1238,7 +1286,7 @@ public class DashboardPage extends javax.swing.JFrame {
         tfModelName.setText(null);
         comboBrand.setSelectedIndex(0);
         comboOs.setSelectedIndex(0);
-//        btnGrpRange.clearSelection();
+        btnGrpAddInventory.clearSelection();
         radioBtnHigh.setSelected(true);
         tfCostPrice.setText(null);
         tfSellingPrice.setText(null);
@@ -1398,13 +1446,13 @@ public class DashboardPage extends javax.swing.JFrame {
             InventoryManagement im = new InventoryManagement(modelNo, modelName, brand, os, range, costPricePojo, sellingPricePojo, quantityPojo);
             arraylistInventory.add(im);
             sort();
-            clearTable();
-            addToTable();
+            clearTableInventory();
+            addToInventoryTable();
         }
         else {
             InventoryManagement im = new InventoryManagement(modelNo, modelName, brand, os, range, costPricePojo, sellingPricePojo, quantityPojo);
             arraylistInventory.add(im);
-            addToTable();
+            addToInventoryTable();
         }
         frameAddInventory.dispose();
     }//GEN-LAST:event_jButtonAddInventoryActionPerformed
@@ -1414,8 +1462,8 @@ public class DashboardPage extends javax.swing.JFrame {
         if (tableSelection == true) {
             if (tblInventory.getSelectedRow() >= 0) {
                 arraylistInventory.remove(tblInventory.getSelectedRow());
-                clearTable();
-                addToTable();
+                clearTableInventory();
+                addToInventoryTable();
             }
             else {
                 JOptionPane.showMessageDialog(rootPane, "No row selected.", "Error", 0);
@@ -1424,18 +1472,14 @@ public class DashboardPage extends javax.swing.JFrame {
         else {
             if (tblSales.getSelectedRow() >= 0) {
                 arraylistSales.remove(tblSales.getSelectedRow());
-                clearTable();
-                addToTable();
+                clearTableInventory();
+                addToInventoryTable();
             }
             else {
                 JOptionPane.showMessageDialog(rootPane, "No row selected.", "Error", 0);
             }
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
-
-    private void comboBrandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBrandActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboBrandActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         // TODO add your handling code here:
@@ -1544,39 +1588,83 @@ public class DashboardPage extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tfEditInvSellingPriceKeyTyped
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        dispose();
+        new Login().setVisible(true);
+    }//GEN-LAST:event_formWindowClosing
+
+    private void jMnuItmAddBrandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmAddBrandActionPerformed
+        // TODO add your handling code here:
+        String dir = System.getProperty("user.dir");
+        dir += "\\resources\\Brands\\brands.txt";
+        String newBrand = JOptionPane.showInputDialog(rootPane, "Enter New Brand", "Add Brand", JOptionPane.INFORMATION_MESSAGE).trim();
+        if (newBrand != null && !newBrand.isEmpty()) {
+            String capBrand = newBrand.substring(0, 1).toUpperCase() + newBrand.substring(1);
+            try {
+                BufferedWriter bw = new BufferedWriter(new FileWriter(dir, true));
+                bw.newLine();
+                bw.write(capBrand);
+                bw.close();
+                JOptionPane.showMessageDialog(rootPane, capBrand + " successfully added to brands.\nRelaunch the program for it to take effect", "Success!", JOptionPane.INFORMATION_MESSAGE);
+                elementsForComboBoxBrand();
+                comboBrand.revalidate();
+                comboBrand.repaint();
+            }
+            catch (IOException ie) {
+                JOptionPane.showMessageDialog(rootPane, "No empty rows found!" + ie, "Error", 0);
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(rootPane, "No input", "Error", 0);
+        }
+    }//GEN-LAST:event_jMnuItmAddBrandActionPerformed
+
     
     private void sort () {
-        ArrayList <InventoryManagement> pH = new ArrayList <InventoryManagement>();
-        for (int i = 0; i < arraylistInventory.size(); i++) {
-            for (int j = i + 1 ; j < arraylistInventory.size(); j++) {
-                InventoryManagement imFirst = arraylistInventory.get(i);
-                InventoryManagement imSecond = arraylistInventory.get(j);
-                if (imFirst.getCost() > imSecond.getCost()) {
-                    Collections.swap(arraylistInventory, i, j);
+        if (tableSelection == true) {
+            for (int i = 0; i < arraylistInventory.size(); i++) {
+                for (int j = i + 1 ; j < arraylistInventory.size(); j++) {
+                    InventoryManagement imFirst = arraylistInventory.get(i);
+                    InventoryManagement imSecond = arraylistInventory.get(j);
+                    if (imFirst.getCost() > imSecond.getCost()) {
+                        Collections.swap(arraylistInventory, i, j);
+                    }
+                }
+            }
+        }
+        else {
+            for (int i = 0; i < arraylistSales.size(); i++) {
+                for (int j = i + 1; j < arraylistSales.size(); j++) {
+                    Sales salesFirst = arraylistSales.get(i);
+                    Sales salesSecond = arraylistSales.get(j);
+                    if(salesFirst.getTotal() > salesSecond.getTotal()) {
+                        Collections.swap(arraylistSales, i, j);
+                    }
                 }
             }
         }
     }
     
-    private void addToTable () {
-        if (tableSelection == true) {
-            String [] arrayForTable = {null, null, null, null, null, null, null, null};
-            for (InventoryManagement im : arraylistInventory) {
-                arrayForTable[0] = im.getModelNo();
-                arrayForTable[1] = im.getModelName();
-                arrayForTable[2] = im.getBrand();
-                arrayForTable[3] = im.getOs();
-                arrayForTable[4] = im.getRange();
-                arrayForTable[5] = String.valueOf(im.getCost());
-                arrayForTable[6] = String.valueOf(im.getSellingPrice());
-                arrayForTable[7] = String.valueOf(im.getQuantity());
+    private void addToInventoryTable () {
+
+        String [] arrayForTable = {null, null, null, null, null, null, null, null};
+        for (InventoryManagement im : arraylistInventory) {
+            arrayForTable[0] = im.getModelNo();
+            arrayForTable[1] = im.getModelName();
+            arrayForTable[2] = im.getBrand();
+            arrayForTable[3] = im.getOs();
+            arrayForTable[4] = im.getRange();
+            arrayForTable[5] = String.valueOf(im.getCost());
+            arrayForTable[6] = String.valueOf(im.getSellingPrice());
+            arrayForTable[7] = String.valueOf(im.getQuantity());
             
-                int rowCount = tblInventory.getRowCount();
-                int nextRow = 0;
-                boolean emptyRowFlag = false;
-                String s;
+            int rowCount = tblInventory.getRowCount();
+            int nextRow = 0;
+            boolean emptyRowFlag = false;
+            String s;
         
-                do{
+            do{
                 s = (String) tblInventory.getValueAt(nextRow, 0);
                 if(s != null && s.length() != 0) {
                     nextRow++;
@@ -1594,27 +1682,27 @@ public class DashboardPage extends javax.swing.JFrame {
             }
             else {
                 JOptionPane.showMessageDialog(rootPane, "No empty rows found!", "Error", 0);
-                }
             }
         }
-        else {
-            String [] arrayForTable = {null, null, null, null, null, null, null, null};
-            for (Sales sales : arraylistSales) {
-                arrayForTable[0] = sales.getModelNo();
-                arrayForTable[1] = sales.getModelName();
-                arrayForTable[2] = sales.getBrand();
-                arrayForTable[3] = sales.getOs();
-                arrayForTable[4] = sales.getCustomerName();
-                arrayForTable[5] = String.valueOf(sales.getDiscount());
-                arrayForTable[6] = String.valueOf(sales.getQuantity());
-                arrayForTable[7] = String.valueOf(sales.getTotal());
+    }
+    private void addToSalesTable() {
+        String [] arrayForTable = {null, null, null, null, null, null, null, null};
+        for (Sales sales : arraylistSales) {
+            arrayForTable[0] = sales.getModelNo();
+            arrayForTable[1] = sales.getModelName();
+            arrayForTable[2] = sales.getBrand();
+            arrayForTable[3] = sales.getOs();
+            arrayForTable[4] = sales.getCustomerName();
+            arrayForTable[5] = String.valueOf(sales.getDiscount());
+            arrayForTable[6] = String.valueOf(sales.getQuantity());
+            arrayForTable[7] = String.valueOf(sales.getTotal());
             
-                int rowCount = tblInventory.getRowCount();
-                int nextRow = 0;
-                boolean emptyRowFlag = false;
-                String s;
+            int rowCount = tblInventory.getRowCount();
+            int nextRow = 0;
+            boolean emptyRowFlag = false;
+            String s;
         
-                do{
+            do{
                 s = (String) tblInventory.getValueAt(nextRow, 0);
                 if(s != null && s.length() != 0) {
                     nextRow++;
@@ -1622,9 +1710,7 @@ public class DashboardPage extends javax.swing.JFrame {
                 else {
                     emptyRowFlag = true;
                 } 
-//                LoginPage login = new LoginPage();
-//
-//       
+      
             }   while(nextRow < rowCount && !emptyRowFlag);
             if(nextRow < rowCount) {
                 int colCount = tblInventory.getColumnCount();
@@ -1635,30 +1721,51 @@ public class DashboardPage extends javax.swing.JFrame {
             }
             else {
                 JOptionPane.showMessageDialog(rootPane, "No empty rows found!", "Error", 0);
-                }
             }
         }
     }
     
-    private void clearTable() {
-        if (tableSelection == true) {
-            int rowCount = tblInventory.getRowCount();
-            int colCount = tblInventory.getColumnCount();
-            for (int i = rowCount - 1; i >=0; i--) {
-                for (int j = 0; j < colCount; j++) {
+    private void clearTableInventory() {
+        
+        int rowCount = tblInventory.getRowCount();
+        int colCount = tblInventory.getColumnCount();
+        for (int i = rowCount - 1; i >=0; i--) {
+            for (int j = 0; j < colCount; j++) {
                 tblInventory.setValueAt(null, i, j);
-                }
             }
-        }
-        else {
-            int rowCount = tblSales.getRowCount();
+        }    
+    }
+    private void clearTableSales() {
+        int rowCount = tblSales.getRowCount();
             int colCount = tblSales.getColumnCount();
             for (int i = rowCount - 1; i >=0; i--) {
                 for (int j = 0; j < colCount; j++) {
                 tblSales.setValueAt(null, i, j);
                 }
             }
+    }
+    private String[] elementsForComboBoxBrand () {
+        String [] comboStrings = {};
+        List <String> listStrings = new ArrayList <>();
+        try {
+            String dir = System.getProperty("user.dir");
+            FileInputStream fstream = new FileInputStream(dir + "\\resources\\Brands\\brands.txt");
+            DataInputStream input = new DataInputStream(fstream);
+            BufferedReader buffer = new BufferedReader (new InputStreamReader(input));
+            String str;
+            while ((str = buffer.readLine()) != null) {
+                str = str.trim();
+                if ((str.length() != 0)) {
+                    listStrings.add(str);
+                }
+            }
         }
+        catch (IOException ie) {
+            JOptionPane.showMessageDialog(rootPane, "No empty rows found!" + ie, "Error", 0);
+        }
+        comboStrings = (String[]) listStrings.toArray(new String[listStrings.size()]);
+        System.out.println(Arrays.toString(comboStrings));
+        return comboStrings;
     }
     
     private int binarySearchInventory(int low, int high, int search) {
@@ -1747,8 +1854,8 @@ public class DashboardPage extends javax.swing.JFrame {
     private javax.swing.JMenu jMnuAbt;
     private javax.swing.JMenu jMnuFile;
     private javax.swing.JMenuItem jMnuItmAbout;
+    private javax.swing.JMenuItem jMnuItmAddBrand;
     private javax.swing.JMenuItem jMnuItmExit;
-    private javax.swing.JMenuItem jMnuItmImport;
     private javax.swing.JMenuItem jMnuItmNew;
     private javax.swing.JMenuItem jMnuItmOpen;
     private javax.swing.JMenuItem jMnuItmSave;
@@ -1817,4 +1924,5 @@ public class DashboardPage extends javax.swing.JFrame {
     private javax.swing.JTextField tfSearch;
     private javax.swing.JTextField tfSellingPrice;
     // End of variables declaration//GEN-END:variables
+
 }
