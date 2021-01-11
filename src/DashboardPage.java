@@ -1,14 +1,25 @@
-
 import java.awt.Toolkit;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
 import java.util.TimerTask;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.util.Timer;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /*
@@ -19,21 +30,65 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
- * @author suresh
+ * @author anish, ashesh, roshani, suresh
  */
 public class DashboardPage extends javax.swing.JFrame {
-    int indexEditInv;
-    boolean tableSelection = true;
-    String path = "";
-    private ArrayList <InventoryManagement> arraylistInventory = new ArrayList <InventoryManagement> ();
-    private ArrayList <Sales> arraylistSales = new ArrayList <Sales> ();
-    
+    private int indexEditInv;
+    private int indexEditSales;
+    private boolean tableSelection = true;
+    private boolean isSaved = true;
+    private boolean isEditSales = false;
+    private String path = "";
+    private final ArrayList <InventoryManagement> arraylistInventory = new ArrayList <> ();
+    private final ArrayList <Sales> arraylistSales = new ArrayList <> ();
+    DocumentListener doc = new DocumentListener() {
+        public void changedUpdate (DocumentEvent evt) {
+            setIt(evt);
+        }
+        public void insertUpdate(DocumentEvent evt) {
+            setIt(evt);
+        }
+        public void removeUpdate(DocumentEvent evt) {
+            setIt(evt);
+        }
+        private void setIt(DocumentEvent evt) {
+            try {
+                String modelNum = comboBoxModelNumber.getSelectedItem().toString();
+                String brand = comboBoxBrandSales.getSelectedItem().toString();
+                for(InventoryManagement im : arraylistInventory) {
+                    String modelNumArray = im.getModelNo();
+                    String brandArray = im.getBrand();
+                    if(modelNumArray.equalsIgnoreCase(modelNum) && brandArray.equalsIgnoreCase(brand)) {
+                        int cost = im.getSellingPrice();
+                        int quantity = Integer.parseInt(tfQuantitySales.getText().trim());
+                        double discount = Integer.parseInt(comboBoxDiscount.getSelectedItem().toString());
+
+                        if(discount != 0) {
+                            discount = discount / 100;
+                        }
+                        else {
+                            tfTotal.setText(String.valueOf(cost * quantity));
+                            return;
+                        }
+                        double discountAmt = (cost * quantity) * discount;
+                        double total = (cost * quantity) - discountAmt;
+                        tfTotal.setText(String.valueOf(Math.round(total)));
+                        return;
+                    }
+                }
+            }
+            catch (NullPointerException | NumberFormatException | ArithmeticException e) {
+            JOptionPane.showMessageDialog(rootPane, e, "Error!", 0);
+        }
+        }
+    };
     /**
      * Creates new form DashboardPage
      */
     public DashboardPage() {
         setIcon();
         initComponents();
+        tfQuantitySales.getDocument().addDocumentListener(doc);
     }
 
     /**
@@ -71,20 +126,24 @@ public class DashboardPage extends javax.swing.JFrame {
         tfSellingPrice = new javax.swing.JTextField();
         frameAddSales = new javax.swing.JFrame();
         panelAddSales = new javax.swing.JPanel();
-        lblCust = new javax.swing.JLabel();
+        lblFirstName = new javax.swing.JLabel();
         lblDate = new javax.swing.JLabel();
         lblModelNoSales = new javax.swing.JLabel();
         lblBrandSales = new javax.swing.JLabel();
         lblSalePrice = new javax.swing.JLabel();
-        tfCustomer = new javax.swing.JTextField();
+        tfLastName = new javax.swing.JTextField();
         tfDate = new javax.swing.JTextField();
         tfQuantitySales = new javax.swing.JTextField();
         jBtnAddSales = new javax.swing.JButton();
         jBtnClearSales = new javax.swing.JButton();
-        tfBrandSales = new javax.swing.JTextField();
-        tfModelNumberSales = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        tfSales = new javax.swing.JTextField();
+        lblQuantitySales = new javax.swing.JLabel();
+        tfTotal = new javax.swing.JTextField();
+        comboBoxModelNumber = new javax.swing.JComboBox<>();
+        comboBoxBrandSales = new javax.swing.JComboBox<>();
+        lblDiscount = new javax.swing.JLabel();
+        comboBoxDiscount = new javax.swing.JComboBox<>();
+        tfFirstName = new javax.swing.JTextField();
+        lblLastName = new javax.swing.JLabel();
         frameSearch = new javax.swing.JFrame();
         panelSearch = new javax.swing.JPanel();
         lblSearch = new javax.swing.JLabel();
@@ -92,6 +151,10 @@ public class DashboardPage extends javax.swing.JFrame {
         radioBtnCostPrice = new javax.swing.JRadioButton();
         jButtonSearchArray = new javax.swing.JButton();
         jButtonSearchCancel = new javax.swing.JButton();
+        radioBtnSellingPrice = new javax.swing.JRadioButton();
+        radioBtnModelName = new javax.swing.JRadioButton();
+        radioBtnBrand = new javax.swing.JRadioButton();
+        lblSearchError = new javax.swing.JLabel();
         frameEditInventory = new javax.swing.JFrame();
         panelEditInventory = new javax.swing.JPanel();
         lblEditInvModelNo = new javax.swing.JLabel();
@@ -117,11 +180,44 @@ public class DashboardPage extends javax.swing.JFrame {
         lblEditInvMsg = new javax.swing.JLabel();
         btnGrpEditInventory = new javax.swing.ButtonGroup();
         btnGrpAddInventory = new javax.swing.ButtonGroup();
+        buttonGroupSearch = new javax.swing.ButtonGroup();
+        frameSearchSales = new javax.swing.JFrame();
+        panelSearchSales = new javax.swing.JPanel();
+        lblSearchSales = new javax.swing.JLabel();
+        tfSearchSales = new javax.swing.JTextField();
+        radioBtnTotal = new javax.swing.JRadioButton();
+        jButtonSearchArraySales = new javax.swing.JButton();
+        jButtonSearchCancelSales = new javax.swing.JButton();
+        radioBtnCustomerName = new javax.swing.JRadioButton();
+        radioBtnModelNumberSales = new javax.swing.JRadioButton();
+        radioBtnBrandSales = new javax.swing.JRadioButton();
+        lblSearchErrorSales = new javax.swing.JLabel();
+        frameEditSales = new javax.swing.JFrame();
+        panelEditSales = new javax.swing.JPanel();
+        lblFirstNameEdit = new javax.swing.JLabel();
+        lblDateEdit = new javax.swing.JLabel();
+        lblModelNoSalesEdit = new javax.swing.JLabel();
+        lblBrandSalesEdit = new javax.swing.JLabel();
+        lblSalePriceEdit = new javax.swing.JLabel();
+        tfLastNameEdit = new javax.swing.JTextField();
+        tfDateEdit = new javax.swing.JTextField();
+        tfQuantitySalesEdit = new javax.swing.JTextField();
+        jBtnSaveSales = new javax.swing.JButton();
+        jBtnCancelSalesEdit = new javax.swing.JButton();
+        lblQuantitySalesEdit = new javax.swing.JLabel();
+        tfTotalEdit = new javax.swing.JTextField();
+        comboBoxModelNumberEdit = new javax.swing.JComboBox<>();
+        comboBoxBrandSalesEdit = new javax.swing.JComboBox<>();
+        lblDiscountEdit = new javax.swing.JLabel();
+        comboBoxDiscountEdit = new javax.swing.JComboBox<>();
+        tfFirstNameEdit = new javax.swing.JTextField();
+        lblLastNameEdit = new javax.swing.JLabel();
+        lblEditInvMsgSales = new javax.swing.JLabel();
         panelBg = new javax.swing.JPanel();
         panelButtons = new javax.swing.JPanel();
         btnEdit = new javax.swing.JButton();
         btnInvoice = new javax.swing.JButton();
-        btnNew = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnVendor = new javax.swing.JButton();
         btnSearch = new javax.swing.JButton();
@@ -135,11 +231,11 @@ public class DashboardPage extends javax.swing.JFrame {
         mnuBarEmployee = new javax.swing.JMenuBar();
         jMnuFile = new javax.swing.JMenu();
         jMnuItmNew = new javax.swing.JMenuItem();
-        jMnuItmImport = new javax.swing.JMenuItem();
         jMnuItmOpen = new javax.swing.JMenuItem();
         jMnuItmSave = new javax.swing.JMenuItem();
         jMnuItmSaveAs = new javax.swing.JMenuItem();
         jMnuTools = new javax.swing.JMenu();
+        jMnuItmAddBrand = new javax.swing.JMenuItem();
         jMnuAbt = new javax.swing.JMenu();
         jMnuItmAbout = new javax.swing.JMenuItem();
         jMnuItmExit = new javax.swing.JMenuItem();
@@ -168,8 +264,14 @@ public class DashboardPage extends javax.swing.JFrame {
         frameAddInventory.setTitle("Add an entry");
         frameAddInventory.setAlwaysOnTop(true);
         frameAddInventory.setMinimumSize(new java.awt.Dimension(400, 480));
-        frameAddInventory.setPreferredSize(new java.awt.Dimension(400, 480));
         frameAddInventory.setResizable(false);
+        frameAddInventory.addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+                frameAddInventoryWindowLostFocus(evt);
+            }
+        });
 
         panelAddInventory.setBackground(new java.awt.Color(0, 0, 51));
         panelAddInventory.setForeground(new java.awt.Color(255, 255, 255));
@@ -200,14 +302,21 @@ public class DashboardPage extends javax.swing.JFrame {
             }
         });
 
-        comboBrand.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Samsung", "Apple", "Huawei", "Motorola", "Sony" }));
-        comboBrand.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboBrandActionPerformed(evt);
+        tfModelNo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfModelNoKeyTyped(evt);
             }
         });
 
-        comboOs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "iOS", "Android", "Symbian", "Others" }));
+        tfModelName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfModelNameKeyTyped(evt);
+            }
+        });
+
+        comboBrand.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
+
+        comboOs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "iOS", "Android", "Symbian", "Others" }));
 
         btnGrpAddInventory.add(radioBtnHigh);
         radioBtnHigh.setForeground(new java.awt.Color(255, 255, 255));
@@ -372,14 +481,26 @@ public class DashboardPage extends javax.swing.JFrame {
 
         frameAddSales.setTitle("Add an entry");
         frameAddSales.setAlwaysOnTop(true);
-        frameAddSales.setMinimumSize(new java.awt.Dimension(398, 375));
+        frameAddSales.setMinimumSize(new java.awt.Dimension(400, 500));
         frameAddSales.setResizable(false);
+        frameAddSales.addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+                frameAddSalesWindowLostFocus(evt);
+            }
+        });
+        frameAddSales.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                frameAddSalesWindowClosing(evt);
+            }
+        });
 
         panelAddSales.setBackground(new java.awt.Color(0, 0, 51));
         panelAddSales.setForeground(new java.awt.Color(255, 255, 255));
 
-        lblCust.setForeground(new java.awt.Color(255, 255, 255));
-        lblCust.setText("Customer :");
+        lblFirstName.setForeground(new java.awt.Color(255, 255, 255));
+        lblFirstName.setText("First Name :");
 
         lblDate.setForeground(new java.awt.Color(255, 255, 255));
         lblDate.setText("Date :");
@@ -411,6 +532,11 @@ public class DashboardPage extends javax.swing.JFrame {
         jBtnAddSales.setForeground(new java.awt.Color(255, 255, 255));
         jBtnAddSales.setText("Add");
         jBtnAddSales.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jBtnAddSales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnAddSalesActionPerformed(evt);
+            }
+        });
 
         jBtnClearSales.setBackground(new java.awt.Color(0, 0, 51));
         jBtnClearSales.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -423,10 +549,33 @@ public class DashboardPage extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Quantity :");
+        lblQuantitySales.setForeground(new java.awt.Color(255, 255, 255));
+        lblQuantitySales.setText("Quantity :");
 
-        tfSales.setEditable(false);
+        tfTotal.setEditable(false);
+
+        comboBoxModelNumber.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        comboBoxModelNumber.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboBoxModelNumberItemStateChanged(evt);
+            }
+        });
+
+        comboBoxBrandSales.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
+
+        lblDiscount.setBackground(new java.awt.Color(0, 0, 51));
+        lblDiscount.setForeground(new java.awt.Color(255, 255, 255));
+        lblDiscount.setText("Discount (%) :");
+
+        comboBoxDiscount.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0", "5", "10", "15", "20" }));
+        comboBoxDiscount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxDiscountActionPerformed(evt);
+            }
+        });
+
+        lblLastName.setForeground(new java.awt.Color(255, 255, 255));
+        lblLastName.setText("Last Name :");
 
         javax.swing.GroupLayout panelAddSalesLayout = new javax.swing.GroupLayout(panelAddSales);
         panelAddSales.setLayout(panelAddSalesLayout);
@@ -435,62 +584,70 @@ public class DashboardPage extends javax.swing.JFrame {
             .addGroup(panelAddSalesLayout.createSequentialGroup()
                 .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelAddSalesLayout.createSequentialGroup()
-                        .addGap(53, 53, 53)
+                        .addGap(50, 50, 50)
                         .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblCust)
+                            .addComponent(lblFirstName)
                             .addComponent(lblDate)
                             .addComponent(lblModelNoSales)
                             .addComponent(lblBrandSales)
-                            .addComponent(jLabel1)
-                            .addComponent(lblSalePrice))
-                        .addGap(35, 35, 35))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAddSalesLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jBtnAddSales, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(14, 14, 14)))
-                .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tfCustomer)
-                    .addComponent(tfQuantitySales)
-                    .addComponent(tfDate)
+                            .addComponent(lblQuantitySales)
+                            .addComponent(lblSalePrice)
+                            .addComponent(lblDiscount)
+                            .addComponent(lblLastName))
+                        .addGap(35, 35, 35)
+                        .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tfLastName)
+                            .addComponent(tfQuantitySales)
+                            .addComponent(tfDate)
+                            .addComponent(tfTotal)
+                            .addComponent(comboBoxModelNumber, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(comboBoxBrandSales, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(comboBoxDiscount, 0, 185, Short.MAX_VALUE)
+                            .addComponent(tfFirstName)))
                     .addGroup(panelAddSalesLayout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(jBtnClearSales, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 77, Short.MAX_VALUE))
-                    .addComponent(tfBrandSales, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(tfModelNumberSales)
-                    .addComponent(tfSales))
-                .addGap(70, 70, 70))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jBtnAddSales, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34)
+                        .addComponent(jBtnClearSales, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(56, 56, 56)))
+                .addGap(50, 50, 50))
         );
         panelAddSalesLayout.setVerticalGroup(
             panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelAddSalesLayout.createSequentialGroup()
-                .addGap(35, 35, 35)
+                .addGap(38, 38, 38)
+                .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblFirstName)
+                    .addComponent(tfFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfLastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblLastName))
+                .addGap(20, 20, 20)
+                .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDate))
+                .addGap(20, 20, 20)
+                .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(comboBoxModelNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblModelNoSales))
+                .addGap(20, 20, 20)
+                .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(comboBoxBrandSales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblBrandSales))
+                .addGap(20, 20, 20)
                 .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(panelAddSalesLayout.createSequentialGroup()
-                        .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(panelAddSalesLayout.createSequentialGroup()
-                                .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lblCust)
-                                    .addComponent(tfCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(20, 20, 20)
-                                .addComponent(lblDate))
-                            .addComponent(tfDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(17, 17, 17)
-                        .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblModelNoSales)
-                            .addComponent(tfModelNumberSales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(17, 17, 17)
-                        .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblBrandSales)
-                            .addComponent(tfBrandSales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(17, 17, 17)
-                        .addComponent(tfQuantitySales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel1))
-                .addGap(17, 17, 17)
-                .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(tfSales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblSalePrice))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 104, Short.MAX_VALUE)
+                    .addComponent(tfQuantitySales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblQuantitySales))
+                .addGap(20, 20, 20)
+                .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(comboBoxDiscount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDiscount))
+                .addGap(20, 20, 20)
+                .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSalePrice)
+                    .addComponent(tfTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 128, Short.MAX_VALUE)
                 .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBtnAddSales)
                     .addComponent(jBtnClearSales))
@@ -509,14 +666,23 @@ public class DashboardPage extends javax.swing.JFrame {
         );
 
         frameSearch.setTitle("Search");
-        frameSearch.setMinimumSize(new java.awt.Dimension(290, 210));
+        frameSearch.setMinimumSize(new java.awt.Dimension(360, 210));
         frameSearch.setResizable(false);
+        frameSearch.addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+                frameSearchWindowLostFocus(evt);
+            }
+        });
 
         panelSearch.setBackground(new java.awt.Color(0, 0, 51));
 
         lblSearch.setForeground(new java.awt.Color(255, 255, 255));
         lblSearch.setText("Search :");
 
+        radioBtnCostPrice.setBackground(new java.awt.Color(0, 0, 51));
+        buttonGroupSearch.add(radioBtnCostPrice);
         radioBtnCostPrice.setForeground(new java.awt.Color(255, 255, 255));
         radioBtnCostPrice.setText("Cost Price");
 
@@ -535,6 +701,25 @@ public class DashboardPage extends javax.swing.JFrame {
         jButtonSearchCancel.setForeground(new java.awt.Color(255, 255, 255));
         jButtonSearchCancel.setText("Cancel");
 
+        radioBtnSellingPrice.setBackground(new java.awt.Color(0, 0, 51));
+        buttonGroupSearch.add(radioBtnSellingPrice);
+        radioBtnSellingPrice.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnSellingPrice.setText("Selling Price");
+
+        radioBtnModelName.setBackground(new java.awt.Color(0, 0, 51));
+        buttonGroupSearch.add(radioBtnModelName);
+        radioBtnModelName.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnModelName.setText("Model Name");
+
+        radioBtnBrand.setBackground(new java.awt.Color(0, 0, 51));
+        buttonGroupSearch.add(radioBtnBrand);
+        radioBtnBrand.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnBrand.setText("Brand");
+
+        lblSearchError.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblSearchError.setForeground(new java.awt.Color(255, 255, 255));
+        lblSearchError.setText("No Search Results Found");
+
         javax.swing.GroupLayout panelSearchLayout = new javax.swing.GroupLayout(panelSearch);
         panelSearch.setLayout(panelSearchLayout);
         panelSearchLayout.setHorizontalGroup(
@@ -543,18 +728,28 @@ public class DashboardPage extends javax.swing.JFrame {
                 .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelSearchLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
-                        .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(radioBtnCostPrice)
-                            .addGroup(panelSearchLayout.createSequentialGroup()
-                                .addComponent(lblSearch)
-                                .addGap(50, 50, 50)
-                                .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(lblSearch)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelSearchLayout.createSequentialGroup()
-                        .addGap(67, 67, 67)
-                        .addComponent(jButtonSearchArray)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonSearchCancel)))
-                .addContainerGap(40, Short.MAX_VALUE))
+                        .addComponent(radioBtnCostPrice)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelSearchLayout.createSequentialGroup()
+                                .addComponent(radioBtnSellingPrice)
+                                .addGap(16, 16, 16)
+                                .addComponent(radioBtnModelName)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(radioBtnBrand))
+                            .addGroup(panelSearchLayout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addComponent(lblSearchError))
+                            .addGroup(panelSearchLayout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(jButtonSearchArray)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonSearchCancel)))))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         panelSearchLayout.setVerticalGroup(
             panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -564,8 +759,14 @@ public class DashboardPage extends javax.swing.JFrame {
                     .addComponent(lblSearch)
                     .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
-                .addComponent(radioBtnCostPrice)
-                .addGap(40, 40, 40)
+                .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(radioBtnCostPrice)
+                    .addComponent(radioBtnSellingPrice)
+                    .addComponent(radioBtnModelName)
+                    .addComponent(radioBtnBrand))
+                .addGap(15, 15, 15)
+                .addComponent(lblSearchError)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonSearchArray)
                     .addComponent(jButtonSearchCancel))
@@ -586,8 +787,14 @@ public class DashboardPage extends javax.swing.JFrame {
         frameEditInventory.setTitle("Add an entry");
         frameEditInventory.setAlwaysOnTop(true);
         frameEditInventory.setMinimumSize(new java.awt.Dimension(400, 520));
-        frameEditInventory.setPreferredSize(new java.awt.Dimension(400, 520));
         frameEditInventory.setResizable(false);
+        frameEditInventory.addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+                frameEditInventoryWindowLostFocus(evt);
+            }
+        });
 
         panelEditInventory.setBackground(new java.awt.Color(0, 0, 51));
         panelEditInventory.setForeground(new java.awt.Color(255, 255, 255));
@@ -770,8 +977,7 @@ public class DashboardPage extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButtonEditInventorySave)
-                            .addComponent(jButtonEditInventoryCancel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                            .addComponent(jButtonEditInventoryCancel))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
                 .addComponent(lblEditInvMsg)
                 .addGap(43, 43, 43))
@@ -788,9 +994,337 @@ public class DashboardPage extends javax.swing.JFrame {
             .addComponent(panelEditInventory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        frameSearchSales.setTitle("Search");
+        frameSearchSales.setMinimumSize(new java.awt.Dimension(360, 210));
+        frameSearchSales.setResizable(false);
+        frameSearchSales.addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+                frameSearchSalesWindowLostFocus(evt);
+            }
+        });
+
+        panelSearchSales.setBackground(new java.awt.Color(0, 0, 51));
+
+        lblSearchSales.setForeground(new java.awt.Color(255, 255, 255));
+        lblSearchSales.setText("Search :");
+
+        radioBtnTotal.setBackground(new java.awt.Color(0, 0, 51));
+        buttonGroupSearch.add(radioBtnTotal);
+        radioBtnTotal.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnTotal.setSelected(true);
+        radioBtnTotal.setText("Total");
+
+        jButtonSearchArraySales.setBackground(new java.awt.Color(0, 0, 51));
+        jButtonSearchArraySales.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonSearchArraySales.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonSearchArraySales.setText("Search");
+        jButtonSearchArraySales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSearchArraySalesActionPerformed(evt);
+            }
+        });
+
+        jButtonSearchCancelSales.setBackground(new java.awt.Color(0, 0, 51));
+        jButtonSearchCancelSales.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonSearchCancelSales.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonSearchCancelSales.setText("Cancel");
+
+        radioBtnCustomerName.setBackground(new java.awt.Color(0, 0, 51));
+        buttonGroupSearch.add(radioBtnCustomerName);
+        radioBtnCustomerName.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnCustomerName.setText("Last Name");
+
+        radioBtnModelNumberSales.setBackground(new java.awt.Color(0, 0, 51));
+        buttonGroupSearch.add(radioBtnModelNumberSales);
+        radioBtnModelNumberSales.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnModelNumberSales.setText("Model Number");
+
+        radioBtnBrandSales.setBackground(new java.awt.Color(0, 0, 51));
+        buttonGroupSearch.add(radioBtnBrandSales);
+        radioBtnBrandSales.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnBrandSales.setText("Brand");
+
+        lblSearchErrorSales.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblSearchErrorSales.setForeground(new java.awt.Color(255, 255, 255));
+        lblSearchErrorSales.setText("No Search Results Found");
+
+        javax.swing.GroupLayout panelSearchSalesLayout = new javax.swing.GroupLayout(panelSearchSales);
+        panelSearchSales.setLayout(panelSearchSalesLayout);
+        panelSearchSalesLayout.setHorizontalGroup(
+            panelSearchSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSearchSalesLayout.createSequentialGroup()
+                .addGroup(panelSearchSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelSearchSalesLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(lblSearchSales)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfSearchSales, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelSearchSalesLayout.createSequentialGroup()
+                        .addComponent(radioBtnTotal)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelSearchSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelSearchSalesLayout.createSequentialGroup()
+                                .addComponent(radioBtnCustomerName)
+                                .addGap(16, 16, 16)
+                                .addComponent(radioBtnModelNumberSales)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(radioBtnBrandSales))
+                            .addGroup(panelSearchSalesLayout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addComponent(lblSearchErrorSales))
+                            .addGroup(panelSearchSalesLayout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(jButtonSearchArraySales)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonSearchCancelSales)))))
+                .addContainerGap(27, Short.MAX_VALUE))
+        );
+        panelSearchSalesLayout.setVerticalGroup(
+            panelSearchSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSearchSalesLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(panelSearchSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSearchSales)
+                    .addComponent(tfSearchSales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(panelSearchSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(radioBtnTotal)
+                    .addComponent(radioBtnCustomerName)
+                    .addComponent(radioBtnModelNumberSales)
+                    .addComponent(radioBtnBrandSales))
+                .addGap(15, 15, 15)
+                .addComponent(lblSearchErrorSales)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelSearchSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonSearchArraySales)
+                    .addComponent(jButtonSearchCancelSales))
+                .addContainerGap(30, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout frameSearchSalesLayout = new javax.swing.GroupLayout(frameSearchSales.getContentPane());
+        frameSearchSales.getContentPane().setLayout(frameSearchSalesLayout);
+        frameSearchSalesLayout.setHorizontalGroup(
+            frameSearchSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelSearchSales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        frameSearchSalesLayout.setVerticalGroup(
+            frameSearchSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelSearchSales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        frameEditSales.setTitle("Add an entry");
+        frameEditSales.setAlwaysOnTop(true);
+        frameEditSales.setMinimumSize(new java.awt.Dimension(400, 500));
+        frameEditSales.setResizable(false);
+        frameEditSales.addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+                frameEditSalesWindowLostFocus(evt);
+            }
+        });
+
+        panelEditSales.setBackground(new java.awt.Color(0, 0, 51));
+        panelEditSales.setForeground(new java.awt.Color(255, 255, 255));
+
+        lblFirstNameEdit.setForeground(new java.awt.Color(255, 255, 255));
+        lblFirstNameEdit.setText("First Name :");
+
+        lblDateEdit.setForeground(new java.awt.Color(255, 255, 255));
+        lblDateEdit.setText("Date :");
+
+        lblModelNoSalesEdit.setForeground(new java.awt.Color(255, 255, 255));
+        lblModelNoSalesEdit.setText("Model Number :");
+
+        lblBrandSalesEdit.setForeground(new java.awt.Color(255, 255, 255));
+        lblBrandSalesEdit.setText("Brand :");
+
+        lblSalePriceEdit.setForeground(new java.awt.Color(255, 255, 255));
+        lblSalePriceEdit.setText("Total:");
+
+        tfLastNameEdit.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfLastNameEditKeyTyped(evt);
+            }
+        });
+
+        tfDateEdit.setToolTipText("dd-mm-yy (e.g.22-10-2010 )");
+        tfDateEdit.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfDateEditKeyTyped(evt);
+            }
+        });
+
+        tfQuantitySalesEdit.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfQuantitySalesEditKeyTyped(evt);
+            }
+        });
+
+        jBtnSaveSales.setBackground(new java.awt.Color(0, 0, 51));
+        jBtnSaveSales.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jBtnSaveSales.setForeground(new java.awt.Color(255, 255, 255));
+        jBtnSaveSales.setText("Save");
+        jBtnSaveSales.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jBtnSaveSales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnSaveSalesActionPerformed(evt);
+            }
+        });
+
+        jBtnCancelSalesEdit.setBackground(new java.awt.Color(0, 0, 51));
+        jBtnCancelSalesEdit.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jBtnCancelSalesEdit.setForeground(new java.awt.Color(255, 255, 255));
+        jBtnCancelSalesEdit.setText("Cancel");
+        jBtnCancelSalesEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jBtnCancelSalesEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnCancelSalesEditActionPerformed(evt);
+            }
+        });
+
+        lblQuantitySalesEdit.setForeground(new java.awt.Color(255, 255, 255));
+        lblQuantitySalesEdit.setText("Quantity :");
+
+        tfTotalEdit.setEditable(false);
+
+        comboBoxModelNumberEdit.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        comboBoxModelNumberEdit.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboBoxModelNumberEditItemStateChanged(evt);
+            }
+        });
+
+        comboBoxBrandSalesEdit.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
+
+        lblDiscountEdit.setBackground(new java.awt.Color(0, 0, 51));
+        lblDiscountEdit.setForeground(new java.awt.Color(255, 255, 255));
+        lblDiscountEdit.setText("Discount (%) :");
+
+        comboBoxDiscountEdit.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0", "5", "10", "15", "20" }));
+        comboBoxDiscountEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxDiscountEditActionPerformed(evt);
+            }
+        });
+
+        tfFirstNameEdit.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfFirstNameEditKeyTyped(evt);
+            }
+        });
+
+        lblLastNameEdit.setForeground(new java.awt.Color(255, 255, 255));
+        lblLastNameEdit.setText("Last Name :");
+
+        lblEditInvMsgSales.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblEditInvMsgSales.setForeground(new java.awt.Color(255, 255, 255));
+        lblEditInvMsgSales.setText("No Changes Detected");
+
+        javax.swing.GroupLayout panelEditSalesLayout = new javax.swing.GroupLayout(panelEditSales);
+        panelEditSales.setLayout(panelEditSalesLayout);
+        panelEditSalesLayout.setHorizontalGroup(
+            panelEditSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelEditSalesLayout.createSequentialGroup()
+                .addGroup(panelEditSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelEditSalesLayout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addGroup(panelEditSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblFirstNameEdit)
+                            .addComponent(lblDateEdit)
+                            .addComponent(lblModelNoSalesEdit)
+                            .addComponent(lblBrandSalesEdit)
+                            .addComponent(lblQuantitySalesEdit)
+                            .addComponent(lblSalePriceEdit)
+                            .addComponent(lblDiscountEdit)
+                            .addComponent(lblLastNameEdit))
+                        .addGap(35, 35, 35)
+                        .addGroup(panelEditSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tfLastNameEdit)
+                            .addComponent(tfQuantitySalesEdit)
+                            .addComponent(tfDateEdit)
+                            .addComponent(tfTotalEdit)
+                            .addComponent(comboBoxModelNumberEdit, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(comboBoxBrandSalesEdit, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(comboBoxDiscountEdit, 0, 185, Short.MAX_VALUE)
+                            .addComponent(tfFirstNameEdit)))
+                    .addGroup(panelEditSalesLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jBtnSaveSales, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34)
+                        .addComponent(jBtnCancelSalesEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(56, 56, 56)))
+                .addGap(50, 50, 50))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEditSalesLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(lblEditInvMsgSales)
+                .addGap(126, 126, 126))
+        );
+        panelEditSalesLayout.setVerticalGroup(
+            panelEditSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelEditSalesLayout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addGroup(panelEditSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblFirstNameEdit)
+                    .addComponent(tfFirstNameEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(panelEditSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfLastNameEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblLastNameEdit))
+                .addGap(20, 20, 20)
+                .addGroup(panelEditSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfDateEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDateEdit))
+                .addGap(20, 20, 20)
+                .addGroup(panelEditSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(comboBoxModelNumberEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblModelNoSalesEdit))
+                .addGap(20, 20, 20)
+                .addGroup(panelEditSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(comboBoxBrandSalesEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblBrandSalesEdit))
+                .addGap(20, 20, 20)
+                .addGroup(panelEditSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(tfQuantitySalesEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblQuantitySalesEdit))
+                .addGap(20, 20, 20)
+                .addGroup(panelEditSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(comboBoxDiscountEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDiscountEdit))
+                .addGap(20, 20, 20)
+                .addGroup(panelEditSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSalePriceEdit)
+                    .addComponent(tfTotalEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addComponent(lblEditInvMsgSales)
+                .addGap(52, 52, 52)
+                .addGroup(panelEditSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jBtnSaveSales)
+                    .addComponent(jBtnCancelSalesEdit))
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout frameEditSalesLayout = new javax.swing.GroupLayout(frameEditSales.getContentPane());
+        frameEditSales.getContentPane().setLayout(frameEditSalesLayout);
+        frameEditSalesLayout.setHorizontalGroup(
+            frameEditSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelEditSales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        frameEditSalesLayout.setVerticalGroup(
+            frameEditSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelEditSales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setTitle("Mobile Inventory Management");
         setBackground(new java.awt.Color(255, 250, 250));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         panelBg.setBackground(new java.awt.Color(0, 0, 51));
 
@@ -819,15 +1353,15 @@ public class DashboardPage extends javax.swing.JFrame {
             }
         });
 
-        btnNew.setBackground(new java.awt.Color(0, 0, 51));
-        btnNew.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        btnNew.setForeground(new java.awt.Color(255, 255, 255));
-        btnNew.setText("Add");
-        btnNew.setToolTipText("Click Inventory/Sales to Add entries to them.");
-        btnNew.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnNew.addActionListener(new java.awt.event.ActionListener() {
+        btnAdd.setBackground(new java.awt.Color(0, 0, 51));
+        btnAdd.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btnAdd.setForeground(new java.awt.Color(255, 255, 255));
+        btnAdd.setText("Add");
+        btnAdd.setToolTipText("Click Inventory/Sales to Add entries to them.");
+        btnAdd.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNewActionPerformed(evt);
+                btnAddActionPerformed(evt);
             }
         });
 
@@ -871,7 +1405,7 @@ public class DashboardPage extends javax.swing.JFrame {
             .addGroup(panelButtonsLayout.createSequentialGroup()
                 .addContainerGap(22, Short.MAX_VALUE)
                 .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnInvoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -883,7 +1417,7 @@ public class DashboardPage extends javax.swing.JFrame {
             panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelButtonsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnNew)
+                .addComponent(btnAdd)
                 .addGap(25, 25, 25)
                 .addComponent(btnEdit)
                 .addGap(25, 25, 25)
@@ -948,23 +1482,31 @@ public class DashboardPage extends javax.swing.JFrame {
 
         tblSales.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Customer", "Date", "Model Number", "Brand", "Quantity", "Discount", "Total Sales"
+                "First Name", "Last Name", "Date", "Model Number", "Brand", "Quantity", "Discount", "Total Sales"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblSales.setRowHeight(20);
         scrlPaneSales.setViewportView(tblSales);
 
@@ -1010,11 +1552,8 @@ public class DashboardPage extends javax.swing.JFrame {
         });
         jMnuFile.add(jMnuItmNew);
 
-        jMnuItmImport.setText("Import");
-        jMnuFile.add(jMnuItmImport);
-
         jMnuItmOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        jMnuItmOpen.setText("Open");
+        jMnuItmOpen.setText("Import/Open");
         jMnuItmOpen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMnuItmOpenActionPerformed(evt);
@@ -1043,6 +1582,15 @@ public class DashboardPage extends javax.swing.JFrame {
         mnuBarEmployee.add(jMnuFile);
 
         jMnuTools.setText("Tools");
+
+        jMnuItmAddBrand.setText("Add Brand");
+        jMnuItmAddBrand.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMnuItmAddBrandActionPerformed(evt);
+            }
+        });
+        jMnuTools.add(jMnuItmAddBrand);
+
         mnuBarEmployee.add(jMnuTools);
 
         jMnuAbt.setText("About");
@@ -1085,7 +1633,23 @@ public class DashboardPage extends javax.swing.JFrame {
 
     private void jMnuItmExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmExitActionPerformed
         // TODO add your handling code here:
-        dispose();
+        if(isSaved) {
+            System.exit(0);
+        }
+        else {
+            int confirmation = JOptionPane.showConfirmDialog(rootPane, "File already exists. Overwrite?", "Overwrite?", JOptionPane.YES_NO_OPTION);
+            switch (confirmation){
+                case JOptionPane.YES_OPTION:
+                    jButtonClearInventoryActionPerformed(evt);
+                    break;
+                case JOptionPane.NO_OPTION:
+                    DashboardPage dash = new DashboardPage();
+                    dash.jMnuItmNewActionPerformed(evt);
+                    break;
+                case JOptionPane.CLOSED_OPTION:
+                    break;
+            }
+        }
     }//GEN-LAST:event_jMnuItmExitActionPerformed
 
     private void jMnuItmAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmAboutActionPerformed
@@ -1098,28 +1662,90 @@ public class DashboardPage extends javax.swing.JFrame {
 
     private void jMnuItmOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmOpenActionPerformed
         // TODO add your handling code here:
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
-        JFileChooser jChooser = new JFileChooser();
-        jChooser.setDialogTitle("Open");
-        jChooser.setAcceptAllFileFilterUsed(false);
-        jChooser.setFileFilter(filter);
-        jChooser.showOpenDialog(null);
-        
-        File file = jChooser.getSelectedFile();
-        String filename = file.getAbsolutePath();
+        if(isSaved) {
+            String dir = System.getProperty("user.dir");
+            if (System.getProperty("os.name").contains("Windows")) {
+                dir += "\\resources\\CSV Files";
+            }
+            else{
+                dir += "/resources/CSV Files";
+            }
+            try {
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
+                JFileChooser jChooser = new JFileChooser(dir);
+                jChooser.setDialogTitle("Open");
+                jChooser.setAcceptAllFileFilterUsed(false);
+                jChooser.setFileFilter(filter);
+                jChooser.showOpenDialog(null);
+
+                File file = jChooser.getSelectedFile();
+                path = file.getAbsolutePath();
+                String pathSales = path.replace(".csv", "_sales.csv");
+                File fileSale = new File(pathSales);
+                
+                csvReaderInventory();
+                sortInventory();
+                addToInventoryTable();
+                if(fileSale.exists()) {
+                   csvReaderSales();
+                   addToInventoryTable();
+                }
+            }
+            catch(NullPointerException npe) {
+                JOptionPane.showMessageDialog(rootPane, npe, "Error!", 0);
+            }
+        }
+        else {
+            int confirmation = JOptionPane.showConfirmDialog(rootPane, "Unsaved changes. Save?", "Save?", JOptionPane.YES_NO_OPTION);
+            switch (confirmation){
+                case JOptionPane.YES_OPTION:
+                    jMnuItmSaveActionPerformed(evt);
+                    break;
+                case JOptionPane.NO_OPTION:
+                    isSaved = true;
+                    clearTableInventory();
+                    clearTableSales();
+                    arraylistInventory.clear();
+                    arraylistSales.clear();
+                    jMnuItmOpenActionPerformed(evt);
+                    break;
+                case JOptionPane.CLOSED_OPTION:
+                    break;
+            }
+        }
     }//GEN-LAST:event_jMnuItmOpenActionPerformed
 
     private void btnVendorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendorActionPerformed
-        dispose();
-//        LoginPage login = new LoginPage();
-//
-//        new Login().setVisible(true);
+        if(isSaved) {
+            System.exit(0);
+        }
+        else {
+            int confirmation = JOptionPane.showConfirmDialog(rootPane, "File already exists. Overwrite?", "Overwrite?", JOptionPane.YES_NO_OPTION);
+            switch (confirmation){
+                case JOptionPane.YES_OPTION:
+                    jButtonClearInventoryActionPerformed(evt);
+                    break;
+                case JOptionPane.NO_OPTION:
+                    DashboardPage dash = new DashboardPage();
+                    dash.jMnuItmNewActionPerformed(evt);
+                    break;
+                case JOptionPane.CLOSED_OPTION:
+                    break;
+            }
+        }
     }//GEN-LAST:event_btnVendorActionPerformed
 
     private void jMnuItmSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmSaveAsActionPerformed
         // TODO add your handling code here:
+        String dir = System.getProperty("user.dir");
+        if (System.getProperty("os.name").contains("Windows")) {
+            dir += "\\resources\\CSV Files";
+        }
+        else{
+            dir += "/resources/CSV Files";
+        }
         FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
-        JFileChooser jFileSaver = new JFileChooser("some path");
+        JFileChooser jFileSaver = new JFileChooser(dir);
         jFileSaver.setDialogTitle("Save as");
         jFileSaver.setDialogType(JFileChooser.SAVE_DIALOG);
         jFileSaver.setFileFilter(filter);
@@ -1127,24 +1753,19 @@ public class DashboardPage extends javax.swing.JFrame {
         int result = jFileSaver.showSaveDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             path = jFileSaver.getSelectedFile().toString();
-            path += ".csv";
             File newFile = new File(path);
             boolean check;
             try{
                 check = newFile.createNewFile();
                 if (check) {
-                    JOptionPane.showMessageDialog(rootPane, "Saved.", "Success", JOptionPane.PLAIN_MESSAGE);
-                    FileWriter fw = new FileWriter(path);
-                    fw.write("Model Number,Name,Brand,OS,Range,Cost,Discount");
-                    fw.close();
+                    csvWriter(path);
+                    JOptionPane.showMessageDialog(rootPane, "Saved successfully.", "Saved", JOptionPane.PLAIN_MESSAGE);    
                 }
                 else {
                    int confirmation = JOptionPane.showConfirmDialog(rootPane, "File already exists. Overwrite?", "Overwrite?", JOptionPane.YES_NO_OPTION);
                    switch (confirmation){
                         case JOptionPane.YES_OPTION:
-                            FileWriter fw = new FileWriter(path, false);
-                            fw.write("Model Number,Name,Brand,OS,Range,Cost,Discount");
-                            fw.close();
+                            csvWriter(path);
                             break;
                         case JOptionPane.NO_OPTION:
                             DashboardPage dash = new DashboardPage();
@@ -1162,50 +1783,75 @@ public class DashboardPage extends javax.swing.JFrame {
 
     private void jMnuItmNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmNewActionPerformed
         // TODO add your handling code here:
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
-        JFileChooser jFileNew = new JFileChooser("some path");
-        jFileNew.setDialogTitle("New");
-        jFileNew.setDialogType(JFileChooser.SAVE_DIALOG);
-        jFileNew.setFileFilter(filter);
-        // Stuff like setting the required file extension, the title, ...
-        int result = jFileNew.showSaveDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            path = jFileNew.getSelectedFile().toString();
-            path += ".csv";
-            File newFile = new File(path);
-            boolean check;
-            try {
-                check = newFile.createNewFile();
-                if (check) {
-                    JOptionPane.showMessageDialog(rootPane, "New File Created.", "Success", JOptionPane.PLAIN_MESSAGE);
-                    FileWriter fw = new FileWriter(path);
-                    fw.write("Model Number,Name,Brand,OS,Range,Cost,Discount");
-                    fw.close();
-                }
-                else {
-                    int confirmation = JOptionPane.showConfirmDialog(rootPane, "File already exists. Overwrite?");
-                    switch (confirmation) {
-                        case JOptionPane.YES_OPTION:
-                            FileWriter fw = new FileWriter(path, false);
-                            fw.write("Model Number,Name,Brand,OS,Range,Cost,Discount");
-                            fw.close();
-                            JOptionPane.showMessageDialog(rootPane, "File overwritten.", "Success", JOptionPane.PLAIN_MESSAGE);
-                            break;
-                        case JOptionPane.NO_OPTION:
-                            DashboardPage dash = new DashboardPage();
-                            dash.jMnuItmNewActionPerformed(evt);
-                            break;
-                        case JOptionPane.CLOSED_OPTION:
-                            break;
-                    }
-                }
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(rootPane, ex, "Error",JOptionPane.ERROR_MESSAGE);
+        if(isSaved) {
+            clearTableInventory();
+            clearTableSales();
+            arraylistInventory.clear();
+            arraylistSales.clear();
+        }
+        else {
+            int confirmation = JOptionPane.showConfirmDialog(rootPane, "Unsaved changes. Save?", "Save?", JOptionPane.YES_NO_OPTION);
+            switch (confirmation){
+                case JOptionPane.YES_OPTION:
+                    jMnuItmSaveActionPerformed(evt);
+                    break;
+                case JOptionPane.NO_OPTION:
+                    isSaved = true;
+                    clearTableInventory();
+                    clearTableSales();
+                    arraylistInventory.clear();
+                    arraylistSales.clear();
+                    jMnuItmNewActionPerformed(evt);
+                    break;
+                case JOptionPane.CLOSED_OPTION:
+                    break;
             }
         }
+//        String dir = System.getProperty("user.dir");
+//        FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
+//        JFileChooser jFileNew = new JFileChooser(dir);
+//        jFileNew.setDialogTitle("New");
+//        jFileNew.setDialogType(JFileChooser.SAVE_DIALOG);
+//        jFileNew.setFileFilter(filter);
+//        // Stuff like setting the required file extension, the title, ...
+//        int result = jFileNew.showSaveDialog(this);
+//        if (result == JFileChooser.APPROVE_OPTION) {
+//            path = jFileNew.getSelectedFile().toString();
+//            path += ".csv";
+//            File newFile = new File(path);
+//            boolean check;
+//            try {
+//                check = newFile.createNewFile();
+//                if (check) {
+//                    JOptionPane.showMessageDialog(rootPane, "New File Created.", "Success", JOptionPane.PLAIN_MESSAGE);
+//                    FileWriter fw = new FileWriter(path);
+//                    fw.write("Model Number,Name,Brand,OS,Range,Cost,Discount");
+//                    fw.close();
+//                }
+//                else {
+//                    int confirmation = JOptionPane.showConfirmDialog(rootPane, "File already exists. Overwrite?");
+//                    switch (confirmation) {
+//                        case JOptionPane.YES_OPTION:
+//                            FileWriter fw = new FileWriter(path, false);
+//                            fw.write("Model Number,Name,Brand,OS,Range,Cost,Discount");
+//                            fw.close();
+//                            JOptionPane.showMessageDialog(rootPane, "File overwritten.", "Success", JOptionPane.PLAIN_MESSAGE);
+//                            break;
+//                        case JOptionPane.NO_OPTION:
+//                            DashboardPage dash = new DashboardPage();
+//                            dash.jMnuItmNewActionPerformed(evt);
+//                            break;
+//                        case JOptionPane.CLOSED_OPTION:
+//                            break;
+//                    }
+//                }
+//            } catch (IOException ex) {
+//                JOptionPane.showMessageDialog(rootPane, ex, "Error",JOptionPane.ERROR_MESSAGE);
+//            }
+//        }
     }//GEN-LAST:event_jMnuItmNewActionPerformed
 
-    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
         if (tableSelection == true) {
             if (arraylistInventory.size() < 12) {
@@ -1213,7 +1859,7 @@ public class DashboardPage extends javax.swing.JFrame {
                 frameAddInventory.setLocationRelativeTo(null);
             }
             else {
-                int confirmation = JOptionPane.showConfirmDialog(rootPane, "Max limit for table reached. Create new file?", "New File?", JOptionPane.YES_NO_OPTION);
+                int confirmation = JOptionPane.showConfirmDialog(rootPane, "Max limit for inventory table reached. Create new file?", "New File?", JOptionPane.YES_NO_OPTION);
                    switch (confirmation){
                         case JOptionPane.YES_OPTION:
                             jMnuItmNewActionPerformed(evt);
@@ -1227,35 +1873,55 @@ public class DashboardPage extends javax.swing.JFrame {
             }
         }
         else {
-            frameAddSales.setVisible(true);
-            frameAddSales.setLocationRelativeTo(null);
+            if (!arraylistInventory.isEmpty()) {
+                if (arraylistSales.size() < 12) {
+                    frameAddSales.setVisible(true);
+                    frameAddSales.setLocationRelativeTo(null);
+                }
+                else {
+                    int confirmation = JOptionPane.showConfirmDialog(rootPane, "Max limit for sales table reached. Create new file?", "New File?", JOptionPane.YES_NO_OPTION);
+                       switch (confirmation){
+                            case JOptionPane.YES_OPTION:
+                                jMnuItmNewActionPerformed(evt);
+                                break;
+                            case JOptionPane.NO_OPTION:
+                                break;
+                            case JOptionPane.CLOSED_OPTION:
+                                break;
+                       }
+                }
+            }
+            else {
+                JOptionPane.showMessageDialog(rootPane,"There is nothing in the inventory", "Error!", 0);
+            }
         }
-    }//GEN-LAST:event_btnNewActionPerformed
+    }//GEN-LAST:event_btnAddActionPerformed
 
     private void jButtonClearInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearInventoryActionPerformed
         // TODO add your handling code here:
-        tfModelNo.setText(null);
-        tfModelName.setText(null);
-        comboBrand.setSelectedIndex(0);
-        comboOs.setSelectedIndex(0);
-//        btnGrpRange.clearSelection();
-        radioBtnHigh.setSelected(true);
-        tfCostPrice.setText(null);
-        tfSellingPrice.setText(null);
+        clearInventoryForm();
     }//GEN-LAST:event_jButtonClearInventoryActionPerformed
 
     private void jMnuItmSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmSaveActionPerformed
         // TODO add your handling code here:
         if (path != "" && path != null) {
+            csvWriter(path);
+            JOptionPane.showMessageDialog(rootPane, "Saved.", "Success", JOptionPane.PLAIN_MESSAGE);
         }
         else{
-           jMnuItmSaveAsActionPerformed(evt); 
+            jMnuItmSaveAsActionPerformed(evt); 
         }
     }//GEN-LAST:event_jMnuItmSaveActionPerformed
 
     private void btnInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInvoiceActionPerformed
         // TODO add your handling code here:
-        
+        if(tblSales.getSelectedRow() >= 0) {
+            int selection = tblSales.getSelectedRow();
+            Sales sales = arraylistSales.get(selection);
+        }
+        else {
+            JOptionPane.showMessageDialog(rootPane, "No row is selected in sales table.", "Error!", 0);
+        }
     }//GEN-LAST:event_btnInvoiceActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
@@ -1279,34 +1945,8 @@ public class DashboardPage extends javax.swing.JFrame {
                 tfEditInvModelNo.setText(modelNoOld);
                 tfEditInvModelName.setText(modelNameOld);
                 
-                if (brandOld.equals("Samsung")) {
-                    comboEditInvBrand.setSelectedIndex(1);
-                }
-                else if (brandOld.equals("Apple")) {
-                    comboEditInvBrand.setSelectedIndex(2);
-                }
-                else if (brandOld.equals("Huawei")) {
-                    comboEditInvBrand.setSelectedIndex(3);
-                }
-                else if (brandOld.equals("Motorola")) {
-                    comboEditInvBrand.setSelectedIndex(4);
-                }
-                else if (brandOld.equals("Sony")) {
-                    comboEditInvBrand.setSelectedIndex(5);
-                }
-                
-                if (osOld.equals("iOS")) {
-                    comboEditInvOs.setSelectedIndex(1);
-                }
-                else if (osOld.equals("Android")) {
-                    comboEditInvOs.setSelectedIndex(2);
-                }
-                else if (osOld.equals("Symbian")) {
-                    comboEditInvOs.setSelectedIndex(3);
-                }
-                else if (osOld.equals("Others")) {
-                    comboEditInvOs.setSelectedIndex(4);
-                }
+                comboEditInvBrand.setSelectedItem(brandOld);
+                comboEditInvOs.setSelectedItem(osOld);
                 
                 if (rangeOld.equals("High")) {
                     radioBtnEditInvHigh.setSelected(true);
@@ -1324,17 +1964,45 @@ public class DashboardPage extends javax.swing.JFrame {
                 
                 tfEditInvQuantity.setText(quantityOld);
                 
+                isSaved = false;
+            }
+            else {
+                JOptionPane.showMessageDialog(rootPane, "No row selected.", "Error", 0);
+            }
+        }
+        else {
+            isEditSales = true;
+            indexEditSales = tblSales.getSelectedRow();
+            if (indexEditSales >= 0) {
+               lblEditInvMsgSales.setVisible(false);
+               frameEditInventory.setVisible(true);
+               frameEditInventory.setLocationRelativeTo(null);
+               Sales sales = arraylistSales.get(indexEditSales);
+               String firstNameOld = sales.getFirstName();
+               String lastNameOld = sales.getLastName();
+               String dateOld = sales.getDate();
+               String modelNumberOld = sales.getModelNumber();
+               String brandOld = sales.getBrand();
+               String discountOld = String.valueOf(sales.getDiscount());
+               String quantityOld = String.valueOf(sales.getQuantity());
+               String totalOld = String.valueOf(sales.getTotal());
+               
+               tfFirstNameEdit.setText(firstNameOld);
+               tfLastNameEdit.setText(lastNameOld);
+               tfDateEdit.setText(dateOld);
+               comboBoxModelNumberEdit.setSelectedItem(modelNumberOld);
+               comboBoxBrandSalesEdit.setSelectedItem(brandOld);
+               tfQuantitySalesEdit.setText(quantityOld);
+               comboBoxDiscountEdit.setSelectedItem(discountOld);
+               tfTotal.setText(totalOld);
             }
             else {
                 JOptionPane.showMessageDialog(rootPane, "No row selected.", "Error", 0);
             }
         }
         
+        
     }//GEN-LAST:event_btnEditActionPerformed
-
-    private void jBtnClearSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnClearSalesActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBtnClearSalesActionPerformed
 
     private void tfCostPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCostPriceKeyTyped
         // TODO add your handling code here:
@@ -1380,32 +2048,69 @@ public class DashboardPage extends javax.swing.JFrame {
 
     private void jButtonAddInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddInventoryActionPerformed
         // TODO add your handling code here:
-        String modelNo = tfModelNo.getText().trim();
-        String modelName = tfModelName.getText().trim();
-        String brand = comboBrand.getSelectedItem().toString().trim();
-        String os = comboOs.getSelectedItem().toString().trim();
-        String range = radioBtnHigh.isSelected() == true ? "High" : radioBtnMid.isSelected() == true ? "Mid" : radioBtnLow.isSelected() == true ? "Low" : null;
-        String costPrice = tfCostPrice.getText().trim();
-        String sellingPrice = tfSellingPrice.getText().trim();
-        String quantity = tfQuantity.getText().trim();
-        
-        int costPricePojo = Integer.parseInt(costPrice);
-        int sellingPricePojo = Integer.parseInt(sellingPrice);
-        int quantityPojo = Integer.parseInt(quantity);
-        
+        String modelNo = null;
+        String modelName = null;
+        String brand = null;
+        String os = null;
+        String range = null;
+        int costPrice = 0;
+        int sellingPrice = 0;
+        int quantity = 0;
+        try{
+            modelNo = tfModelNo.getText().trim();
+            modelName = tfModelName.getText().trim();
+            brand = comboBrand.getSelectedItem().toString().trim();
+            os = comboOs.getSelectedItem().toString().trim();
+            range = radioBtnHigh.isSelected() == true ? "High" : radioBtnMid.isSelected() == true ? "Mid" : radioBtnLow.isSelected() == true ? "Low" : null;
+            costPrice = Integer.parseInt(tfCostPrice.getText().trim());
+            sellingPrice = Integer.parseInt(tfSellingPrice.getText().trim());
+            quantity = Integer.parseInt(tfQuantity.getText().trim());    
+        }
+        catch (NullPointerException npe) {
+            JOptionPane.showMessageDialog(rootPane,"Check your inputs.", "Error!", 0); 
+        }
+        catch (NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(rootPane, "Check your number inputs.", "Error!", 0);
+        }
             
         if (arraylistInventory.size() > 0 && arraylistInventory.size() < 12) {
-            InventoryManagement im = new InventoryManagement(modelNo, modelName, brand, os, range, costPricePojo, sellingPricePojo, quantityPojo);
+            InventoryManagement im = new InventoryManagement(modelNo, modelName, brand, os, range, costPrice, sellingPrice, quantity);
             arraylistInventory.add(im);
-            sort();
-            clearTable();
-            addToTable();
+            sortInventory();
+            clearTableInventory();
+            addToInventoryTable();
+            int confirmation = JOptionPane.showConfirmDialog(rootPane, "Do you want to add more?", "New?", JOptionPane.YES_NO_OPTION);
+            switch (confirmation){
+                case JOptionPane.YES_OPTION:
+                    clearInventoryForm();
+                    return;
+                case JOptionPane.NO_OPTION:
+                    clearInventoryForm();
+                    frameAddInventory.dispose();
+                    break;
+                case JOptionPane.CLOSED_OPTION:
+                    break;
+            }
         }
         else {
-            InventoryManagement im = new InventoryManagement(modelNo, modelName, brand, os, range, costPricePojo, sellingPricePojo, quantityPojo);
+            InventoryManagement im = new InventoryManagement(modelNo, modelName, brand, os, range, costPrice, sellingPrice, quantity);
             arraylistInventory.add(im);
-            addToTable();
+            addToInventoryTable();
+            int confirmation = JOptionPane.showConfirmDialog(rootPane, "Do you want to add more?", "New?", JOptionPane.YES_NO_OPTION);
+            switch (confirmation){
+                case JOptionPane.YES_OPTION:
+                    clearInventoryForm();
+                    return;
+                case JOptionPane.NO_OPTION:
+                    clearInventoryForm();
+                    frameAddInventory.dispose();
+                    break;
+                case JOptionPane.CLOSED_OPTION:
+                    break;
+            }
         }
+        isSaved = false;
+        comboBoxModelNumber.addItem(modelName);
         frameAddInventory.dispose();
     }//GEN-LAST:event_jButtonAddInventoryActionPerformed
 
@@ -1413,9 +2118,19 @@ public class DashboardPage extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (tableSelection == true) {
             if (tblInventory.getSelectedRow() >= 0) {
-                arraylistInventory.remove(tblInventory.getSelectedRow());
-                clearTable();
-                addToTable();
+                int confirmation = JOptionPane.showConfirmDialog(rootPane, "Index " + (tblInventory.getSelectedRow() + 1) + " of Inventory table will be deleted", "Delete?", JOptionPane.YES_NO_OPTION);
+                switch (confirmation){
+                    case JOptionPane.YES_OPTION:
+                        arraylistInventory.remove(tblInventory.getSelectedRow());
+                        clearTableInventory();
+                        addToInventoryTable();
+                        isSaved = false;
+                        break;
+                    case JOptionPane.NO_OPTION:
+                        break;
+                    case JOptionPane.CLOSED_OPTION:
+                        break;
+                }
             }
             else {
                 JOptionPane.showMessageDialog(rootPane, "No row selected.", "Error", 0);
@@ -1423,9 +2138,19 @@ public class DashboardPage extends javax.swing.JFrame {
         }
         else {
             if (tblSales.getSelectedRow() >= 0) {
-                arraylistSales.remove(tblSales.getSelectedRow());
-                clearTable();
-                addToTable();
+                int confirmation = JOptionPane.showConfirmDialog(rootPane, "Index " + (tblSales.getSelectedRow() + 1) + " of Sales table will be deleted", "Delete?", JOptionPane.YES_NO_OPTION);
+                switch (confirmation){
+                    case JOptionPane.YES_OPTION:
+                        arraylistSales.remove(tblSales.getSelectedRow());
+                        clearTableInventory();
+                        addToInventoryTable();
+                        isSaved = false;
+                        break;
+                    case JOptionPane.NO_OPTION:
+                        break;
+                    case JOptionPane.CLOSED_OPTION:
+                        break;
+                }
             }
             else {
                 JOptionPane.showMessageDialog(rootPane, "No row selected.", "Error", 0);
@@ -1433,14 +2158,24 @@ public class DashboardPage extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
-    private void comboBrandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBrandActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboBrandActionPerformed
-
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         // TODO add your handling code here:
-        frameSearch.setVisible(true);
-        frameSearch.setLocationRelativeTo(null);
+        if(!arraylistInventory.isEmpty() && tableSelection == true) {
+            lblSearchError.setVisible(false);
+            frameSearch.setVisible(true);
+            frameSearch.setLocationRelativeTo(null);
+        }
+        else if (!arraylistSales.isEmpty() && tableSelection == false) {
+            lblSearchErrorSales.setVisible(false);
+            frameSearchSales.setVisible(true);
+            frameSearchSales.setLocationRelativeTo(null);
+        }
+        else if (arraylistSales.isEmpty() && tableSelection == true) {
+            JOptionPane.showMessageDialog(rootPane, "There is no inventory data to perform search operation.", "Error", 0);
+        }
+        else {
+            JOptionPane.showMessageDialog(rootPane, "There is no sales data to perform search operation.", "Error", 0);
+        }
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void tfSellingPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSellingPriceKeyTyped
@@ -1453,15 +2188,91 @@ public class DashboardPage extends javax.swing.JFrame {
 
     private void jButtonSearchArrayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchArrayActionPerformed
         // TODO add your handling code here:
-        int search = Integer.parseInt(tfSearch.getText().trim());
-        int index = binarySearchInventory(0, arraylistInventory.size() - 1, search);
-        if (index == -1) {
-            System.out.println("Error! No match found");
+        String searchSelection = radioBtnCostPrice.isSelected() == true ? "Cost" : radioBtnSellingPrice.isSelected() == true ? "Selling" : radioBtnModelName.isSelected() == true ? "Model" : radioBtnBrand.isSelected() == true? "Brand" : null;
+        if(searchSelection.equals("Cost")) {
+            int search = 0;
+            try{
+                search = Integer.parseInt(tfSearch.getText().trim());
+            }
+            catch (NumberFormatException nfe) {
+                JOptionPane.showMessageDialog(rootPane, "Empty text field.\n" + nfe, "Error!", 0);
+                return;
+            }
+            int [] index = binarySearchInventoryCost(0, arraylistInventory.size() - 1, search);
+            if (index[0] == -1) {
+                lblSearchError.setVisible(true);
+                TimerTask task = new TimerTask () {
+                    public void run() {
+                        lblSearchError.setVisible(false);
+                    }
+                };
+                long delay = 1000L;
+                Timer timer = new Timer("Timer#1");
+                timer.schedule(task, delay);  
+            }
+            else {
+                frameSearch.dispose();
+                JOptionPane.showMessageDialog(rootPane, "Index: " + Arrays.toString(index), "Search results", 0);
+            }
+        }
+        else if (searchSelection.equals("Selling")) {
+        }
+        else if (searchSelection.equals("Model")) {
+            List <Integer> listInt = new ArrayList <>();
+            String search = null;
+            try {
+                search = tfSearch.getText().trim();
+            }
+            catch (NullPointerException npe) {
+                JOptionPane.showMessageDialog(rootPane, "Null input.\n" + npe, "Error!", 0);
+                return;
+            }
+            for (int i = 0; i < arraylistInventory.size(); i++) {
+                InventoryManagement im = arraylistInventory.get(i);
+                if (im.getModelNo().equals(search)) {
+                    listInt.add(i+1);
+                }
+            }
+            if(!listInt.isEmpty()) {
+                int [] index = listInt.stream().mapToInt(i -> i).toArray();
+                JOptionPane.showMessageDialog(rootPane, "Index: " + Arrays.toString(index), "Search results", 0);
+            }
+            else {
+                lblSearchError.setVisible(true);
+                TimerTask task = new TimerTask () {
+                    public void run() {
+                        lblSearchError.setVisible(false);
+                    }
+                };
+                long delay = 1000L;
+                Timer timer = new Timer("Timer#1");
+                timer.schedule(task, delay);
+            }
         }
         else {
-            System.out.println("Index: " + index);
-            InventoryManagement im = arraylistInventory.get(index);
-            System.out.println(im.getModelName());
+            List <Integer> listInt = new ArrayList <>();
+            String search = tfSearch.getText().trim();
+            for (int i = 0; i < arraylistInventory.size(); i++) {
+                InventoryManagement im = arraylistInventory.get(i);
+                if (im.getBrand().equals(search)) {
+                    listInt.add(i+1);
+                }
+            }
+            if(!listInt.isEmpty()) {
+                int [] index = listInt.stream().mapToInt(i -> i).toArray();
+                JOptionPane.showMessageDialog(rootPane, "Index: " + Arrays.toString(index), "Search results", 0);
+            }
+            else {
+                lblSearchError.setVisible(true);
+                TimerTask task = new TimerTask () {
+                    public void run() {
+                        lblSearchError.setVisible(false);
+                    }
+                };
+                long delay = 1000L;
+                Timer timer = new Timer("Timer#1");
+                timer.schedule(task, delay);
+            }
         }
     }//GEN-LAST:event_jButtonSearchArrayActionPerformed
 
@@ -1488,18 +2299,15 @@ public class DashboardPage extends javax.swing.JFrame {
         String brand = comboEditInvBrand.getSelectedItem().toString().trim();
         String os = comboEditInvOs.getSelectedItem().toString().trim();
         String range = radioBtnEditInvHigh.isSelected() == true ? "High" : radioBtnMid.isSelected() == true ? "Mid" : radioBtnLow.isSelected() == true ? "Low" : null;
-        String costPrice = tfEditInvCostPrice.getText().trim();
-        String sellingPrice = tfEditInvSellingPrice.getText().trim();
-        String quantity = tfEditInvQuantity.getText().trim();
-        
-        int costPricePojo = Integer.parseInt(costPrice);
-        int sellingPricePojo = Integer.parseInt(sellingPrice);
-        int quantityPojo = Integer.parseInt(quantity);
+        int costPrice = Integer.parseInt(tfEditInvCostPrice.getText().trim());
+        int sellingPrice = Integer.parseInt(tfEditInvSellingPrice.getText().trim());
+        int quantity = Integer.parseInt(tfEditInvQuantity.getText().trim());
+  
         
         InventoryManagement im = arraylistInventory.get(indexEditInv);
         if (modelNo.equalsIgnoreCase(im.getModelNo()) && modelName.equalsIgnoreCase(im.getModelName()) && brand.equalsIgnoreCase(im.getBrand()) && 
-        os.equalsIgnoreCase(im.getOs()) && range.equalsIgnoreCase(im.getRange()) && costPricePojo == im.getCost() && sellingPricePojo == im.getSellingPrice() &&
-        quantityPojo == im.getQuantity()) {
+        os.equalsIgnoreCase(im.getOs()) && range.equalsIgnoreCase(im.getRange()) && costPrice == im.getCost() && sellingPrice == im.getSellingPrice() &&
+        quantity == im.getQuantity()) {
             lblEditInvMsg.setVisible(true);
             TimerTask task = new TimerTask () {
                 public void run() {
@@ -1516,9 +2324,9 @@ public class DashboardPage extends javax.swing.JFrame {
             im.setBrand(brand);
             im.setOs(os);
             im.setRange(range);
-            im.setCost(costPricePojo);
-            im.setSellingPrice(sellingPricePojo);
-            im.setQuantity(quantityPojo);
+            im.setCost(costPrice);
+            im.setSellingPrice(sellingPrice);
+            im.setQuantity(quantity);
             JOptionPane.showMessageDialog(rootPane, "Edit Saved.", "Success!", 1);
         }
     }//GEN-LAST:event_jButtonEditInventorySaveActionPerformed
@@ -1544,39 +2352,608 @@ public class DashboardPage extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tfEditInvSellingPriceKeyTyped
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        if(isSaved) {
+            dispose();
+            new Login().setVisible(true);
+        }
+        else {
+            int confirmation = JOptionPane.showConfirmDialog(rootPane, "Unsaved changes. Save?", "Save?", JOptionPane.YES_NO_OPTION);
+            switch (confirmation){
+                case JOptionPane.YES_OPTION:
+                    java.awt.event.ActionEvent evt1 = null;
+                    jMnuItmSaveActionPerformed(evt1);
+                    break;
+                case JOptionPane.NO_OPTION:
+                    dispose();
+                    new Login().setVisible(true);
+                    break;
+                case JOptionPane.CLOSED_OPTION:
+                    break;
+            }
+        }
+    }//GEN-LAST:event_formWindowClosing
+
+    private void jMnuItmAddBrandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmAddBrandActionPerformed
+        // TODO add your handling code here:
+        String newBrand = null;
+        String dir = System.getProperty("user.dir");
+        dir += "\\resources\\Brands\\brands.txt";
+        try{
+            
+            newBrand = JOptionPane.showInputDialog(rootPane, "Enter New Brand", "Add Brand", JOptionPane.INFORMATION_MESSAGE).trim();
+        }
+        catch (NullPointerException npe) {
+        }
+        if(newBrand == null) {
+            //no code written here just an empty if condition to catch nullpointerexception
+        }
+        else if (newBrand != null && !newBrand.isEmpty()) {
+            String capBrand = newBrand.substring(0, 1).toUpperCase() + newBrand.substring(1);
+            try {
+                BufferedWriter bw = new BufferedWriter(new FileWriter(dir, true));
+                bw.newLine();
+                bw.write(capBrand);
+                bw.close();
+                JOptionPane.showMessageDialog(rootPane, capBrand + " successfully added to brands.", "Success!", JOptionPane.INFORMATION_MESSAGE);
+                elementsForComboBoxBrand();
+                comboBrand.addItem(capBrand);
+                comboBrand.revalidate();
+                comboBrand.repaint();
+                comboBoxBrandSales.addItem(capBrand);
+                comboBoxBrandSales.revalidate();
+                comboBoxBrandSales.repaint();
+            }
+            catch (IOException ie) {
+                JOptionPane.showMessageDialog(rootPane, "No empty rows found!" + ie, "Error", 0);
+            }
+            
+        }
+        else if (!newBrand.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "No input", "Error", 0);
+        }
+    }//GEN-LAST:event_jMnuItmAddBrandActionPerformed
+
+    private void jBtnAddSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAddSalesActionPerformed
+        // TODO add your handling code here:
+        String firstName = null;
+        String lastName = null;
+        String date = null;
+        String modelNumber = null;
+        String brand = null;
+        int quantity = 0;
+        int discount = 0;
+        int total = 0;
+        try{
+            firstName = tfFirstName.getText().trim();
+            lastName = tfLastName.getText().trim();
+            date = tfDate.getText().trim();
+            modelNumber = comboBoxModelNumber.getSelectedItem().toString();
+            brand = comboBoxBrandSales.getSelectedItem().toString();
+            quantity = Integer.parseInt(tfQuantitySales.getText().trim());
+            discount = Integer.parseInt(comboBoxDiscount.getSelectedItem().toString());
+            total = Integer.parseInt(tfTotal.getText());
+        }
+        catch (NullPointerException npe) {
+            JOptionPane.showMessageDialog(rootPane, "Please enter all the inputs.\n" + npe, "Error!", 0);
+            return;
+        }
+        catch (NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(rootPane, "Error in quantity text field.\n" + nfe, "Error!", 0);
+            return;
+        }
+        
+        if (arraylistInventory.size() > 0 && arraylistInventory.size() < 12) {
+            for(InventoryManagement im : arraylistInventory) {
+                if(im.getModelNo().equalsIgnoreCase(modelNumber) && im.getBrand().equalsIgnoreCase(brand)) {
+                    if(im.getQuantity() >= quantity) {
+                        Sales sales = new Sales(firstName, lastName, date, modelNumber, brand, discount, quantity, total);
+                        arraylistSales.add(sales);
+                        clearTableSales();
+                        addToSalesTable();
+                        int newQuantity = quantity - im.getQuantity();
+                        im.setQuantity(newQuantity);
+                        clearTableInventory();
+                        addToInventoryTable();
+                        int confirmation = JOptionPane.showConfirmDialog(rootPane, "Do you want to add more?", "New?", JOptionPane.YES_NO_OPTION);
+                        switch (confirmation){
+                        case JOptionPane.YES_OPTION:
+                            clearSalesForm();
+                            return;
+                        case JOptionPane.NO_OPTION:
+                            clearSalesForm();
+                            break;
+                        case JOptionPane.CLOSED_OPTION:
+                            break;
+                        }
+                    }
+                }
+            }   
+        }
+        else {
+            for(InventoryManagement im : arraylistInventory) {
+                if(im.getModelNo().equalsIgnoreCase(modelNumber) && im.getBrand().equalsIgnoreCase(brand)) {
+                    if(im.getQuantity() >= quantity) {
+                        Sales sales = new Sales(firstName, lastName, date, modelNumber, brand, discount, quantity, total);
+                        arraylistSales.add(sales);
+                        addToSalesTable();
+                        int newQuantity = quantity - im.getQuantity();
+                        im.setQuantity(newQuantity);
+                        clearTableInventory();
+                        addToInventoryTable();
+                        int confirmation = JOptionPane.showConfirmDialog(rootPane, "Do you want to add more?", "New?", JOptionPane.YES_NO_OPTION);
+                        switch (confirmation){
+                        case JOptionPane.YES_OPTION:
+                            clearSalesForm();
+                            return;
+                        case JOptionPane.NO_OPTION:
+                            clearSalesForm();
+                            frameAddSales.dispose();
+                            break;
+                        case JOptionPane.CLOSED_OPTION:
+                            break;
+                        }
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(rootPane, "Not enough pieces in the inventory.", "Error!", 0);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_jBtnAddSalesActionPerformed
+
+    private void jBtnClearSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnClearSalesActionPerformed
+        // TODO add your handling code here:
+        clearSalesForm();    
+    }//GEN-LAST:event_jBtnClearSalesActionPerformed
+
+    private void frameAddInventoryWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameAddInventoryWindowLostFocus
+        // TODO add your handling code here:
+        frameAddInventory.requestFocus();
+    }//GEN-LAST:event_frameAddInventoryWindowLostFocus
+
+    private void frameAddSalesWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameAddSalesWindowLostFocus
+        // TODO add your handling code here:
+        frameAddSales.requestFocus();
+    }//GEN-LAST:event_frameAddSalesWindowLostFocus
+
+    private void frameSearchWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameSearchWindowLostFocus
+        // TODO add your handling code here:
+        frameSearch.requestFocus();
+    }//GEN-LAST:event_frameSearchWindowLostFocus
+
+    private void frameEditInventoryWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameEditInventoryWindowLostFocus
+        // TODO add your handling code here:
+        frameEditInventory.requestFocus();
+    }//GEN-LAST:event_frameEditInventoryWindowLostFocus
+
+    private void jButtonSearchArraySalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchArraySalesActionPerformed
+        // TODO add your handling code here:
+        String searchSelection = radioBtnTotal.isSelected() == true ? "Total" : radioBtnCustomerName.isSelected() == true ? "Last" : radioBtnModelNumberSales.isSelected() == true ? "Model" : radioBtnBrandSales.isSelected() == true? "Brand" : null;
+        if (searchSelection.equals("Total")) {
+            List <Integer> listInt = new ArrayList <>();
+            int search = 0;
+            try {
+                search = Integer.parseInt(tfSearch.getText().trim());
+            }
+            catch (NumberFormatException nfe) {
+                JOptionPane.showMessageDialog(rootPane, "Integer input required.\n" + nfe, "Error!", 0);
+                return;
+            }
+            for (int i = 0; i < arraylistInventory.size(); i++) {
+                Sales sales = arraylistSales.get(i);
+                if (sales.getTotal() == search) {
+                    listInt.add(i+1);
+                }
+            }
+            if(!listInt.isEmpty()) {
+                int [] index = listInt.stream().mapToInt(i -> i).toArray();
+                JOptionPane.showMessageDialog(rootPane, "Index: " + Arrays.toString(index), "Search results", 0);
+            }
+            else {
+                lblSearchError.setVisible(true);
+                TimerTask task = new TimerTask () {
+                    public void run() {
+                        lblSearchErrorSales.setVisible(false);
+                    }
+                };
+                long delay = 1000L;
+                Timer timer = new Timer("Timer#1");
+                timer.schedule(task, delay);
+            }
+        }
+        else if (searchSelection.equals("Last")) {
+            List <Integer> listInt = new ArrayList <>();
+            String search = null;
+            try {
+                search = tfSearchSales.getText().trim();
+            }
+            catch (NullPointerException npe) {
+                JOptionPane.showMessageDialog(rootPane, "Check your inputs.\n" + npe, "Error!", 0);
+                return;
+            }
+            for (int i = 0; i < arraylistInventory.size(); i++) {
+                Sales sales = arraylistSales.get(i);
+                if (search.equals(sales.getLastName())) {
+                    listInt.add(i+1);
+                }
+            }
+            if(!listInt.isEmpty()) {
+                int [] index = listInt.stream().mapToInt(i -> i).toArray();
+                JOptionPane.showMessageDialog(rootPane, "Index: " + Arrays.toString(index), "Search results", 0);
+            }
+            else {
+                lblSearchError.setVisible(true);
+                TimerTask task = new TimerTask () {
+                    public void run() {
+                        lblSearchErrorSales.setVisible(false);
+                    }
+                };
+                long delay = 1000L;
+                Timer timer = new Timer("Timer#1");
+                timer.schedule(task, delay);
+            }
+        }
+        else if (searchSelection.equals("Model")) {
+            List <Integer> listInt = new ArrayList <>();
+            String search = null;
+            try {
+                search = tfSearchSales.getText().trim();
+            }
+            catch (NullPointerException npe) {
+                JOptionPane.showMessageDialog(rootPane, "Check your inputs.\n" + npe, "Error!", 0);
+                return;
+            }
+            for (int i = 0; i < arraylistInventory.size(); i++) {
+                Sales sales = arraylistSales.get(i);
+                if (search.equals(sales.getModelNumber())) {
+                    listInt.add(i+1);
+                }
+            }
+            if(!listInt.isEmpty()) {
+                int [] index = listInt.stream().mapToInt(i -> i).toArray();
+                JOptionPane.showMessageDialog(rootPane, "Index: " + Arrays.toString(index), "Search results", 0);
+            }
+            else {
+                lblSearchError.setVisible(true);
+                TimerTask task = new TimerTask () {
+                    public void run() {
+                        lblSearchErrorSales.setVisible(false);
+                    }
+                };
+                long delay = 1000L;
+                Timer timer = new Timer("Timer#1");
+                timer.schedule(task, delay);
+            }
+        }
+        else {
+            List <Integer> listInt = new ArrayList <>();
+            String search = null;
+            try {
+                search = tfSearchSales.getText().trim();
+            }
+            catch (NullPointerException npe) {
+                JOptionPane.showMessageDialog(rootPane, "Check your inputs.\n" + npe, "Error!", 0);
+                return;
+            }
+            for (int i = 0; i < arraylistInventory.size(); i++) {
+                Sales sales = arraylistSales.get(i);
+                if (search.equals(sales.getBrand())) {
+                    listInt.add(i+1);
+                }
+            }
+            if(!listInt.isEmpty()) {
+                int [] index = listInt.stream().mapToInt(i -> i).toArray();
+                JOptionPane.showMessageDialog(rootPane, "Index: " + Arrays.toString(index), "Search results", 0);
+            }
+            else {
+                lblSearchError.setVisible(true);
+                TimerTask task = new TimerTask () {
+                    public void run() {
+                        lblSearchErrorSales.setVisible(false);
+                    }
+                };
+                long delay = 1000L;
+                Timer timer = new Timer("Timer#1");
+                timer.schedule(task, delay);
+            }
+        }
+    }//GEN-LAST:event_jButtonSearchArraySalesActionPerformed
+
+    private void frameSearchSalesWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameSearchSalesWindowLostFocus
+        // TODO add your handling code here:
+    }//GEN-LAST:event_frameSearchSalesWindowLostFocus
+
+    private void comboBoxModelNumberItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboBoxModelNumberItemStateChanged
+        // TODO add your handling code here:
+        if(!isEditSales) {
+            String getModelNumber = comboBoxModelNumber.getSelectedItem().toString();
+            if(!getModelNumber.isEmpty()) {
+                for (InventoryManagement im : arraylistInventory) {
+                    if (im.getModelNo().equalsIgnoreCase(getModelNumber)) {
+                        String brand = im.getBrand();
+                        String setBrand = comboBoxBrandSales.getSelectedItem().toString();
+                        if (!brand.equalsIgnoreCase(setBrand)) {
+                            comboBoxBrandSales.setSelectedItem(brand);
+                            return;
+                        }
+                        else if (setBrand.isEmpty()) {
+                            comboBoxBrandSales.setSelectedItem("Apple");
+                            return;
+                        }
+                        else {
+                            return;
+                        }
+                    }
+                }
+                JOptionPane.showMessageDialog(rootPane, "No such model number exists", "Error!", 0);
+            }
+        }
+    }//GEN-LAST:event_comboBoxModelNumberItemStateChanged
+
+    private void comboBoxDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxDiscountActionPerformed
+        // TODO add your handling code here:
+        try {
+            String modelNum = comboBoxModelNumber.getSelectedItem().toString();
+            String brand = comboBoxBrandSales.getSelectedItem().toString();
+            for(InventoryManagement im : arraylistInventory) {
+                String modelNumArray = im.getModelNo();
+                String brandArray = im.getBrand();
+                if(modelNumArray.equalsIgnoreCase(modelNum) && brandArray.equalsIgnoreCase(brand)) {
+                    int cost = im.getSellingPrice();
+                    int quantity = Integer.parseInt(tfQuantitySales.getText().trim());
+                    double discount = Integer.parseInt(comboBoxDiscount.getSelectedItem().toString());
+
+                    if(discount != 0) {
+                        discount = discount / 100;
+                    }
+                    else {
+                        tfTotal.setText(String.valueOf(cost * quantity));
+                        return;
+                    }
+                    double discountAmt = (cost * quantity) * discount;
+                    double total = (cost * quantity) - discountAmt;
+                    tfTotal.setText(String.valueOf(Math.round(total)));
+                    return;
+                    }
+                }
+            }
+        catch (NullPointerException | NumberFormatException | ArithmeticException e) {
+            JOptionPane.showMessageDialog(rootPane, e, "Error!", 0);
+        }
+    }//GEN-LAST:event_comboBoxDiscountActionPerformed
+
+    private void tfQuantitySalesEditKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfQuantitySalesEditKeyTyped
+        // TODO add your handling code here:
+        char key = evt.getKeyChar();
+        if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE)) {
+            evt.consume();
+        }
+        else {
+            try {
+                String modelNum = comboBoxModelNumber.getSelectedItem().toString();
+                String brand = comboBoxBrandSales.getSelectedItem().toString();
+                for(InventoryManagement im : arraylistInventory) {
+                    String modelNumArray = im.getModelNo();
+                    String brandArray = im.getBrand();
+                    if(modelNumArray.equalsIgnoreCase(modelNum) && brandArray.equalsIgnoreCase(brand)) {
+                        int cost = im.getSellingPrice();
+                        int quantity = Integer.parseInt(tfQuantitySalesEdit.getText().trim());
+                        int discountPercent = Integer.parseInt(comboBoxDiscountEdit.getSelectedItem().toString());
+                        int discount = 0;
+                        if(discountPercent != 0) {
+                            discount = discountPercent / 100;
+                        }
+                        else {
+                            tfTotalEdit.setText(String.valueOf(cost * quantity));
+                            return;
+                        }
+                        int total = (cost * quantity) / discount;
+                        String stringTotal = String.valueOf(total);
+                        tfTotalEdit.setText(stringTotal);
+                        return;
+                    }
+                }
+            }
+            catch (NullPointerException npe) {
+            }
+            catch (NumberFormatException nfe) {
+            }
+        }
+    }//GEN-LAST:event_tfQuantitySalesEditKeyTyped
+
+    private void jBtnSaveSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSaveSalesActionPerformed
+        // TODO add your handling code here:
+        String firstName = tfFirstNameEdit.getText().trim();
+        String lastName = tfLastNameEdit.getText().trim();
+        String date = tfDateEdit.getText().trim();
+        String modelNumber = comboBoxModelNumberEdit.getSelectedItem().toString().trim();
+        String brand = comboBoxBrandSalesEdit.getSelectedItem().toString().trim();
+        int quantity = Integer.parseInt(tfQuantitySalesEdit.getText().trim());
+        int discount = Integer.parseInt(comboBoxDiscountEdit.getSelectedItem().toString().trim());
+        int total = Integer.parseInt(tfTotalEdit.getText());
+        
+        
+        
+        
+        Sales s = arraylistSales.get(indexEditSales);
+        if (s.getFirstName().equalsIgnoreCase(firstName) && s.getLastName().equalsIgnoreCase(lastName) && s.getDate().equalsIgnoreCase(date)
+        && s.getModelNumber().equalsIgnoreCase(modelNumber) && s.getBrand().equalsIgnoreCase(brand)
+        && s.getQuantity() == quantity && s.getDiscount() == discount && s.getTotal() == total) {
+            lblEditInvMsgSales.setVisible(true);
+            TimerTask task = new TimerTask () {
+                public void run() {
+                    lblEditInvMsgSales.setVisible(false);
+                }
+            };
+            long delay = 1000L;
+            Timer timer = new Timer("Timer#1");
+            timer.schedule(task, delay);
+        }
+        else {
+            s.setFirstName(firstName);
+            s.setLastName(lastName);
+            s.setDate(date);
+            s.setModelNumber(modelNumber);
+            s.setBrand(brand);
+            s.setQuantity(quantity);
+            s.setDiscount(discount);
+            s.setTotal(total);
+            JOptionPane.showMessageDialog(rootPane, "Edit Saved.", "Success!", 1);
+        }
+    }//GEN-LAST:event_jBtnSaveSalesActionPerformed
+
+    private void jBtnCancelSalesEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnCancelSalesEditActionPerformed
+        // TODO add your handling code here:
+        frameEditSales.dispose();
+    }//GEN-LAST:event_jBtnCancelSalesEditActionPerformed
+
+    private void comboBoxModelNumberEditItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboBoxModelNumberEditItemStateChanged
+        // TODO add your handling code here:
+        isEditSales = false;
+        String getModelNumber = comboBoxModelNumber.getSelectedItem().toString();
+        if(!getModelNumber.isEmpty()) {
+            for (InventoryManagement im : arraylistInventory) {
+                if (im.getModelNo().equalsIgnoreCase(getModelNumber)) {
+                    String brand = im.getBrand();
+                    String setBrand = comboBoxBrandSales.getSelectedItem().toString();
+                    if (!brand.equalsIgnoreCase(setBrand)) {
+                        comboBoxBrandSales.setSelectedItem(brand);
+                        return;
+                    }
+                    else if (setBrand.isEmpty()) {
+                        comboBoxBrandSales.setSelectedItem("Apple");
+                        return;
+                    }
+                    else {
+                        return;
+                    }
+                }
+            }
+            JOptionPane.showMessageDialog(rootPane, "No such model number exists", "Error!", 0);
+        }
+    }//GEN-LAST:event_comboBoxModelNumberEditItemStateChanged
+
+    private void comboBoxDiscountEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxDiscountEditActionPerformed
+        // TODO add your handling code here:
+        try {
+            String modelNum = comboBoxModelNumber.getSelectedItem().toString();
+            String brand = comboBoxBrandSales.getSelectedItem().toString();
+            for(InventoryManagement im : arraylistInventory) {
+                String modelNumArray = im.getModelNo();
+                String brandArray = im.getBrand();
+                if(modelNumArray.equalsIgnoreCase(modelNum) && brandArray.equalsIgnoreCase(brand)) {
+                    int cost = im.getSellingPrice();
+                    int quantity = Integer.parseInt(tfQuantitySales.getText().trim());
+                    double discountPercent = Double.parseDouble(comboBoxDiscount.getSelectedItem().toString());
+                    if(discountPercent != 0) {
+                        discountPercent = discountPercent / 100;
+                        double total = (cost * quantity) * discountPercent;
+                        tfTotal.setText(String.valueOf(Math.round(total)));
+                        break;
+                    }
+                    else {
+                        tfTotal.setText(String.valueOf(cost * quantity));
+                        break;
+                    }
+                    
+                }
+            }
+        }
+        catch (NullPointerException npe) {
+        }
+        catch (NumberFormatException nfe) {
+            System.out.println(nfe);
+        }
+        catch (ArithmeticException ae) {
+            System.out.println(ae);
+        }
+    }//GEN-LAST:event_comboBoxDiscountEditActionPerformed
+
+    private void frameEditSalesWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameEditSalesWindowLostFocus
+        // TODO add your handling code here:
+        frameEditSales.requestFocus();
+    }//GEN-LAST:event_frameEditSalesWindowLostFocus
+
+    private void tfFirstNameEditKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFirstNameEditKeyTyped
+        // TODO add your handling code here:
+        char key = evt.getKeyChar();
+        if(key == evt.VK_SPACE){
+            evt.consume();
+        }
+    }//GEN-LAST:event_tfFirstNameEditKeyTyped
+
+    private void tfModelNoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfModelNoKeyTyped
+        // TODO add your handling code here:
+        char key = evt.getKeyChar();
+        if(key == evt.VK_SPACE){
+            evt.consume();
+        }
+    }//GEN-LAST:event_tfModelNoKeyTyped
+
+    private void tfModelNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfModelNameKeyTyped
+        // TODO add your handling code here:
+        char key = evt.getKeyChar();
+        if(key == evt.VK_SPACE){
+            evt.consume();
+        }
+    }//GEN-LAST:event_tfModelNameKeyTyped
+
+    private void tfLastNameEditKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfLastNameEditKeyTyped
+        // TODO add your handling code here:
+        char key = evt.getKeyChar();
+        if(key == evt.VK_SPACE){
+            evt.consume();
+        }
+    }//GEN-LAST:event_tfLastNameEditKeyTyped
+
+    private void tfDateEditKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfDateEditKeyTyped
+        // TODO add your handling code here:
+        char key = evt.getKeyChar();
+        if(key == evt.VK_SPACE){
+            evt.consume();
+        }
+    }//GEN-LAST:event_tfDateEditKeyTyped
+
+    private void frameAddSalesWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameAddSalesWindowClosing
+        // TODO add your handling code here:
+        clearSalesForm();
+        frameAddSales.dispose();
+    }//GEN-LAST:event_frameAddSalesWindowClosing
+
     
-    private void sort () {
-        ArrayList <InventoryManagement> pH = new ArrayList <InventoryManagement>();
+    private void sortInventory () {
         for (int i = 0; i < arraylistInventory.size(); i++) {
             for (int j = i + 1 ; j < arraylistInventory.size(); j++) {
                 InventoryManagement imFirst = arraylistInventory.get(i);
                 InventoryManagement imSecond = arraylistInventory.get(j);
                 if (imFirst.getCost() > imSecond.getCost()) {
-                    Collections.swap(arraylistInventory, i, j);
+                        Collections.swap(arraylistInventory, i, j);
                 }
             }
         }
     }
     
-    private void addToTable () {
-        if (tableSelection == true) {
-            String [] arrayForTable = {null, null, null, null, null, null, null, null};
-            for (InventoryManagement im : arraylistInventory) {
-                arrayForTable[0] = im.getModelNo();
-                arrayForTable[1] = im.getModelName();
-                arrayForTable[2] = im.getBrand();
-                arrayForTable[3] = im.getOs();
-                arrayForTable[4] = im.getRange();
-                arrayForTable[5] = String.valueOf(im.getCost());
-                arrayForTable[6] = String.valueOf(im.getSellingPrice());
-                arrayForTable[7] = String.valueOf(im.getQuantity());
+    private void addToInventoryTable () {
+
+        String [] arrayForTable = {null, null, null, null, null, null, null, null};
+        for (InventoryManagement im : arraylistInventory) {
+            arrayForTable[0] = im.getModelNo();
+            arrayForTable[1] = im.getModelName();
+            arrayForTable[2] = im.getBrand();
+            arrayForTable[3] = im.getOs();
+            arrayForTable[4] = im.getRange();
+            arrayForTable[5] = String.valueOf(im.getCost());
+            arrayForTable[6] = String.valueOf(im.getSellingPrice());
+            arrayForTable[7] = String.valueOf(im.getQuantity());
             
-                int rowCount = tblInventory.getRowCount();
-                int nextRow = 0;
-                boolean emptyRowFlag = false;
-                String s;
+            int rowCount = tblInventory.getRowCount();
+            int nextRow = 0;
+            boolean emptyRowFlag = false;
+            String s;
         
-                do{
+            do{
                 s = (String) tblInventory.getValueAt(nextRow, 0);
                 if(s != null && s.length() != 0) {
                     nextRow++;
@@ -1594,27 +2971,27 @@ public class DashboardPage extends javax.swing.JFrame {
             }
             else {
                 JOptionPane.showMessageDialog(rootPane, "No empty rows found!", "Error", 0);
-                }
             }
         }
-        else {
-            String [] arrayForTable = {null, null, null, null, null, null, null, null};
-            for (Sales sales : arraylistSales) {
-                arrayForTable[0] = sales.getModelNo();
-                arrayForTable[1] = sales.getModelName();
-                arrayForTable[2] = sales.getBrand();
-                arrayForTable[3] = sales.getOs();
-                arrayForTable[4] = sales.getCustomerName();
-                arrayForTable[5] = String.valueOf(sales.getDiscount());
-                arrayForTable[6] = String.valueOf(sales.getQuantity());
-                arrayForTable[7] = String.valueOf(sales.getTotal());
+    }
+    private void addToSalesTable() {
+        String [] arrayForTable = {null, null, null, null, null, null, null, null};
+        for (Sales sales : arraylistSales) {
+            arrayForTable[0] = sales.getFirstName();
+            arrayForTable[1] = sales.getLastName();
+            arrayForTable[2] = sales.getDate();
+            arrayForTable[3] = sales.getModelNumber();
+            arrayForTable[4] = sales.getDate();
+            arrayForTable[5] = String.valueOf(sales.getDiscount());
+            arrayForTable[6] = String.valueOf(sales.getQuantity());
+            arrayForTable[7] = String.valueOf(sales.getTotal());
             
-                int rowCount = tblInventory.getRowCount();
-                int nextRow = 0;
-                boolean emptyRowFlag = false;
-                String s;
+            int rowCount = tblInventory.getRowCount();
+            int nextRow = 0;
+            boolean emptyRowFlag = false;
+            String s;
         
-                do{
+            do{
                 s = (String) tblInventory.getValueAt(nextRow, 0);
                 if(s != null && s.length() != 0) {
                     nextRow++;
@@ -1622,9 +2999,7 @@ public class DashboardPage extends javax.swing.JFrame {
                 else {
                     emptyRowFlag = true;
                 } 
-//                LoginPage login = new LoginPage();
-//
-//       
+      
             }   while(nextRow < rowCount && !emptyRowFlag);
             if(nextRow < rowCount) {
                 int colCount = tblInventory.getColumnCount();
@@ -1635,97 +3010,228 @@ public class DashboardPage extends javax.swing.JFrame {
             }
             else {
                 JOptionPane.showMessageDialog(rootPane, "No empty rows found!", "Error", 0);
-                }
             }
         }
     }
     
-    private void clearTable() {
-        if (tableSelection == true) {
-            int rowCount = tblInventory.getRowCount();
-            int colCount = tblInventory.getColumnCount();
-            for (int i = rowCount - 1; i >=0; i--) {
-                for (int j = 0; j < colCount; j++) {
+    private void clearTableInventory() {
+        
+        int rowCount = tblInventory.getRowCount();
+        int colCount = tblInventory.getColumnCount();
+        for (int i = rowCount - 1; i >=0; i--) {
+            for (int j = 0; j < colCount; j++) {
                 tblInventory.setValueAt(null, i, j);
-                }
             }
-        }
-        else {
-            int rowCount = tblSales.getRowCount();
+        }    
+    }
+    private void clearTableSales() {
+        int rowCount = tblSales.getRowCount();
             int colCount = tblSales.getColumnCount();
             for (int i = rowCount - 1; i >=0; i--) {
                 for (int j = 0; j < colCount; j++) {
                 tblSales.setValueAt(null, i, j);
                 }
             }
+    }
+    private String[] elementsForComboBoxBrand () {
+        String [] comboStrings = {};
+        List <String> listStrings = new ArrayList <>();
+        try {
+            String dir = System.getProperty("user.dir");
+            FileInputStream fstream = new FileInputStream(dir + "\\resources\\Brands\\brands.txt");
+            DataInputStream input = new DataInputStream(fstream);
+            BufferedReader buffer = new BufferedReader (new InputStreamReader(input));
+            String str;
+            while ((str = buffer.readLine()) != null) {
+                str = str.trim();
+                if ((str.length() != 0)) {
+                    listStrings.add(str);
+                }
+            }
         }
+        catch (IOException ie) {
+            JOptionPane.showMessageDialog(rootPane, "No empty rows found!" + ie, "Error", 0);
+        }
+        comboStrings = (String[]) listStrings.toArray(new String[listStrings.size()]);
+        return comboStrings;
     }
     
-    private int binarySearchInventory(int low, int high, int search) {
-        
+    private int [] binarySearchInventoryCost(int low, int high, int search) {
+        int [] values = {};
+        List <Integer> listInt = new ArrayList <>();
         if (high >= low) {
             int mid = (low+high) / 2;
             InventoryManagement im = arraylistInventory.get(mid);
             System.out.println(im.getCost());
-            if (im.getCost() == search) 
-                return mid;
-            
+            if (im.getCost() == search){
+                listInt.add(mid);
+                for (int i = mid + 1; i < arraylistInventory.size(); i++) {
+                    InventoryManagement imCheck = arraylistInventory.get(i);
+                    if(imCheck.getCost() == search) {
+                        listInt.add(i + 1);
+                    }
+                    else {
+                        break;
+                    }
+                }
+                for (int j = mid - 1; j > -1; j--) {
+                    InventoryManagement imCheck = arraylistInventory.get(j);
+                    if(imCheck.getCost() == search) {
+                        listInt.add(j);
+                    }
+                    else {
+                        break;
+                    }
+                }
+                values = listInt.stream().mapToInt(i -> i).toArray();
+                return values;
+            }
+
             if (im.getCost() > search) 
-                return binarySearchInventory(low, mid - 1, search);
+                return binarySearchInventoryCost(low, mid - 1, search);
             
             
-            return binarySearchInventory(mid + 1, high, search);
+            return binarySearchInventoryCost(mid + 1, high, search);
             
         }
-        return -1;
+        return values;
     }
     private void setIcon() {
         setIconImage (Toolkit.getDefaultToolkit().getImage(getClass().getResource("")));
     }
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(DashboardPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(DashboardPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(DashboardPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(DashboardPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new DashboardPage().setVisible(true);
-//            }
-//        });
-//    }
+    private void csvReaderInventory() {
+        File file= new File(path);
+        Scanner inputStream;
+        arraylistInventory.clear();
+        try{
+            inputStream = new Scanner(file);
 
+            while(inputStream.hasNext()){
+                String line= inputStream.next();
+                String [] values = line.split(",");
+                String modelNo = values[0];
+                String modelName = values[1];
+                String brand = values[2];
+                String os = values[3];
+                String range = values[4];
+                int costPrice = Integer.parseInt(values[5]);
+                int sellingPrice = Integer.parseInt(values[6]);
+                int quantity = Integer.parseInt(values[7]);
+                InventoryManagement im = new InventoryManagement(modelNo, modelName, brand, os, range, costPrice, sellingPrice, quantity);
+                arraylistInventory.add(im);
+                comboBoxModelNumber.addItem(modelNo);
+            }
+
+            inputStream.close();
+        }catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(rootPane, "Error Occured " + e, "Error!", 0);
+        }   
+    }
+    private void csvReaderSales() {
+        String pathSales = path.replace(".csv", "_sales.csv");
+        File file= new File(pathSales);
+        Scanner inputStream;
+        arraylistSales.clear();
+        try{
+            inputStream = new Scanner(file);
+
+            while(inputStream.hasNext()){
+                String line= inputStream.next();
+                String [] values = line.split(",");
+                String firstName = values[0];
+                String lastName = values[1];
+                String date = values[2];
+                String modelNumber = values[3];
+                String brand = values[4];
+                int quantity = Integer.parseInt(values[5]);
+                int discount = Integer.parseInt(values[6]);
+                int total = Integer.parseInt(values[7]);
+                Sales sales = new Sales(firstName, lastName, date, modelNumber, brand, quantity, discount, total);
+                arraylistSales.add(sales);
+            }
+
+            inputStream.close();
+        }catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(rootPane, "Error Occured " + e, "Error!", 0);
+        } 
+    }
+    private void csvWriter(String path) {
+        try {
+            String pathSales = path.replace(".csv", "_sales.csv");
+            BufferedWriter bw = new BufferedWriter(new FileWriter(path, false));
+            BufferedWriter bws = new BufferedWriter(new FileWriter(pathSales, false));
+            for (InventoryManagement im : arraylistInventory) {
+                String lines = null;
+                lines = im.getModelNo();
+                lines += "," + im.getModelName();
+                lines += "," + im.getBrand();
+                lines += "," + im.getOs();
+                lines += "," + im.getRange();
+                lines += "," + String.valueOf(im.getCost());
+                lines += "," + String.valueOf(im.getSellingPrice());
+                lines += "," + String.valueOf(im.getQuantity());
+                bw.write(lines);
+                bw.newLine();
+            }
+            bw.close();
+            if (!arraylistSales.isEmpty()) {
+                for (Sales sales : arraylistSales) {
+                    String lines = null;
+                    lines = sales.getFirstName();
+                    lines += "," + sales.getLastName();
+                    lines += "," + sales.getDate();
+                    lines += "," + sales.getModelNumber();
+                    lines += "," + sales.getBrand();
+                    lines += "," + String.valueOf(sales.getQuantity());
+                    lines += "," + String.valueOf(sales.getDiscount());
+                    lines += "," + String.valueOf(sales.getTotal());
+                    bws.write(lines);
+                    bws.newLine();
+                }
+            }
+            bws.close();
+        }
+        catch (FileNotFoundException f) {
+            JOptionPane.showMessageDialog(rootPane, "File not found.\n" + f, "Error!", 0);
+        }
+        catch (IOException ie) {
+            JOptionPane.showMessageDialog(rootPane, "IO Exception.\n" + ie, "Error!", 0);
+        }
+    }
+    private void clearSalesForm() {
+        tfFirstName.setText(null);
+        tfLastName.setText(null);
+        tfDate.setText(null);
+        tfQuantity.setText(null);
+        comboBoxDiscount.setSelectedIndex(0);
+        tfTotal.setText(null);
+    }
+    private void clearInventoryForm() {
+        tfModelNo.setText(null);
+        tfModelName.setText(null);
+        comboBrand.setSelectedIndex(0);
+        comboOs.setSelectedIndex(0);
+        btnGrpAddInventory.clearSelection();
+        radioBtnHigh.setSelected(true);
+        tfCostPrice.setText(null);
+        tfSellingPrice.setText(null);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
     private javax.swing.ButtonGroup btnGrpAddInventory;
     private javax.swing.ButtonGroup btnGrpEditInventory;
     private javax.swing.JButton btnInvoice;
-    private javax.swing.JButton btnNew;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnVendor;
+    private javax.swing.ButtonGroup buttonGroupSearch;
+    private javax.swing.JComboBox<String> comboBoxBrandSales;
+    private javax.swing.JComboBox<String> comboBoxBrandSalesEdit;
+    private javax.swing.JComboBox<String> comboBoxDiscount;
+    private javax.swing.JComboBox<String> comboBoxDiscountEdit;
+    private javax.swing.JComboBox<String> comboBoxModelNumber;
+    private javax.swing.JComboBox<String> comboBoxModelNumberEdit;
     private javax.swing.JComboBox<String> comboBrand;
     private javax.swing.JComboBox<String> comboEditInvBrand;
     private javax.swing.JComboBox<String> comboEditInvOs;
@@ -1733,22 +3239,27 @@ public class DashboardPage extends javax.swing.JFrame {
     private javax.swing.JFrame frameAddInventory;
     private javax.swing.JFrame frameAddSales;
     private javax.swing.JFrame frameEditInventory;
+    private javax.swing.JFrame frameEditSales;
     private javax.swing.JFrame frameSearch;
+    private javax.swing.JFrame frameSearchSales;
     private javax.swing.JButton jBtnAddSales;
+    private javax.swing.JButton jBtnCancelSalesEdit;
     private javax.swing.JButton jBtnClearSales;
+    private javax.swing.JButton jBtnSaveSales;
     private javax.swing.JButton jButtonAddInventory;
     private javax.swing.JButton jButtonClearInventory;
     private javax.swing.JButton jButtonEditInventoryCancel;
     private javax.swing.JButton jButtonEditInventorySave;
     private javax.swing.JButton jButtonSearchArray;
+    private javax.swing.JButton jButtonSearchArraySales;
     private javax.swing.JButton jButtonSearchCancel;
+    private javax.swing.JButton jButtonSearchCancelSales;
     private javax.swing.JDialog jDialogAbout;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMnuAbt;
     private javax.swing.JMenu jMnuFile;
     private javax.swing.JMenuItem jMnuItmAbout;
+    private javax.swing.JMenuItem jMnuItmAddBrand;
     private javax.swing.JMenuItem jMnuItmExit;
-    private javax.swing.JMenuItem jMnuItmImport;
     private javax.swing.JMenuItem jMnuItmNew;
     private javax.swing.JMenuItem jMnuItmOpen;
     private javax.swing.JMenuItem jMnuItmSave;
@@ -1757,26 +3268,41 @@ public class DashboardPage extends javax.swing.JFrame {
     private javax.swing.JLabel lblAbt;
     private javax.swing.JLabel lblBrand;
     private javax.swing.JLabel lblBrandSales;
+    private javax.swing.JLabel lblBrandSalesEdit;
     private javax.swing.JLabel lblCostPrice;
-    private javax.swing.JLabel lblCust;
     private javax.swing.JLabel lblDate;
+    private javax.swing.JLabel lblDateEdit;
+    private javax.swing.JLabel lblDiscount;
+    private javax.swing.JLabel lblDiscountEdit;
     private javax.swing.JLabel lblEditInvBrand;
     private javax.swing.JLabel lblEditInvCostPrice;
     private javax.swing.JLabel lblEditInvModelName;
     private javax.swing.JLabel lblEditInvModelNo;
     private javax.swing.JLabel lblEditInvMsg;
+    private javax.swing.JLabel lblEditInvMsgSales;
     private javax.swing.JLabel lblEditInvOS;
     private javax.swing.JLabel lblEditInvQuantity;
     private javax.swing.JLabel lblEditInvRange;
     private javax.swing.JLabel lblEditInvSellingPrice;
+    private javax.swing.JLabel lblFirstName;
+    private javax.swing.JLabel lblFirstNameEdit;
+    private javax.swing.JLabel lblLastName;
+    private javax.swing.JLabel lblLastNameEdit;
     private javax.swing.JLabel lblModelName;
     private javax.swing.JLabel lblModelNo;
     private javax.swing.JLabel lblModelNoSales;
+    private javax.swing.JLabel lblModelNoSalesEdit;
     private javax.swing.JLabel lblOS;
     private javax.swing.JLabel lblQuantity;
+    private javax.swing.JLabel lblQuantitySales;
+    private javax.swing.JLabel lblQuantitySalesEdit;
     private javax.swing.JLabel lblRange;
     private javax.swing.JLabel lblSalePrice;
+    private javax.swing.JLabel lblSalePriceEdit;
     private javax.swing.JLabel lblSearch;
+    private javax.swing.JLabel lblSearchError;
+    private javax.swing.JLabel lblSearchErrorSales;
+    private javax.swing.JLabel lblSearchSales;
     private javax.swing.JLabel lblSellingPrice;
     private javax.swing.JMenuBar mnuBarEmployee;
     private javax.swing.JPanel panelAddInventory;
@@ -1784,14 +3310,23 @@ public class DashboardPage extends javax.swing.JFrame {
     private javax.swing.JPanel panelBg;
     private javax.swing.JPanel panelButtons;
     private javax.swing.JPanel panelEditInventory;
+    private javax.swing.JPanel panelEditSales;
     private javax.swing.JPanel panelSearch;
+    private javax.swing.JPanel panelSearchSales;
+    private javax.swing.JRadioButton radioBtnBrand;
+    private javax.swing.JRadioButton radioBtnBrandSales;
     private javax.swing.JRadioButton radioBtnCostPrice;
+    private javax.swing.JRadioButton radioBtnCustomerName;
     private javax.swing.JRadioButton radioBtnEditInvHigh;
     private javax.swing.JRadioButton radioBtnEditInvLow;
     private javax.swing.JRadioButton radioBtnEditInvMid;
     private javax.swing.JRadioButton radioBtnHigh;
     private javax.swing.JRadioButton radioBtnLow;
     private javax.swing.JRadioButton radioBtnMid;
+    private javax.swing.JRadioButton radioBtnModelName;
+    private javax.swing.JRadioButton radioBtnModelNumberSales;
+    private javax.swing.JRadioButton radioBtnSellingPrice;
+    private javax.swing.JRadioButton radioBtnTotal;
     private javax.swing.JScrollPane scrlPaneInventory;
     private javax.swing.JScrollPane scrlPaneSales;
     private javax.swing.JTabbedPane tabbedPaneTbl;
@@ -1799,22 +3334,28 @@ public class DashboardPage extends javax.swing.JFrame {
     private javax.swing.JPanel tblPnlInventory;
     private javax.swing.JPanel tblPnlSales;
     private javax.swing.JTable tblSales;
-    private javax.swing.JTextField tfBrandSales;
     private javax.swing.JTextField tfCostPrice;
-    private javax.swing.JTextField tfCustomer;
     private javax.swing.JTextField tfDate;
+    private javax.swing.JTextField tfDateEdit;
     private javax.swing.JTextField tfEditInvCostPrice;
     private javax.swing.JTextField tfEditInvModelName;
     private javax.swing.JTextField tfEditInvModelNo;
     private javax.swing.JTextField tfEditInvQuantity;
     private javax.swing.JTextField tfEditInvSellingPrice;
+    private javax.swing.JTextField tfFirstName;
+    private javax.swing.JTextField tfFirstNameEdit;
+    private javax.swing.JTextField tfLastName;
+    private javax.swing.JTextField tfLastNameEdit;
     private javax.swing.JTextField tfModelName;
     private javax.swing.JTextField tfModelNo;
-    private javax.swing.JTextField tfModelNumberSales;
     private javax.swing.JTextField tfQuantity;
     private javax.swing.JTextField tfQuantitySales;
-    private javax.swing.JTextField tfSales;
+    private javax.swing.JTextField tfQuantitySalesEdit;
     private javax.swing.JTextField tfSearch;
+    private javax.swing.JTextField tfSearchSales;
     private javax.swing.JTextField tfSellingPrice;
+    private javax.swing.JTextField tfTotal;
+    private javax.swing.JTextField tfTotalEdit;
     // End of variables declaration//GEN-END:variables
+
 }

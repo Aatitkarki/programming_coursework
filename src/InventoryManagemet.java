@@ -1,6 +1,6 @@
 class InventoryManagement {
 	private String modelNo, modelName, brand, os, range;
-	int cost, sellingPrice, quantity;
+	private int cost, sellingPrice, quantity;
 	InventoryManagement(String modelNo, String modelName, String brand, String os, String range, int cost, int sellingPrice, int quantity) {
 		this.modelNo = modelNo;
 		this.modelName = modelName;
