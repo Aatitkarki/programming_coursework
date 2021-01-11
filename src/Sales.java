@@ -1,33 +1,31 @@
 class Sales {
-	private String modelNo, modelName, brand, os, customerName;
-	int total, discount, quantity;
-	Sales(String modelNo, String modelName, String brand, String os, String customerName, int discount, int quantity, int total) {
-		this.modelNo = modelNo;
-		this.modelName = modelName;
+	private String firstName, lastName, date, modelNumber, brand;
+	private int total, discount, quantity;
+	Sales(String firstName, String lastName, String date, String modelNumber, String brand, int discount, int quantity, int total) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.date = date;
+		this.modelNumber = modelNumber;
 		this.brand = brand;
-		this.os = os;
-		this.customerName = customerName;
-		this.total = total;
 		this.discount = discount;
 		this.quantity = quantity;
+		this.total = total;
 	}
-	public String getModelNo() {
-		return this.modelNo;
+	
+	public String getFirstName() {
+		return this.firstName;
 	}
-	public String getModelName() {
-		return this.modelName;
+	public String getLastName() {
+		return this.lastName;
+	}
+	public String getDate() {
+		return this.date;
+	}
+	public String getModelNumber() {
+		return this.modelNumber;
 	}
 	public String getBrand() {
 		return this.brand;
-	}
-	public String getOs() {
-		return this.os;
-	}
-	public String getCustomerName() {
-		return this.customerName;
-	}
-	public int getTotal() {
-		return this.total;
 	}
 	public int getDiscount() {
 		return this.discount;
@@ -35,28 +33,31 @@ class Sales {
 	public int getQuantity() {
 		return this.quantity;
 	}
-	public void setModelNo(String modelNo) {
-		this.modelNo = modelNo;
+	public int getTotal() {
+		return this.total;
 	}
-	public void setModelName(String modelName) {
-		this.modelName = modelName;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	public void setDate(String date) {
+		this.date = date;
+	}
+	public void setModelNumber(String modelNumber) {
+		this.modelNumber = modelNumber;
 	}
 	public void setBrand(String brand) {
 		this.brand = brand;
-	}
-	public void setOs(String os) {
-		this.os = os;
-	}
-	public void setCustomerName(String customerName) {
-		this.customerName = customerName;
-	}
-	public void setTotal(int total) {
-		this.total = total;
 	}
 	public void setDiscount(int discount) {
 		this.discount = discount;
 	}
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+	public void setTotal(int total) {
+		this.total = total;
 	}
 }
