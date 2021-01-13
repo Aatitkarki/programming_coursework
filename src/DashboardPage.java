@@ -1,8 +1,9 @@
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
@@ -43,7 +44,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author anish, ashesh, roshani, suresh
  */
-public class DashboardPage extends javax.swing.JFrame {
+public class DashboardPage extends javax.swing.JFrame implements KeyListener{
     private int indexEditInv;
     private int indexEditSales;
     private boolean tableSelection = true;
@@ -104,6 +105,7 @@ public class DashboardPage extends javax.swing.JFrame {
         setIcon();
         initComponents();
         tfQuantitySales.getDocument().addDocumentListener(doc);
+        addKeyListener(this);
     }
 
     /**
@@ -1361,7 +1363,6 @@ public class DashboardPage extends javax.swing.JFrame {
         frameInvoice.setTitle("Invoice");
         frameInvoice.setBackground(new java.awt.Color(255, 255, 255));
         frameInvoice.setMinimumSize(new java.awt.Dimension(400, 370));
-        frameInvoice.setPreferredSize(new java.awt.Dimension(400, 370));
         frameInvoice.setResizable(false);
         frameInvoice.addWindowFocusListener(new java.awt.event.WindowFocusListener() {
             public void windowGainedFocus(java.awt.event.WindowEvent evt) {
@@ -1907,7 +1908,7 @@ public class DashboardPage extends javax.swing.JFrame {
                 }
             }
             catch(NullPointerException npe) {
-                JOptionPane.showMessageDialog(rootPane, npe, "Error!", 0);
+                // Throws error message when you do not choose a file, so no error messages.
             }
         }
         else {
@@ -2022,48 +2023,6 @@ public class DashboardPage extends javax.swing.JFrame {
                     break;
             }
         }
-//        String dir = System.getProperty("user.dir");
-//        FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
-//        JFileChooser jFileNew = new JFileChooser(dir);
-//        jFileNew.setDialogTitle("New");
-//        jFileNew.setDialogType(JFileChooser.SAVE_DIALOG);
-//        jFileNew.setFileFilter(filter);
-//        // Stuff like setting the required file extension, the title, ...
-//        int result = jFileNew.showSaveDialog(this);
-//        if (result == JFileChooser.APPROVE_OPTION) {
-//            path = jFileNew.getSelectedFile().toString();
-//            path += ".csv";
-//            File newFile = new File(path);
-//            boolean check;
-//            try {
-//                check = newFile.createNewFile();
-//                if (check) {
-//                    JOptionPane.showMessageDialog(rootPane, "New File Created.", "Success", JOptionPane.PLAIN_MESSAGE);
-//                    FileWriter fw = new FileWriter(path);
-//                    fw.write("Model Number,Name,Brand,OS,Range,Cost,Discount");
-//                    fw.close();
-//                }
-//                else {
-//                    int confirmation = JOptionPane.showConfirmDialog(rootPane, "File already exists. Overwrite?");
-//                    switch (confirmation) {
-//                        case JOptionPane.YES_OPTION:
-//                            FileWriter fw = new FileWriter(path, false);
-//                            fw.write("Model Number,Name,Brand,OS,Range,Cost,Discount");
-//                            fw.close();
-//                            JOptionPane.showMessageDialog(rootPane, "File overwritten.", "Success", JOptionPane.PLAIN_MESSAGE);
-//                            break;
-//                        case JOptionPane.NO_OPTION:
-//                            DashboardPage dash = new DashboardPage();
-//                            dash.jMnuItmNewActionPerformed(evt);
-//                            break;
-//                        case JOptionPane.CLOSED_OPTION:
-//                            break;
-//                    }
-//                }
-//            } catch (IOException ex) {
-//                JOptionPane.showMessageDialog(rootPane, ex, "Error",JOptionPane.ERROR_MESSAGE);
-//            }
-//        }
     }//GEN-LAST:event_jMnuItmNewActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
@@ -2632,8 +2591,16 @@ public class DashboardPage extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
         if(isSaved) {
-            dispose();
-            new Login().setVisible(true);
+            int confirmation = JOptionPane.showConfirmDialog(rootPane, "You are exiting the application.", "Exit?", JOptionPane.YES_NO_OPTION);
+            switch (confirmation){
+                case JOptionPane.YES_OPTION:
+                    System.exit(0);
+                    break;
+                case JOptionPane.NO_OPTION:
+                    break;
+                case JOptionPane.CLOSED_OPTION:
+                    break;
+            }
         }
         else {
             int confirmation = JOptionPane.showConfirmDialog(rootPane, "Unsaved changes. Save?", "Save?", JOptionPane.YES_NO_OPTION);
@@ -3555,8 +3522,9 @@ public class DashboardPage extends javax.swing.JFrame {
         boolean returnedResult = printer.printDialog();
         if (returnedResult) {
             try {
-            printer.print();
-            frameInvoice.dispose();
+                // Send job to the operating system's printer services
+                printer.print();
+                frameInvoice.dispose();
             }
             catch (PrinterException pe) {
                 JOptionPane.showMessageDialog(rootPane, "Print error.\n" + pe.getMessage(), "Error!", 0);
@@ -3751,5 +3719,46 @@ public class DashboardPage extends javax.swing.JFrame {
     private javax.swing.JTextField tfTotal;
     private javax.swing.JTextField tfTotalEdit;
     // End of variables declaration//GEN-END:variables
+    //Overriding keylistener methods
+    @Override
+    public void keyTyped(KeyEvent e) {
+        //getting keycode from the main JFrame when in focus and comparing them to call their respective methods
+        int key = e.getKeyCode();
+        if (key == KeyEvent.CTRL_DOWN_MASK) {
+            if (key == KeyEvent.VK_N) {
+                java.awt.event.ActionEvent evt1 = null;
+                jMnuItmNewActionPerformed(evt1);
+            }
+            else if (key == KeyEvent.VK_O) {
+                java.awt.event.ActionEvent evt1 = null;
+                jMnuItmOpenActionPerformed(evt1);
+            }
+            else if (key == KeyEvent.VK_S) {
+                java.awt.event.ActionEvent evt1 = null;
+                jMnuItmSaveActionPerformed(evt1);
+            }
+            else if (key == KeyEvent.SHIFT_DOWN_MASK) {
+                if (key == KeyEvent.VK_S) {
+                    java.awt.event.ActionEvent evt1 = null;
+                    jMnuItmSaveAsActionPerformed(evt1);
+                }
+                else if (key == KeyEvent.VK_X) {
+                    java.awt.event.ActionEvent evt1 = null;
+                    jMnuItmExitActionPerformed(evt1);
+                }
+            }
+        }
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    //unused keylistener methods
+    @Override
+    public void keyPressed(KeyEvent e) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
 }
