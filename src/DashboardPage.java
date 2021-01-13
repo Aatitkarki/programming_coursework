@@ -1,4 +1,13 @@
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -17,7 +26,9 @@ import java.util.TimerTask;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.util.Timer;
+import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -39,15 +50,19 @@ public class DashboardPage extends javax.swing.JFrame {
     private boolean isSaved = true;
     private boolean isEditSales = false;
     private String path = "";
-    private final ArrayList <InventoryManagement> arraylistInventory = new ArrayList <> ();
-    private final ArrayList <Sales> arraylistSales = new ArrayList <> ();
+    private ArrayList <InventoryManagement> arraylistInventory = new ArrayList <> ();
+    private ArrayList <Sales> arraylistSales = new ArrayList <> ();
+    private ArrayList <InventoryManagement> temp = new ArrayList <> ();
     DocumentListener doc = new DocumentListener() {
+        @Override
         public void changedUpdate (DocumentEvent evt) {
             setIt(evt);
         }
+        @Override
         public void insertUpdate(DocumentEvent evt) {
             setIt(evt);
         }
+        @Override
         public void removeUpdate(DocumentEvent evt) {
             setIt(evt);
         }
@@ -213,6 +228,27 @@ public class DashboardPage extends javax.swing.JFrame {
         tfFirstNameEdit = new javax.swing.JTextField();
         lblLastNameEdit = new javax.swing.JLabel();
         lblEditInvMsgSales = new javax.swing.JLabel();
+        frameInvoice = new javax.swing.JFrame();
+        panelBtn = new javax.swing.JPanel();
+        btnSave = new javax.swing.JButton();
+        btnPrint = new javax.swing.JButton();
+        panelInvoice = new javax.swing.JPanel();
+        lblInvoiceFirstName = new javax.swing.JLabel();
+        lblSetFirstName = new javax.swing.JLabel();
+        lblInvoiceLastName = new javax.swing.JLabel();
+        lblSetLastName = new javax.swing.JLabel();
+        lblInvoiceDate = new javax.swing.JLabel();
+        lblSetDate = new javax.swing.JLabel();
+        lblInvoiceModelNumber = new javax.swing.JLabel();
+        lblSetModelNumber = new javax.swing.JLabel();
+        lblInvoiceBrand = new javax.swing.JLabel();
+        lblSetBrand = new javax.swing.JLabel();
+        lblInvoiceDiscount = new javax.swing.JLabel();
+        lblInvoiceQuantity = new javax.swing.JLabel();
+        lblInvoiceTotal = new javax.swing.JLabel();
+        lblSetDiscount = new javax.swing.JLabel();
+        lblSetQuantity = new javax.swing.JLabel();
+        lblSetTotal = new javax.swing.JLabel();
         panelBg = new javax.swing.JPanel();
         panelButtons = new javax.swing.JPanel();
         btnEdit = new javax.swing.JButton();
@@ -1196,6 +1232,11 @@ public class DashboardPage extends javax.swing.JFrame {
                 comboBoxModelNumberEditItemStateChanged(evt);
             }
         });
+        comboBoxModelNumberEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxModelNumberEditActionPerformed(evt);
+            }
+        });
 
         comboBoxBrandSalesEdit.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
 
@@ -1315,6 +1356,180 @@ public class DashboardPage extends javax.swing.JFrame {
         frameEditSalesLayout.setVerticalGroup(
             frameEditSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelEditSales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        frameInvoice.setTitle("Invoice");
+        frameInvoice.setBackground(new java.awt.Color(255, 255, 255));
+        frameInvoice.setMinimumSize(new java.awt.Dimension(400, 370));
+        frameInvoice.setPreferredSize(new java.awt.Dimension(400, 370));
+        frameInvoice.setResizable(false);
+        frameInvoice.addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+                frameInvoiceWindowLostFocus(evt);
+            }
+        });
+
+        panelBtn.setBackground(new java.awt.Color(255, 255, 255));
+
+        btnSave.setBackground(new java.awt.Color(255, 255, 255));
+        btnSave.setForeground(new java.awt.Color(255, 255, 255));
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/saveicon.png"))); // NOI18N
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+
+        btnPrint.setBackground(new java.awt.Color(255, 255, 255));
+        btnPrint.setForeground(new java.awt.Color(255, 255, 255));
+        btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/printericon.png"))); // NOI18N
+        btnPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelBtnLayout = new javax.swing.GroupLayout(panelBtn);
+        panelBtn.setLayout(panelBtnLayout);
+        panelBtnLayout.setHorizontalGroup(
+            panelBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33))
+            .addGroup(panelBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelBtnLayout.createSequentialGroup()
+                    .addGap(30, 30, 30)
+                    .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(320, Short.MAX_VALUE)))
+        );
+        panelBtnLayout.setVerticalGroup(
+            panelBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBtnLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(panelBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelBtnLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(btnPrint, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+
+        panelInvoice.setBackground(new java.awt.Color(255, 255, 255));
+
+        lblInvoiceFirstName.setText("First Name : ");
+
+        lblSetFirstName.setText("FirstName");
+
+        lblInvoiceLastName.setText("Last Name :");
+
+        lblSetLastName.setText("LastName");
+
+        lblInvoiceDate.setText("Date :");
+
+        lblSetDate.setText("date");
+
+        lblInvoiceModelNumber.setText("Model Number:");
+
+        lblSetModelNumber.setText("ModelNumber");
+
+        lblInvoiceBrand.setText("Brand :");
+
+        lblSetBrand.setText("brand");
+
+        lblInvoiceDiscount.setText("Discount :");
+
+        lblInvoiceQuantity.setText("Quantity :");
+
+        lblInvoiceTotal.setText("Total :");
+
+        lblSetDiscount.setText("discount");
+
+        lblSetQuantity.setText("quantity");
+
+        lblSetTotal.setText("total");
+
+        javax.swing.GroupLayout panelInvoiceLayout = new javax.swing.GroupLayout(panelInvoice);
+        panelInvoice.setLayout(panelInvoiceLayout);
+        panelInvoiceLayout.setHorizontalGroup(
+            panelInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelInvoiceLayout.createSequentialGroup()
+                .addGap(95, 95, 95)
+                .addGroup(panelInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblInvoiceFirstName)
+                    .addComponent(lblInvoiceLastName)
+                    .addComponent(lblInvoiceDate)
+                    .addComponent(lblInvoiceModelNumber)
+                    .addComponent(lblInvoiceBrand)
+                    .addComponent(lblInvoiceDiscount)
+                    .addComponent(lblInvoiceQuantity)
+                    .addComponent(lblInvoiceTotal))
+                .addGap(38, 38, 38)
+                .addGroup(panelInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblSetTotal)
+                    .addComponent(lblSetQuantity)
+                    .addComponent(lblSetDiscount)
+                    .addComponent(lblSetBrand)
+                    .addComponent(lblSetModelNumber)
+                    .addComponent(lblSetLastName)
+                    .addComponent(lblSetFirstName)
+                    .addComponent(lblSetDate))
+                .addContainerGap(130, Short.MAX_VALUE))
+        );
+        panelInvoiceLayout.setVerticalGroup(
+            panelInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelInvoiceLayout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addGroup(panelInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblInvoiceFirstName)
+                    .addComponent(lblSetFirstName))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblInvoiceLastName)
+                    .addComponent(lblSetLastName))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblInvoiceDate)
+                    .addComponent(lblSetDate))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblInvoiceModelNumber)
+                    .addComponent(lblSetModelNumber))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblInvoiceBrand)
+                    .addComponent(lblSetBrand))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblInvoiceDiscount)
+                    .addComponent(lblSetDiscount))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblInvoiceQuantity)
+                    .addComponent(lblSetQuantity))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblInvoiceTotal)
+                    .addComponent(lblSetTotal))
+                .addContainerGap(75, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout frameInvoiceLayout = new javax.swing.GroupLayout(frameInvoice.getContentPane());
+        frameInvoice.getContentPane().setLayout(frameInvoiceLayout);
+        frameInvoiceLayout.setHorizontalGroup(
+            frameInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelInvoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        frameInvoiceLayout.setVerticalGroup(
+            frameInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(frameInvoiceLayout.createSequentialGroup()
+                .addComponent(panelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelInvoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -1915,12 +2130,49 @@ public class DashboardPage extends javax.swing.JFrame {
 
     private void btnInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInvoiceActionPerformed
         // TODO add your handling code here:
-        if(tblSales.getSelectedRow() >= 0) {
-            int selection = tblSales.getSelectedRow();
-            Sales sales = arraylistSales.get(selection);
+        if (!arraylistSales.isEmpty()) {
+            if(tblSales.getSelectedRow() >= 0) {
+                int selection = tblSales.getSelectedRow();
+                Sales sales = arraylistSales.get(selection);
+                String firstName = null;
+                String lastName = null;
+                String date = null;
+                String modelNumber = null;
+                String brand = null;
+                String quantity = null;
+                String discount = null;
+                String total = null;
+                try {
+                    firstName = sales.getFirstName();
+                    lastName = sales.getLastName();
+                    date = sales.getDate();
+                    modelNumber = sales.getModelNumber();
+                    brand = sales.getBrand();
+                    quantity = String.valueOf(sales.getQuantity());
+                    discount = String.valueOf(sales.getDiscount()) + "%";
+                    total = String.valueOf(sales.getTotal());
+                }
+                catch (NullPointerException npe) {
+                    JOptionPane.showMessageDialog(rootPane, npe, "Error!", 0); 
+                    return;
+                }
+                lblSetFirstName.setText(firstName);
+                lblSetLastName.setText(lastName);
+                lblSetDate.setText(date);
+                lblSetModelNumber.setText(modelNumber);
+                lblSetBrand.setText(brand);
+                lblSetDiscount.setText(discount);
+                lblSetQuantity.setText(quantity);
+                lblSetTotal.setText(total);
+                frameInvoice.setVisible(true);
+                frameInvoice.setLocationRelativeTo(null);
+            }
+            else {
+            JOptionPane.showMessageDialog(rootPane, "No row is selected in the sales table.", "Error!", 0);
+            }
         }
         else {
-            JOptionPane.showMessageDialog(rootPane, "No row is selected in sales table.", "Error!", 0);
+            JOptionPane.showMessageDialog(rootPane, "No entry in  the sales list to create an invoice..", "Error!", 0);
         }
     }//GEN-LAST:event_btnInvoiceActionPerformed
 
@@ -2198,8 +2450,8 @@ public class DashboardPage extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(rootPane, "Empty text field.\n" + nfe, "Error!", 0);
                 return;
             }
-            int [] index = binarySearchInventoryCost(0, arraylistInventory.size() - 1, search);
-            if (index[0] == -1) {
+            int index = binarySearchInventoryCost(0, arraylistInventory.size() - 1, search);
+            if (index == -1) {
                 lblSearchError.setVisible(true);
                 TimerTask task = new TimerTask () {
                     public void run() {
@@ -2212,10 +2464,35 @@ public class DashboardPage extends javax.swing.JFrame {
             }
             else {
                 frameSearch.dispose();
-                JOptionPane.showMessageDialog(rootPane, "Index: " + Arrays.toString(index), "Search results", 0);
+                JOptionPane.showMessageDialog(rootPane, "Index: " + index, "Search results", 0);
             }
         }
         else if (searchSelection.equals("Selling")) {
+            int search = 0;
+            try{
+                search = Integer.parseInt(tfSearch.getText().trim());
+            }
+            catch (NumberFormatException nfe) {
+                JOptionPane.showMessageDialog(rootPane, "Empty text field.\n" + nfe, "Error!", 0);
+                return;
+            }
+            sortInventoryTemp();
+            int index = binarySearchSelling(0, temp.size() - 1, search);
+            if (index == -1) {
+                lblSearchError.setVisible(true);
+                TimerTask task = new TimerTask () {
+                    public void run() {
+                        lblSearchError.setVisible(false);
+                    }
+                };
+                long delay = 1000L;
+                Timer timer = new Timer("Timer#1");
+                timer.schedule(task, delay);  
+            }
+            else {
+                frameSearch.dispose();
+                JOptionPane.showMessageDialog(rootPane, "Index: " + index, "Search results", 0);
+            }
         }
         else if (searchSelection.equals("Model")) {
             List <Integer> listInt = new ArrayList <>();
@@ -2379,7 +2656,12 @@ public class DashboardPage extends javax.swing.JFrame {
         // TODO add your handling code here:
         String newBrand = null;
         String dir = System.getProperty("user.dir");
-        dir += "\\resources\\Brands\\brands.txt";
+        if (System.getProperty("user.dir").equalsIgnoreCase("Windows")) {
+            dir += "\\resources\\Brands\\brands.txt";
+        }
+        else {
+            dir += "/resources/Brands/brands.txt";
+        }
         try{
             
             newBrand = JOptionPane.showInputDialog(rootPane, "Enter New Brand", "Add Brand", JOptionPane.INFORMATION_MESSAGE).trim();
@@ -2448,7 +2730,7 @@ public class DashboardPage extends javax.swing.JFrame {
             for(InventoryManagement im : arraylistInventory) {
                 if(im.getModelNo().equalsIgnoreCase(modelNumber) && im.getBrand().equalsIgnoreCase(brand)) {
                     if(im.getQuantity() >= quantity) {
-                        Sales sales = new Sales(firstName, lastName, date, modelNumber, brand, discount, quantity, total);
+                        Sales sales = new Sales(firstName, lastName, date, modelNumber, brand, quantity, discount, total);
                         arraylistSales.add(sales);
                         clearTableSales();
                         addToSalesTable();
@@ -2922,6 +3204,25 @@ public class DashboardPage extends javax.swing.JFrame {
         frameAddSales.dispose();
     }//GEN-LAST:event_frameAddSalesWindowClosing
 
+    private void comboBoxModelNumberEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxModelNumberEditActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxModelNumberEditActionPerformed
+
+    private void frameInvoiceWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameInvoiceWindowLostFocus
+        // TODO add your handling code here:
+        frameInvoice.requestFocus();
+    }//GEN-LAST:event_frameInvoiceWindowLostFocus
+
+    private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
+        // TODO add your handling code here:
+        printInvoice(panelInvoice);
+    }//GEN-LAST:event_btnPrintActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        // TODO add your handling code here:
+        savePicture(panelInvoice, lblSetFirstName.getText(), lblSetLastName.getText());
+    }//GEN-LAST:event_btnSaveActionPerformed
+
     
     private void sortInventory () {
         for (int i = 0; i < arraylistInventory.size(); i++) {
@@ -2929,6 +3230,18 @@ public class DashboardPage extends javax.swing.JFrame {
                 InventoryManagement imFirst = arraylistInventory.get(i);
                 InventoryManagement imSecond = arraylistInventory.get(j);
                 if (imFirst.getCost() > imSecond.getCost()) {
+                        Collections.swap(arraylistInventory, i, j);
+                }
+            }
+        }
+    }
+    private void sortInventoryTemp() {
+        Collections.copy(temp, arraylistInventory);
+        for (int i = 0; i < temp.size(); i++) {
+            for (int j = i + 1 ; j < temp.size(); j++) {
+                InventoryManagement imFirst = temp.get(i);
+                InventoryManagement imSecond = temp.get(j);
+                if (imFirst.getSellingPrice() > imSecond.getSellingPrice()) {
                         Collections.swap(arraylistInventory, i, j);
                 }
             }
@@ -2982,8 +3295,8 @@ public class DashboardPage extends javax.swing.JFrame {
             arrayForTable[2] = sales.getDate();
             arrayForTable[3] = sales.getModelNumber();
             arrayForTable[4] = sales.getDate();
-            arrayForTable[5] = String.valueOf(sales.getDiscount());
-            arrayForTable[6] = String.valueOf(sales.getQuantity());
+            arrayForTable[5] = String.valueOf(sales.getQuantity());
+            arrayForTable[6] = String.valueOf(sales.getDiscount());
             arrayForTable[7] = String.valueOf(sales.getTotal());
             
             int rowCount = tblInventory.getRowCount();
@@ -3056,34 +3369,36 @@ public class DashboardPage extends javax.swing.JFrame {
         return comboStrings;
     }
     
-    private int [] binarySearchInventoryCost(int low, int high, int search) {
-        int [] values = {};
+    private int binarySearchInventoryCost(int low, int high, int search) {
+        int values = -1;
         List <Integer> listInt = new ArrayList <>();
         if (high >= low) {
             int mid = (low+high) / 2;
             InventoryManagement im = arraylistInventory.get(mid);
             System.out.println(im.getCost());
             if (im.getCost() == search){
-                listInt.add(mid);
-                for (int i = mid + 1; i < arraylistInventory.size(); i++) {
-                    InventoryManagement imCheck = arraylistInventory.get(i);
-                    if(imCheck.getCost() == search) {
-                        listInt.add(i + 1);
-                    }
-                    else {
-                        break;
-                    }
-                }
-                for (int j = mid - 1; j > -1; j--) {
-                    InventoryManagement imCheck = arraylistInventory.get(j);
-                    if(imCheck.getCost() == search) {
-                        listInt.add(j);
-                    }
-                    else {
-                        break;
-                    }
-                }
-                values = listInt.stream().mapToInt(i -> i).toArray();
+                values = mid;
+                return values;
+            }
+
+            if (im.getCost() > search) 
+                return binarySearchInventoryCost(low, mid - 1, search);
+            
+            
+            return binarySearchInventoryCost(mid + 1, high, search);
+            
+        }
+        return values;
+    }
+    private int binarySearchSelling(int low, int high, int search) {
+        int values = -1;
+        List <Integer> listInt = new ArrayList <>();
+        if (high >= low) {
+            int mid = (low+high) / 2;
+            InventoryManagement im = temp.get(mid);
+            System.out.println(im.getCost());
+            if (im.getSellingPrice() == search){
+                values = mid;
                 return values;
             }
 
@@ -3097,7 +3412,7 @@ public class DashboardPage extends javax.swing.JFrame {
         return values;
     }
     private void setIcon() {
-        setIconImage (Toolkit.getDefaultToolkit().getImage(getClass().getResource("")));
+        setIconImage (Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/mobile.png")));
     }
     private void csvReaderInventory() {
         File file= new File(path);
@@ -3216,6 +3531,64 @@ public class DashboardPage extends javax.swing.JFrame {
         tfCostPrice.setText(null);
         tfSellingPrice.setText(null);
     }
+    private void printInvoice (JPanel print) {
+        // Using printer to print out the invoice
+        PrinterJob printer = PrinterJob.getPrinterJob();
+        printer.setJobName("Invoice");
+        printer.setPrintable(new Printable () {
+            @Override
+            public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+                //Checks if there are printable content or not
+                if (pageIndex > 0) {
+                        return Printable.NO_SUCH_PAGE;
+                }
+                // making,setting, and scaling 2d graphics to map the panel
+                Graphics2D graphics2D = (Graphics2D)graphics;
+                graphics2D.translate(pageFormat.getImageableX()*2, pageFormat.getImageableY());
+                graphics2D.scale(0.5, 0.5);
+                // painting panel
+                print.paint(graphics2D);
+                // Returns if page exists
+                return Printable.PAGE_EXISTS;
+            }
+        });
+        boolean returnedResult = printer.printDialog();
+        if (returnedResult) {
+            try {
+            printer.print();
+            frameInvoice.dispose();
+            }
+            catch (PrinterException pe) {
+                JOptionPane.showMessageDialog(rootPane, "Print error.\n" + pe.getMessage(), "Error!", 0);
+            }
+        }
+    }
+    private void savePicture(JPanel panel, String first, String last) {
+        //getting the size of the panel and setting the image size to it
+        Dimension size = panel.getSize();
+        BufferedImage image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
+        //using graphics2d to create the graphics
+        Graphics2D graphics = image.createGraphics();
+        panel.paint(graphics);
+        String imageName = null;
+        if (System.getProperty("user.dir").equalsIgnoreCase("Windows")) {
+            imageName += "\\resources\\images" + first + last + ".png";
+        }
+        else {
+            imageName += "/resources/images" + first + last + ".png";
+        }
+        try {
+            ImageIO.write(image, "png", new File(imageName));
+            JOptionPane.showMessageDialog(rootPane, "Invoice saved as image", "Saved!", 0);
+            frameInvoice.dispose();
+        }
+        catch(IOException ie) {
+            JOptionPane.showMessageDialog(rootPane, "Failed to save.\n" + ie, "Error!", 0);
+        }
+        catch(Exception e) {
+            JOptionPane.showMessageDialog(rootPane, "Failed to save.\n" + e, "Error!", 0);
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
@@ -3223,6 +3596,8 @@ public class DashboardPage extends javax.swing.JFrame {
     private javax.swing.ButtonGroup btnGrpAddInventory;
     private javax.swing.ButtonGroup btnGrpEditInventory;
     private javax.swing.JButton btnInvoice;
+    private javax.swing.JButton btnPrint;
+    private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnVendor;
     private javax.swing.ButtonGroup buttonGroupSearch;
@@ -3240,6 +3615,7 @@ public class DashboardPage extends javax.swing.JFrame {
     private javax.swing.JFrame frameAddSales;
     private javax.swing.JFrame frameEditInventory;
     private javax.swing.JFrame frameEditSales;
+    private javax.swing.JFrame frameInvoice;
     private javax.swing.JFrame frameSearch;
     private javax.swing.JFrame frameSearchSales;
     private javax.swing.JButton jBtnAddSales;
@@ -3286,6 +3662,14 @@ public class DashboardPage extends javax.swing.JFrame {
     private javax.swing.JLabel lblEditInvSellingPrice;
     private javax.swing.JLabel lblFirstName;
     private javax.swing.JLabel lblFirstNameEdit;
+    private javax.swing.JLabel lblInvoiceBrand;
+    private javax.swing.JLabel lblInvoiceDate;
+    private javax.swing.JLabel lblInvoiceDiscount;
+    private javax.swing.JLabel lblInvoiceFirstName;
+    private javax.swing.JLabel lblInvoiceLastName;
+    private javax.swing.JLabel lblInvoiceModelNumber;
+    private javax.swing.JLabel lblInvoiceQuantity;
+    private javax.swing.JLabel lblInvoiceTotal;
     private javax.swing.JLabel lblLastName;
     private javax.swing.JLabel lblLastNameEdit;
     private javax.swing.JLabel lblModelName;
@@ -3304,13 +3688,23 @@ public class DashboardPage extends javax.swing.JFrame {
     private javax.swing.JLabel lblSearchErrorSales;
     private javax.swing.JLabel lblSearchSales;
     private javax.swing.JLabel lblSellingPrice;
+    private javax.swing.JLabel lblSetBrand;
+    private javax.swing.JLabel lblSetDate;
+    private javax.swing.JLabel lblSetDiscount;
+    private javax.swing.JLabel lblSetFirstName;
+    private javax.swing.JLabel lblSetLastName;
+    private javax.swing.JLabel lblSetModelNumber;
+    private javax.swing.JLabel lblSetQuantity;
+    private javax.swing.JLabel lblSetTotal;
     private javax.swing.JMenuBar mnuBarEmployee;
     private javax.swing.JPanel panelAddInventory;
     private javax.swing.JPanel panelAddSales;
     private javax.swing.JPanel panelBg;
+    private javax.swing.JPanel panelBtn;
     private javax.swing.JPanel panelButtons;
     private javax.swing.JPanel panelEditInventory;
     private javax.swing.JPanel panelEditSales;
+    private javax.swing.JPanel panelInvoice;
     private javax.swing.JPanel panelSearch;
     private javax.swing.JPanel panelSearchSales;
     private javax.swing.JRadioButton radioBtnBrand;

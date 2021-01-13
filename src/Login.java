@@ -169,7 +169,7 @@ public class Login extends javax.swing.JFrame {
     }
     
     private void setIcon(){
-    setIconImage (Toolkit.getDefaultToolkit().getImage(getClass().getResource("key.png")));
+    setIconImage (Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/key.png")));
 }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
