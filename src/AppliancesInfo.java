@@ -9,19 +9,11 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -360,6 +352,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         });
 
         comboBoxBrand.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
+        comboBoxBrand.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxBrandActionPerformed(evt);
+            }
+        });
 
         comboOs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "iOS", "Android", "Symbian", "Others" }));
 
@@ -1936,8 +1933,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             try {
                 FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
                 JFileChooser jChooser = new JFileChooser(dir);
-                System.out.println(dir);
-                System.out.println(dir.contains("_sales.csv"));
                 jChooser.setDialogTitle("Open");
                 jChooser.setAcceptAllFileFilterUsed(false);
                 jChooser.setFileFilter(filter);
@@ -1945,8 +1940,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
 
                 File file = jChooser.getSelectedFile();
                 path = file.getAbsolutePath();
-                System.out.println(path);
-                System.out.println(path.contains("sales.csv"));
                 if (!path.contains("sales.csv")) {
                     String pathSales = path.replace(".csv", "_sales.csv");
                     File fileSale = new File(pathSales);
@@ -1963,8 +1956,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                     String pathSales = path;
                     String pathInventory = path.replace("_sales.csv", ".csv");
                     path = pathInventory;
-                    System.out.println(path);
-                    System.out.println(pathSales);
                     File fileInventory = new File(path);
                     csvReaderInventory(path);
                     sortInventory();
@@ -3193,10 +3184,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         catch (NullPointerException npe) {
         }
         catch (NumberFormatException nfe) {
-            System.out.println(nfe);
         }
         catch (ArithmeticException ae) {
-            System.out.println(ae);
         }
     }//GEN-LAST:event_comboBoxDiscountEditActionPerformed
 
@@ -3270,56 +3259,52 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         savePicture(panelInvoice, lblSetFirstName.getText(), lblSetLastName.getText());
     }//GEN-LAST:event_btnSaveActionPerformed
 
-    private void jMnuItmRemoveBrandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmRemoveBrandActionPerformed
-        String delBrand = null;
+    private String getBrandFilePath(){
         String dir = System.getProperty("user.dir");
-        
         if (System.getProperty("user.dir").equalsIgnoreCase("Windows")) {
-            dir += "\\resources\\Brands\\brands.txt";
+               dir += "\\resources\\Brands\\brands.txt";
         }
         else {
-            dir += "/resources/Brands/brands.txt";
+               dir += "/resources/Brands/brands.txt";
         }
+        return dir;
+        
+    }
+    private void jMnuItmRemoveBrandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmRemoveBrandActionPerformed
+        String delBrand = null;
+        String dir = getBrandFilePath();
         try {
             delBrand = JOptionPane.showInputDialog(rootPane, "Delete a brand", "Delete", JOptionPane.INFORMATION_MESSAGE).trim();
-            
             if(!delBrand.matches("^[a-zA-Z]*$") || delBrand.trim().isEmpty()){
                 JOptionPane.showMessageDialog(rootPane, "Brand name can only have alphabets,Please enter valid brand name!", "Error!", JOptionPane.ERROR_MESSAGE);
                 jMnuItmAddBrandActionPerformed(evt);
             }
             else {
-                String capBrand = delBrand.substring(0, 1).toUpperCase() + delBrand.substring(1);
-                System.out.println(capBrand);
-                File inputFile = new File(dir);
-                String temp = dir.replace("brands.txt", "temp.txt");
-                File tempFile = new File(temp);
-
-                BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-                BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
-
-                String currentLine;
-
-                while((currentLine = reader.readLine()) != null) {
-                    // trim newline when comparing with lineToRemove
-                    String trimmedLine = currentLine.trim();
-                    if(trimmedLine.equals(capBrand)) continue;
-                    writer.write(currentLine + System.getProperty("line.separator"));
+                boolean brandFound = false;
+                
+                for(int i = 0;i< comboBoxBrand.getItemCount();i++){
+                    if(comboBoxBrand.getItemAt(i).toString().equalsIgnoreCase(delBrand)){
+                       comboBoxBrand.removeItemAt(i);
+                       comboBoxBrandSales.removeItemAt(i);
+                       comboEditInvBrand.removeItemAt(i);
+                       comboBoxBrandSalesEdit.removeItemAt(i);
+                       brandFound = true;
+                       break;
+                    }
+                    
                 }
-                writer.close(); 
-                reader.close();
-                inputFile.delete();
-                boolean success = tempFile.renameTo(inputFile);
-                if(success)  {
-                    comboBoxBrandSales.setSelectedItem(capBrand);
-                    comboBoxBrand.setSelectedItem(capBrand);
-                    System.out.println(comboBoxBrandSales.getSelectedIndex());
-                    System.out.println(comboBoxBrand.getSelectedIndex());
-                    comboBoxBrandSales.removeItemAt(comboBoxBrandSales.getSelectedIndex());
-                    comboBoxBrand.removeItemAt(comboBoxBrand.getSelectedIndex());
-                    JOptionPane.showMessageDialog(rootPane, capBrand + " delete successfully", "Deleted", 0);
-                }
-                else {
-                    JOptionPane.showMessageDialog(rootPane, capBrand + " could not be", "Error!", 0);
+                if(!brandFound){
+                    JOptionPane.showMessageDialog(rootPane, "Cannot find the brand name "+delBrand, "Error!", JOptionPane.ERROR_MESSAGE);
+                }else{
+                    
+                    File brandTextFile = new File(dir);
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(brandTextFile));
+                    for(int i =0;i<comboBoxBrand.getItemCount();i++){
+                        writer.write(comboBoxBrand.getItemAt(i).toString());
+                        writer.newLine();
+                    }
+                    writer.close();
+                    JOptionPane.showMessageDialog(rootPane, delBrand + " delete successfully", "Deleted", 0);
                 }
             }
         }
@@ -3338,6 +3323,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private void tfDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfDateActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tfDateActionPerformed
+
+    private void comboBoxBrandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxBrandActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxBrandActionPerformed
 
     
     private void sortInventory () {
@@ -3465,12 +3454,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private String[] elementsForComboBoxBrand () {
         String [] comboStrings = {};
         List <String> listStrings = new ArrayList <>();
-        String dir = System.getProperty("user.dir");
-        if(System.getProperty("os.name").equalsIgnoreCase("windows")){
-                dir += "\\resources\\Brands\\brands.txt";
-            }else{
-            dir += "/resources/Brands/brands.txt";
-            }
+        String dir = getBrandFilePath();
         try {
             File file= new File(dir);
             if(file.createNewFile()){
@@ -3484,7 +3468,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                     listStrings.add(data);
                  }
                 }
-             myReader.close();}
+             myReader.close();
+            }
        
         }
         catch (IOException ie) {
@@ -3499,7 +3484,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         if (high >= low) {
             int mid = (low+high) / 2;
             InventoryManagement im = arraylistInventory.get(mid);
-            System.out.println(im.getCost());
+   
             if (im.getCost() == search){
                 values = mid;
                 return values;
@@ -3519,7 +3504,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         if (high >= low) {
             int mid = (low+high) / 2;
             InventoryManagement im = temp.get(mid);
-            System.out.println(im.getCost());
             if (im.getSellingPrice() == search){
                 values = mid;
                 return values;
