@@ -1,8 +1,5 @@
-Apple
-Samsung
-Huawei
-Redmi
-Motorola
-Sony
-Oppo
-Mi
+
+Apple;
+Google
+Asdfasdf
+Sdfsd
