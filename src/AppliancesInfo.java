@@ -107,10 +107,12 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
      * Creates new form DashboardPage
      */
     public AppliancesInfo() {
-        setIcon();
+        
         initComponents();
+        setIcon();
         tfQuantitySales.getDocument().addDocumentListener(doc);
         addKeyListener(this);
+        
     }
 
     /**
@@ -3534,6 +3536,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }
     private void setIcon() {
         setIconImage (Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/mobile.png")));
+        frameAddInventory.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/add.JPG")));
+        frameAddSales.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/add.JPG")));
     }
     private void csvReaderInventory(String pathInventory) {
         File file= new File(pathInventory);
