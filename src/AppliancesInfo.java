@@ -262,7 +262,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         btnInvoice = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
-        btnVendor = new javax.swing.JButton();
         btnSearch = new javax.swing.JButton();
         tabbedPaneTbl = new javax.swing.JTabbedPane();
         tblPnlInventory = new javax.swing.JPanel();
@@ -1553,6 +1552,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setTitle("Mobile Inventory Management");
         setBackground(new java.awt.Color(255, 250, 250));
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -1609,17 +1609,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             }
         });
 
-        btnVendor.setBackground(new java.awt.Color(0, 0, 51));
-        btnVendor.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        btnVendor.setForeground(new java.awt.Color(255, 255, 255));
-        btnVendor.setText("Logout");
-        btnVendor.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnVendor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVendorActionPerformed(evt);
-            }
-        });
-
         btnSearch.setBackground(new java.awt.Color(0, 0, 51));
         btnSearch.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnSearch.setForeground(new java.awt.Color(255, 255, 255));
@@ -1638,30 +1627,27 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             .addGroup(panelButtonsLayout.createSequentialGroup()
                 .addContainerGap(22, Short.MAX_VALUE)
                 .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAdd, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEdit, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnInvoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnVendor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnSearch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
         panelButtonsLayout.setVerticalGroup(
             panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelButtonsLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(26, 26, 26)
                 .addComponent(btnAdd)
-                .addGap(25, 25, 25)
+                .addGap(28, 28, 28)
                 .addComponent(btnEdit)
-                .addGap(25, 25, 25)
+                .addGap(27, 27, 27)
                 .addComponent(btnDelete)
-                .addGap(25, 25, 25)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addComponent(btnInvoice)
-                .addGap(25, 25, 25)
+                .addGap(32, 32, 32)
                 .addComponent(btnSearch)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
-                .addComponent(btnVendor)
-                .addContainerGap())
+                .addGap(23, 23, 23))
         );
 
         tabbedPaneTbl.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -2009,26 +1995,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         }
     }//GEN-LAST:event_jMnuItmOpenActionPerformed
 
-    private void btnVendorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendorActionPerformed
-        if(isSaved) {
-            System.exit(0);
-        }
-        else {
-            int confirmation = JOptionPane.showConfirmDialog(rootPane, "File already exists. Overwrite?", "Overwrite?", JOptionPane.YES_NO_OPTION);
-            switch (confirmation){
-                case JOptionPane.YES_OPTION:
-                    jButtonClearInventoryActionPerformed(evt);
-                    break;
-                case JOptionPane.NO_OPTION:
-                    AppliancesInfo dash = new AppliancesInfo();
-                    dash.jMnuItmNewActionPerformed(evt);
-                    break;
-                case JOptionPane.CLOSED_OPTION:
-                    break;
-            }
-        }
-    }//GEN-LAST:event_btnVendorActionPerformed
-
     private void jMnuItmSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmSaveAsActionPerformed
         // TODO add your handling code here:
         String dir = System.getProperty("user.dir");
@@ -2372,7 +2338,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             sortInventory();
             clearTableInventory();
             addToInventoryTable();
-            int confirmation = JOptionPane.showConfirmDialog(rootPane, "Do you want to add more?", "New?", JOptionPane.YES_NO_OPTION);
+            int confirmation = JOptionPane.showConfirmDialog(frameAddInventory, "Do you want to add more?", "New?", JOptionPane.YES_NO_OPTION);
             switch (confirmation){
                 case JOptionPane.YES_OPTION:
                     clearInventoryForm();
@@ -2389,7 +2355,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             InventoryManagement im = new InventoryManagement(modelNo, modelName, brand, os, range, costPrice, sellingPrice, quantity);
             arraylistInventory.add(im);
             addToInventoryTable();
-            int confirmation = JOptionPane.showConfirmDialog(rootPane, "Do you want to add more?", "New?", JOptionPane.YES_NO_OPTION);
+            int confirmation = JOptionPane.showConfirmDialog(frameAddInventory, "Do you want to add more?", "New?", JOptionPane.YES_NO_OPTION);
             switch (confirmation){
                 case JOptionPane.YES_OPTION:
                     clearInventoryForm();
@@ -2816,7 +2782,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         im.setQuantity(newQuantity);
                         clearTableInventory();
                         addToInventoryTable();
-                        int confirmation = JOptionPane.showConfirmDialog(rootPane, "Do you want to add more?", "New?", JOptionPane.YES_NO_OPTION);
+                        int confirmation = JOptionPane.showConfirmDialog(frameAddSales, "Do you want to add more?", "New?", JOptionPane.YES_NO_OPTION);
                         switch (confirmation){
                         case JOptionPane.YES_OPTION:
                             clearSalesForm();
@@ -2842,7 +2808,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         im.setQuantity(newQuantity);
                         clearTableInventory();
                         addToInventoryTable();
-                        int confirmation = JOptionPane.showConfirmDialog(rootPane, "Do you want to add more?", "New?", JOptionPane.YES_NO_OPTION);
+                        int confirmation = JOptionPane.showConfirmDialog(frameAddSales, "Do you want to add more?", "New?", JOptionPane.YES_NO_OPTION);
                         switch (confirmation){
                         case JOptionPane.YES_OPTION:
                             clearSalesForm();
@@ -2856,7 +2822,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         }
                     }
                     else {
-                        JOptionPane.showMessageDialog(rootPane, "Not enough pieces in the inventory.", "Error!", 0);
+                        JOptionPane.showMessageDialog(frameAddSales, "Not enough pieces in the inventory.", "Error!", 0);
                     }
                 }
             }
@@ -3759,7 +3725,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearch;
-    private javax.swing.JButton btnVendor;
     private javax.swing.ButtonGroup buttonGroupSearch;
     private javax.swing.JComboBox<String> comboBoxBrand;
     private javax.swing.JComboBox<String> comboBoxBrandSales;
