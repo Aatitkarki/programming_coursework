@@ -1,5 +1,6 @@
-
-Apple;
+Apple
 Google
-Asdfasdf
-Sdfsd
+Huawei
+Redmi
+Mi
+Samsung

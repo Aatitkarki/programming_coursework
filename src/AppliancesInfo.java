@@ -15,9 +15,13 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -131,7 +135,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         lblSellingPrice = new javax.swing.JLabel();
         tfModelNo = new javax.swing.JTextField();
         tfModelName = new javax.swing.JTextField();
-        comboBrand = new javax.swing.JComboBox<>();
+        comboBoxBrand = new javax.swing.JComboBox<>();
         comboOs = new javax.swing.JComboBox<>();
         radioBtnHigh = new javax.swing.JRadioButton();
         radioBtnMid = new javax.swing.JRadioButton();
@@ -354,7 +358,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             }
         });
 
-        comboBrand.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
+        comboBoxBrand.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
 
         comboOs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "iOS", "Android", "Symbian", "Others" }));
 
@@ -439,7 +443,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(tfModelNo)
                     .addComponent(tfCostPrice)
-                    .addComponent(comboBrand, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(comboBoxBrand, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(tfModelName)
                     .addGroup(panelAddInventoryLayout.createSequentialGroup()
                         .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -475,7 +479,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         .addGap(20, 20, 20)
                         .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblBrand)
-                            .addComponent(comboBrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(comboBoxBrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(20, 20, 20)
                         .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblOS)
@@ -2346,7 +2350,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         try{
             modelNo = tfModelNo.getText().trim();
             modelName = tfModelName.getText().trim();
-            brand = comboBrand.getSelectedItem().toString().trim();
+            brand = comboBoxBrand.getSelectedItem().toString().trim();
             os = comboOs.getSelectedItem().toString().trim();
             range = radioBtnHigh.isSelected() == true ? "High" : radioBtnMid.isSelected() == true ? "Mid" : radioBtnLow.isSelected() == true ? "Low" : null;
             costPrice = Integer.parseInt(tfCostPrice.getText().trim());
@@ -2733,36 +2737,37 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         else {
             dir += "/resources/Brands/brands.txt";
         }
+        try {
             newBrand = JOptionPane.showInputDialog(rootPane, "Enter New Brand", "Add Brand", JOptionPane.INFORMATION_MESSAGE).trim();
             
             if(!newBrand.matches("^[a-zA-Z]*$") || newBrand.trim().isEmpty()){
-                JOptionPane.showMessageDialog(rootPane, "Brand name can only have alphabets,Please enter valid brand name!", "Error!", JOptionPane.ERROR_MESSAGE);
-                jMnuItmAddBrandActionPerformed(evt);
-            }else{
+            JOptionPane.showMessageDialog(rootPane, "Brand name can only have alphabets,Please enter valid brand name!", "Error!", JOptionPane.ERROR_MESSAGE);
+            jMnuItmAddBrandActionPerformed(evt);
+            }
+            else {
                 String capBrand = newBrand.substring(0, 1).toUpperCase() + newBrand.substring(1);
-            try {
+
                 BufferedWriter bw = new BufferedWriter(new FileWriter(dir, true));
                 bw.newLine();
                 bw.write(capBrand);
                 bw.close();
                 JOptionPane.showMessageDialog(rootPane, capBrand + " successfully added to brands.", "Success!", JOptionPane.INFORMATION_MESSAGE);
 //                elementsForComboBoxBrand();
-                comboBrand.addItem(capBrand);
-                comboBrand.revalidate();
-                comboBrand.repaint();
+                comboBoxBrand.addItem(capBrand);
+                comboBoxBrand.revalidate();
+                comboBoxBrand.repaint();
                 comboBoxBrandSales.addItem(capBrand);
                 comboBoxBrandSales.revalidate();
                 comboBoxBrandSales.repaint();
+            
             }
-            catch (IOException ie) {
+        }
+        catch (IOException ie) {
                 JOptionPane.showMessageDialog(rootPane, "Something went wrong! Cannot write to file!" + ie, "Error", 0);
                 return;
-            }
-            
-            
-            }
-            
-       
+        }
+        catch (NullPointerException npe) {
+        }
     }//GEN-LAST:event_jMnuItmAddBrandActionPerformed
 
     private void jBtnAddSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAddSalesActionPerformed
@@ -3298,7 +3303,64 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void jMnuItmRemoveBrandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmRemoveBrandActionPerformed
-        // TODO add your handling code here:
+        String delBrand = null;
+        String dir = System.getProperty("user.dir");
+        
+        if (System.getProperty("user.dir").equalsIgnoreCase("Windows")) {
+            dir += "\\resources\\Brands\\brands.txt";
+        }
+        else {
+            dir += "/resources/Brands/brands.txt";
+        }
+        try {
+            delBrand = JOptionPane.showInputDialog(rootPane, "Delete a brand", "Delete", JOptionPane.INFORMATION_MESSAGE).trim();
+            
+            if(!delBrand.matches("^[a-zA-Z]*$") || delBrand.trim().isEmpty()){
+                JOptionPane.showMessageDialog(rootPane, "Brand name can only have alphabets,Please enter valid brand name!", "Error!", JOptionPane.ERROR_MESSAGE);
+                jMnuItmAddBrandActionPerformed(evt);
+            }
+            else {
+                String capBrand = delBrand.substring(0, 1).toUpperCase() + delBrand.substring(1);
+                System.out.println(capBrand);
+                File inputFile = new File(dir);
+                String temp = dir.replace("brands.txt", "temp.txt");
+                File tempFile = new File(temp);
+
+                BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+                BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+
+                String currentLine;
+
+                while((currentLine = reader.readLine()) != null) {
+                    // trim newline when comparing with lineToRemove
+                    String trimmedLine = currentLine.trim();
+                    if(trimmedLine.equals(capBrand)) continue;
+                    writer.write(currentLine + System.getProperty("line.separator"));
+                }
+                writer.close(); 
+                reader.close();
+                inputFile.delete();
+                boolean success = tempFile.renameTo(inputFile);
+                if(success)  {
+                    comboBoxBrandSales.setSelectedItem(capBrand);
+                    comboBoxBrand.setSelectedItem(capBrand);
+                    System.out.println(comboBoxBrandSales.getSelectedIndex());
+                    System.out.println(comboBoxBrand.getSelectedIndex());
+                    comboBoxBrandSales.removeItemAt(comboBoxBrandSales.getSelectedIndex());
+                    comboBoxBrand.removeItemAt(comboBoxBrand.getSelectedIndex());
+                    JOptionPane.showMessageDialog(rootPane, capBrand + " delete successfully", "Deleted", 0);
+                }
+                else {
+                    JOptionPane.showMessageDialog(rootPane, capBrand + " could not be", "Error!", 0);
+                }
+            }
+        }
+        catch (IOException ie) {
+                JOptionPane.showMessageDialog(rootPane, "Something went wrong! Cannot write to file!" + ie, "Error", 0);
+                return;
+        }
+        catch (NullPointerException npe) {
+        }
     }//GEN-LAST:event_jMnuItmRemoveBrandActionPerformed
 
     private void jButtonSearchCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchCancelActionPerformed
@@ -3619,7 +3681,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private void clearInventoryForm() {
         tfModelNo.setText(null);
         tfModelName.setText(null);
-        comboBrand.setSelectedIndex(0);
+        comboBoxBrand.setSelectedIndex(0);
         comboOs.setSelectedIndex(0);
         btnGrpAddInventory.clearSelection();
         radioBtnHigh.setSelected(true);
@@ -3699,13 +3761,13 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnVendor;
     private javax.swing.ButtonGroup buttonGroupSearch;
+    private javax.swing.JComboBox<String> comboBoxBrand;
     private javax.swing.JComboBox<String> comboBoxBrandSales;
     private javax.swing.JComboBox<String> comboBoxBrandSalesEdit;
     private javax.swing.JComboBox<String> comboBoxDiscount;
     private javax.swing.JComboBox<String> comboBoxDiscountEdit;
     private javax.swing.JComboBox<String> comboBoxModelNumber;
     private javax.swing.JComboBox<String> comboBoxModelNumberEdit;
-    private javax.swing.JComboBox<String> comboBrand;
     private javax.swing.JComboBox<String> comboEditInvBrand;
     private javax.swing.JComboBox<String> comboEditInvOs;
     private javax.swing.JComboBox<String> comboOs;
