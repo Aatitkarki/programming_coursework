@@ -1923,6 +1923,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             try {
                 FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
                 JFileChooser jChooser = new JFileChooser(dir);
+                System.out.println(dir);
+                System.out.println(dir.contains("_sales.csv"));
                 jChooser.setDialogTitle("Open");
                 jChooser.setAcceptAllFileFilterUsed(false);
                 jChooser.setFileFilter(filter);
@@ -1930,15 +1932,32 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
 
                 File file = jChooser.getSelectedFile();
                 path = file.getAbsolutePath();
-                String pathSales = path.replace(".csv", "_sales.csv");
-                File fileSale = new File(pathSales);
-                
-                csvReaderInventory();
-                sortInventory();
-                addToInventoryTable();
-                if(fileSale.exists()) {
-                   csvReaderSales();
-                   addToInventoryTable();
+                System.out.println(path);
+                System.out.println(path.contains("sales.csv"));
+                if (!path.contains("sales.csv")) {
+                    String pathSales = path.replace(".csv", "_sales.csv");
+                    File fileSale = new File(pathSales);
+
+                    csvReaderInventory(path);
+                    sortInventory();
+                    addToInventoryTable();
+                    if(fileSale.exists()) {
+                        csvReaderSales(pathSales);
+                        addToSalesTable();
+                    }
+                }
+                else {
+                    String pathSales = path;
+                    String pathInventory = path.replace("_sales.csv", ".csv");
+                    path = pathInventory;
+                    System.out.println(path);
+                    System.out.println(pathSales);
+                    File fileInventory = new File(path);
+                    csvReaderInventory(path);
+                    sortInventory();
+                    csvReaderSales(pathSales);
+                    addToInventoryTable();
+                    addToSalesTable();  
                 }
             }
             catch(NullPointerException npe) {
@@ -3300,13 +3319,13 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             arrayForTable[6] = String.valueOf(sales.getDiscount());
             arrayForTable[7] = String.valueOf(sales.getTotal());
             
-            int rowCount = tblInventory.getRowCount();
+            int rowCount = tblSales.getRowCount();
             int nextRow = 0;
             boolean emptyRowFlag = false;
             String s;
         
             do{
-                s = (String) tblInventory.getValueAt(nextRow, 0);
+                s = (String) tblSales.getValueAt(nextRow, 0);
                 if(s != null && s.length() != 0) {
                     nextRow++;
                 }
@@ -3316,9 +3335,9 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
       
             }   while(nextRow < rowCount && !emptyRowFlag);
             if(nextRow < rowCount) {
-                int colCount = tblInventory.getColumnCount();
+                int colCount = tblSales.getColumnCount();
                 for (int i = 0; i < colCount; i++) {
-                    tblInventory.setValueAt(arrayForTable[i], nextRow, i);
+                    tblSales.setValueAt(arrayForTable[i], nextRow, i);
                 }
             
             }
@@ -3377,7 +3396,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     
     private int binarySearchInventoryCost(int low, int high, int search) {
         int values = -1;
-        List <Integer> listInt = new ArrayList <>();
         if (high >= low) {
             int mid = (low+high) / 2;
             InventoryManagement im = arraylistInventory.get(mid);
@@ -3398,7 +3416,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }
     private int binarySearchSelling(int low, int high, int search) {
         int values = -1;
-        List <Integer> listInt = new ArrayList <>();
         if (high >= low) {
             int mid = (low+high) / 2;
             InventoryManagement im = temp.get(mid);
@@ -3420,8 +3437,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private void setIcon() {
         setIconImage (Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/mobile.png")));
     }
-    private void csvReaderInventory() {
-        File file= new File(path);
+    private void csvReaderInventory(String pathInventory) {
+        File file= new File(pathInventory);
         Scanner inputStream;
         arraylistInventory.clear();
         try{
@@ -3446,10 +3463,12 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             inputStream.close();
         }catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(rootPane, "Error Occured " + e, "Error!", 0);
-        }   
+        }
+        catch (NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(rootPane, "Error Occured " + nfe, "Error!", 0);
+        }
     }
-    private void csvReaderSales() {
-        String pathSales = path.replace(".csv", "_sales.csv");
+    private void csvReaderSales(String pathSales) {
         File file= new File(pathSales);
         Scanner inputStream;
         arraylistSales.clear();
