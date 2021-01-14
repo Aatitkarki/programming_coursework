@@ -33,6 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JTextField;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -274,6 +275,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         jMnuItmSaveAs = new javax.swing.JMenuItem();
         jMnuTools = new javax.swing.JMenu();
         jMnuItmAddBrand = new javax.swing.JMenuItem();
+        jMnuItmRemoveBrand = new javax.swing.JMenuItem();
         jMnuAbt = new javax.swing.JMenu();
         jMnuItmAbout = new javax.swing.JMenuItem();
         jMnuItmExit = new javax.swing.JMenuItem();
@@ -553,6 +555,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         lblSalePrice.setText("Total:");
 
         tfDate.setToolTipText("dd-mm-yy (e.g.22-10-2010 )");
+        tfDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfDateActionPerformed(evt);
+            }
+        });
         tfDate.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 tfDateKeyTyped(evt);
@@ -592,7 +599,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
 
         tfTotal.setEditable(false);
 
-        comboBoxModelNumber.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        comboBoxModelNumber.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "" }));
         comboBoxModelNumber.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 comboBoxModelNumberItemStateChanged(evt);
@@ -600,6 +607,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         });
 
         comboBoxBrandSales.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
+        comboBoxBrandSales.setEnabled(false);
 
         lblDiscount.setBackground(new java.awt.Color(0, 0, 51));
         lblDiscount.setForeground(new java.awt.Color(255, 255, 255));
@@ -685,7 +693,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSalePrice)
                     .addComponent(tfTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 128, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 116, Short.MAX_VALUE)
                 .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBtnAddSales)
                     .addComponent(jBtnClearSales))
@@ -722,6 +730,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         radioBtnCostPrice.setBackground(new java.awt.Color(0, 0, 51));
         buttonGroupSearch.add(radioBtnCostPrice);
         radioBtnCostPrice.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnCostPrice.setSelected(true);
         radioBtnCostPrice.setText("Cost Price");
 
         jButtonSearchArray.setBackground(new java.awt.Color(0, 0, 51));
@@ -738,6 +747,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         jButtonSearchCancel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jButtonSearchCancel.setForeground(new java.awt.Color(255, 255, 255));
         jButtonSearchCancel.setText("Cancel");
+        jButtonSearchCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSearchCancelActionPerformed(evt);
+            }
+        });
 
         radioBtnSellingPrice.setBackground(new java.awt.Color(0, 0, 51));
         buttonGroupSearch.add(radioBtnSellingPrice);
@@ -1051,7 +1065,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         radioBtnTotal.setBackground(new java.awt.Color(0, 0, 51));
         buttonGroupSearch.add(radioBtnTotal);
         radioBtnTotal.setForeground(new java.awt.Color(255, 255, 255));
-        radioBtnTotal.setSelected(true);
         radioBtnTotal.setText("Total");
 
         jButtonSearchArraySales.setBackground(new java.awt.Color(0, 0, 51));
@@ -1807,6 +1820,14 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         });
         jMnuTools.add(jMnuItmAddBrand);
 
+        jMnuItmRemoveBrand.setText("Remove Brand");
+        jMnuItmRemoveBrand.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMnuItmRemoveBrandActionPerformed(evt);
+            }
+        });
+        jMnuTools.add(jMnuItmRemoveBrand);
+
         mnuBarEmployee.add(jMnuTools);
 
         jMnuAbt.setText("About");
@@ -2276,7 +2297,9 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private void tfDateKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfDateKeyTyped
         // TODO add your handling code here:
         char key = evt.getKeyChar();
-        if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE || key == '-')) {
+        if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE || key == '-'|| key=='/' || key=='.')) {
+           
+            
             evt.consume();
         }
     }//GEN-LAST:event_tfDateKeyTyped
@@ -2313,9 +2336,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         }
         catch (NullPointerException npe) {
             JOptionPane.showMessageDialog(rootPane,"Check your inputs.", "Error!", 0); 
+            return;
         }
         catch (NumberFormatException nfe) {
             JOptionPane.showMessageDialog(rootPane, "Check your number inputs.", "Error!", 0);
+            return;
         }
             
         if (arraylistInventory.size() > 0 && arraylistInventory.size() < 12) {
@@ -2431,19 +2456,40 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         }
     }//GEN-LAST:event_tfSellingPriceKeyTyped
 
+        private String getStringFromTextfield(JTextField tfName){
+            if(tfName.getText().trim().isEmpty()){
+                JOptionPane.showMessageDialog(rootPane, "Empty text field.\n", "Error!", 0);
+                return null;
+            }
+            return tfName.getText().trim();
+        
+        }
+        private int getIntFromTextField(JTextField tfName){
+            int data = 0;
+            
+            if(!tfName.getText().trim().isEmpty()){
+                try{
+                   data = Integer.parseInt(tfName.getText().trim());
+                
+                }catch(NumberFormatException nfe){
+                    JOptionPane.showMessageDialog(rootPane, "Please provide a valid number as input.\n", "Error!", 0);
+                data= -1;
+                
+                }
+            }else{
+                JOptionPane.showMessageDialog(rootPane, "Empty text field.\n", "Error!", 0);
+                data= -1;
+            }
+            return data;
+        }
     private void jButtonSearchArrayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchArrayActionPerformed
         // TODO add your handling code here:
         String searchSelection = radioBtnCostPrice.isSelected() == true ? "Cost" : radioBtnSellingPrice.isSelected() == true ? "Selling" : radioBtnModelName.isSelected() == true ? "Model" : radioBtnBrand.isSelected() == true? "Brand" : null;
         if(searchSelection.equals("Cost")) {
-            int search = 0;
-            try{
-                search = Integer.parseInt(tfSearch.getText().trim());
-            }
-            catch (NumberFormatException nfe) {
-                JOptionPane.showMessageDialog(rootPane, "Empty text field.\n" + nfe, "Error!", 0);
-                return;
-            }
-            int index = binarySearchInventoryCost(0, arraylistInventory.size() - 1, search);
+           
+            int search = getIntFromTextField(tfSearch);
+            if(search !=-1){
+                int index = binarySearchInventoryCost(0, arraylistInventory.size() - 1, search);
             if (index == -1) {
                 lblSearchError.setVisible(true);
                 TimerTask task = new TimerTask () {
@@ -2459,17 +2505,12 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 frameSearch.dispose();
                 JOptionPane.showMessageDialog(rootPane, "Index: " + index, "Search results", 0);
             }
+            }
         }
         else if (searchSelection.equals("Selling")) {
-            int search = 0;
-            try{
-                search = Integer.parseInt(tfSearch.getText().trim());
-            }
-            catch (NumberFormatException nfe) {
-                JOptionPane.showMessageDialog(rootPane, "Empty text field.\n" + nfe, "Error!", 0);
-                return;
-            }
-            sortInventoryTemp();
+            int search = getIntFromTextField(tfSearch);
+            if(search !=-1){
+           sortInventoryTemp();
             int index = binarySearchSelling(0, temp.size() - 1, search);
             if (index == -1) {
                 lblSearchError.setVisible(true);
@@ -2486,18 +2527,16 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 frameSearch.dispose();
                 JOptionPane.showMessageDialog(rootPane, "Index: " + index, "Search results", 0);
             }
+            }
+            
+            
         }
         else if (searchSelection.equals("Model")) {
             List <Integer> listInt = new ArrayList <>();
-            String search = null;
-            try {
-                search = tfSearch.getText().trim();
-            }
-            catch (NullPointerException npe) {
-                JOptionPane.showMessageDialog(rootPane, "Null input.\n" + npe, "Error!", 0);
-                return;
-            }
-            for (int i = 0; i < arraylistInventory.size(); i++) {
+            String search = getStringFromTextfield(tfSearch);
+            
+            if(search!=null){
+                for (int i = 0; i < arraylistInventory.size(); i++) {
                 InventoryManagement im = arraylistInventory.get(i);
                 if (im.getModelNo().equals(search)) {
                     listInt.add(i+1);
@@ -2519,10 +2558,14 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 timer.schedule(task, delay);
             }
         }
+        }
         else {
             List <Integer> listInt = new ArrayList <>();
-            String search = tfSearch.getText().trim();
-            for (int i = 0; i < arraylistInventory.size(); i++) {
+            String search = getStringFromTextfield(tfSearch);
+            
+            
+            if(search!=null){
+                for (int i = 0; i < arraylistInventory.size(); i++) {
                 InventoryManagement im = arraylistInventory.get(i);
                 if (im.getBrand().equals(search)) {
                     listInt.add(i+1);
@@ -2543,7 +2586,14 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 Timer timer = new Timer("Timer#1");
                 timer.schedule(task, delay);
             }
+            
+            }
+            
         }
+            
+            
+            
+            
     }//GEN-LAST:event_jButtonSearchArrayActionPerformed
 
     private void lblSellingPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lblSellingPriceKeyTyped
@@ -2657,30 +2707,27 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         // TODO add your handling code here:
         String newBrand = null;
         String dir = System.getProperty("user.dir");
+        
         if (System.getProperty("user.dir").equalsIgnoreCase("Windows")) {
             dir += "\\resources\\Brands\\brands.txt";
         }
         else {
             dir += "/resources/Brands/brands.txt";
         }
-        try{
-            
             newBrand = JOptionPane.showInputDialog(rootPane, "Enter New Brand", "Add Brand", JOptionPane.INFORMATION_MESSAGE).trim();
-        }
-        catch (NullPointerException npe) {
-        }
-        if(newBrand == null) {
-            //no code written here just an empty if condition to catch nullpointerexception
-        }
-        else if (newBrand != null && !newBrand.isEmpty()) {
-            String capBrand = newBrand.substring(0, 1).toUpperCase() + newBrand.substring(1);
+            
+            if(!newBrand.matches("^[a-zA-Z]*$") || newBrand.trim().isEmpty()){
+                JOptionPane.showMessageDialog(rootPane, "Brand name can only have alphabets,Please enter valid brand name!", "Error!", JOptionPane.ERROR_MESSAGE);
+                jMnuItmAddBrandActionPerformed(evt);
+            }else{
+                String capBrand = newBrand.substring(0, 1).toUpperCase() + newBrand.substring(1);
             try {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(dir, true));
                 bw.newLine();
                 bw.write(capBrand);
                 bw.close();
                 JOptionPane.showMessageDialog(rootPane, capBrand + " successfully added to brands.", "Success!", JOptionPane.INFORMATION_MESSAGE);
-                elementsForComboBoxBrand();
+//                elementsForComboBoxBrand();
                 comboBrand.addItem(capBrand);
                 comboBrand.revalidate();
                 comboBrand.repaint();
@@ -2689,13 +2736,14 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 comboBoxBrandSales.repaint();
             }
             catch (IOException ie) {
-                JOptionPane.showMessageDialog(rootPane, "No empty rows found!" + ie, "Error", 0);
+                JOptionPane.showMessageDialog(rootPane, "Something went wrong! Cannot write to file!" + ie, "Error", 0);
+                return;
             }
             
-        }
-        else if (!newBrand.isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "No input", "Error", 0);
-        }
+            
+            }
+            
+       
     }//GEN-LAST:event_jMnuItmAddBrandActionPerformed
 
     private void jBtnAddSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAddSalesActionPerformed
@@ -2726,6 +2774,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             JOptionPane.showMessageDialog(rootPane, "Error in quantity text field.\n" + nfe, "Error!", 0);
             return;
         }
+        String datePattern = "^(?:(?:31(\\/|-|\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.)(?:0?[13-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(\\/|-|\\.)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\\d|2[0-8])(\\/|-|\\.)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$";
+        if(!date.matches(datePattern)){
+          JOptionPane.showMessageDialog(rootPane, "Please enter a valid Date!\n", "Error!", 0);
+        
+        }else{
         
         if (arraylistInventory.size() > 0 && arraylistInventory.size() < 12) {
             for(InventoryManagement im : arraylistInventory) {
@@ -2783,6 +2836,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                     }
                 }
             }
+        }
         }
     }//GEN-LAST:event_jBtnAddSalesActionPerformed
 
@@ -3224,6 +3278,18 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         savePicture(panelInvoice, lblSetFirstName.getText(), lblSetLastName.getText());
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void jMnuItmRemoveBrandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmRemoveBrandActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMnuItmRemoveBrandActionPerformed
+
+    private void jButtonSearchCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchCancelActionPerformed
+        frameSearch.dispose();
+    }//GEN-LAST:event_jButtonSearchCancelActionPerformed
+
+    private void tfDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfDateActionPerformed
+
     
     private void sortInventory () {
         for (int i = 0; i < arraylistInventory.size(); i++) {
@@ -3300,13 +3366,13 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             arrayForTable[6] = String.valueOf(sales.getDiscount());
             arrayForTable[7] = String.valueOf(sales.getTotal());
             
-            int rowCount = tblInventory.getRowCount();
+            int rowCount = tblSales.getRowCount();
             int nextRow = 0;
             boolean emptyRowFlag = false;
             String s;
         
             do{
-                s = (String) tblInventory.getValueAt(nextRow, 0);
+                s = (String) tblSales.getValueAt(nextRow, 0);
                 if(s != null && s.length() != 0) {
                     nextRow++;
                 }
@@ -3316,9 +3382,9 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
       
             }   while(nextRow < rowCount && !emptyRowFlag);
             if(nextRow < rowCount) {
-                int colCount = tblInventory.getColumnCount();
+                int colCount = tblSales.getColumnCount();
                 for (int i = 0; i < colCount; i++) {
-                    tblInventory.setValueAt(arrayForTable[i], nextRow, i);
+                    tblSales.setValueAt(arrayForTable[i], nextRow, i);
                 }
             
             }
@@ -3350,26 +3416,30 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private String[] elementsForComboBoxBrand () {
         String [] comboStrings = {};
         List <String> listStrings = new ArrayList <>();
-        try {
-            String dir = System.getProperty("user.dir");
-            if(System.getProperty("os.name").equalsIgnoreCase("windows")){
+        String dir = System.getProperty("user.dir");
+        if(System.getProperty("os.name").equalsIgnoreCase("windows")){
                 dir += "\\resources\\Brands\\brands.txt";
             }else{
             dir += "/resources/Brands/brands.txt";
             }
-            FileInputStream fstream = new FileInputStream(dir);
-            DataInputStream input = new DataInputStream(fstream);
-            BufferedReader buffer = new BufferedReader (new InputStreamReader(input));
-            String str;
-            while ((str = buffer.readLine()) != null) {
-                str = str.trim();
-                if ((str.length() != 0)) {
-                    listStrings.add(str);
+        try {
+            File file= new File(dir);
+            if(file.createNewFile()){
+                
+            }else{
+            Scanner myReader = new Scanner(file);
+            String data="";
+                while (myReader.hasNextLine()) {
+                 data = myReader.nextLine();
+                 if(!data.equals("")){
+                    listStrings.add(data);
+                 }
                 }
-            }
+             myReader.close();}
+       
         }
         catch (IOException ie) {
-            JOptionPane.showMessageDialog(rootPane, "No empty rows found!" + ie, "Error", 0);
+            JOptionPane.showMessageDialog(rootPane, "Soemthing went wrong" + ie, "Error", 0);
         }
         comboStrings = (String[]) listStrings.toArray(new String[listStrings.size()]);
         return comboStrings;
@@ -3523,7 +3593,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         tfFirstName.setText(null);
         tfLastName.setText(null);
         tfDate.setText(null);
-        tfQuantity.setText(null);
+        tfQuantitySales.setText(null);
         comboBoxDiscount.setSelectedIndex(0);
         tfTotal.setText(null);
     }
@@ -3536,6 +3606,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         radioBtnHigh.setSelected(true);
         tfCostPrice.setText(null);
         tfSellingPrice.setText(null);
+        tfQuantity.setText(null);
+        
     }
     private void printInvoice (JPanel print) {
         // Using printer to print out the invoice
@@ -3645,6 +3717,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private javax.swing.JMenuItem jMnuItmExit;
     private javax.swing.JMenuItem jMnuItmNew;
     private javax.swing.JMenuItem jMnuItmOpen;
+    private javax.swing.JMenuItem jMnuItmRemoveBrand;
     private javax.swing.JMenuItem jMnuItmSave;
     private javax.swing.JMenuItem jMnuItmSaveAs;
     private javax.swing.JMenu jMnuTools;
