@@ -1540,7 +1540,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 .addComponent(panelInvoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jDialogHelp.setTitle("About");
+        jDialogHelp.setTitle("Help");
         jDialogHelp.setBackground(new java.awt.Color(255, 255, 255));
         jDialogHelp.setIconImage(null);
         jDialogHelp.setMinimumSize(new java.awt.Dimension(296, 410));
