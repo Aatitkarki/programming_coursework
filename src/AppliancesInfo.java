@@ -45,7 +45,7 @@ import javax.swing.JTextField;
 public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private int indexEditInv;
     private int indexEditSales;
-    private boolean tableSelection = true;
+    private boolean isInventoryTableSelected = true;
     private boolean isSaved = true;
     private boolean isEditSales = false;
     private String path = "";
@@ -1942,19 +1942,13 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private void jMnuItmAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmAboutActionPerformed
         jDialogAbout.setLocationRelativeTo(null);
         jDialogAbout.setSize(300,200);
-        
         jDialogAbout.setVisible(true);
     }//GEN-LAST:event_jMnuItmAboutActionPerformed
 
     private void jMnuItmOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmOpenActionPerformed
         if(isSaved) {
-            String dir = System.getProperty("user.dir");
-            if (System.getProperty("os.name").contains("Windows")) {
-                dir += "\\resources\\CSV Files";
-            }
-            else{
-                dir += "/resources/CSV Files";
-            }
+            String dir = getCSVFilesDirectory();
+            
             try {
                 FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
                 JFileChooser jChooser = new JFileChooser(dir);
@@ -2012,15 +2006,18 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             }
         }
     }//GEN-LAST:event_jMnuItmOpenActionPerformed
-
+       private String getCSVFilesDirectory(){
+       String dir = System.getProperty("user.dir");
+            if (System.getProperty("os.name").contains("Windows")) {
+                dir += "\\resources\\CSV Files";
+            }
+            else{
+                dir += "/resources/CSV Files";
+            }
+            return dir;
+       }
     private void jMnuItmSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmSaveAsActionPerformed
-        String dir = System.getProperty("user.dir");
-        if (System.getProperty("os.name").contains("Windows")) {
-            dir += "\\resources\\CSV Files";
-        }
-        else{
-            dir += "/resources/CSV Files";
-        }
+        String dir =getCSVFilesDirectory();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
         JFileChooser jFileSaver = new JFileChooser(dir);
         jFileSaver.setDialogTitle("Save as");
@@ -2086,7 +2083,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jMnuItmNewActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        if (tableSelection == true) {
+        if (isInventoryTableSelected == true) {
             if (arraylistInventory.size() < 12) {
                 frameAddInventory.setVisible(true);
                 frameAddInventory.setLocationRelativeTo(null);
@@ -2192,7 +2189,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_btnInvoiceActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        if (tableSelection == true) {
+        if (isInventoryTableSelected == true) {
             indexEditInv = tblInventory.getSelectedRow();
             if (indexEditInv >= 0) {
                 lblEditInvMsg.setVisible(false);
@@ -2214,6 +2211,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 comboEditInvBrand.setSelectedItem(brandOld);
                 comboEditInvOs.setSelectedItem(osOld);
                 
+                
+
                 if (rangeOld.equals("High")) {
                     radioBtnEditInvHigh.setSelected(true);
                 }
@@ -2302,10 +2301,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
 
     private void tabbedPaneTblStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabbedPaneTblStateChanged
         if (tabbedPaneTbl.getSelectedIndex() == 0) {
-            tableSelection = true;
+            isInventoryTableSelected = true;
         }
         else {
-            tableSelection = false;
+            isInventoryTableSelected = false;
         }
     }//GEN-LAST:event_tabbedPaneTblStateChanged
 
@@ -2326,18 +2325,9 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             range = radioBtnHigh.isSelected() == true ? "High" : radioBtnMid.isSelected() == true ? "Mid" : radioBtnLow.isSelected() == true ? "Low" : null;
             costPrice = Integer.parseInt(tfCostPrice.getText().trim());
             sellingPrice = Integer.parseInt(tfSellingPrice.getText().trim());
-            quantity = Integer.parseInt(tfQuantity.getText().trim());    
-        }
-        catch (NullPointerException npe) {
-            JOptionPane.showMessageDialog(rootPane,"Check your inputs.", "Error!", 0); 
-            return;
-        }
-        catch (NumberFormatException nfe) {
-            JOptionPane.showMessageDialog(rootPane, "Check your number inputs.", "Error!", 0);
-            return;
-        }
+            quantity = Integer.parseInt(tfQuantity.getText().trim()); 
             
-        if (arraylistInventory.size() > 0 && arraylistInventory.size() < 12) {
+             if (arraylistInventory.size() > 0 && arraylistInventory.size() < 12) {
             InventoryManagement im = new InventoryManagement(modelNo, modelName, brand, os, range, costPrice, sellingPrice, quantity);
             arraylistInventory.add(im);
             sortInventory();
@@ -2376,10 +2366,23 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         isSaved = false;
         comboBoxModelNumber.addItem(modelName);
         frameAddInventory.dispose();
+            
+            
+        }
+        catch (NullPointerException npe) {
+            JOptionPane.showMessageDialog(rootPane,"Check your inputs.", "Error!", 0); 
+            return;
+        }
+        catch (NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(rootPane, "Check your number inputs.", "Error!", 0);
+            return;
+        }
+            
+       
     }//GEN-LAST:event_jButtonAddInventoryActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        if (tableSelection == true) {
+        if (isInventoryTableSelected == true) {
             if (tblInventory.getSelectedRow() >= 0) {
                 int confirmation = JOptionPane.showConfirmDialog(rootPane, "Index " + (tblInventory.getSelectedRow() + 1) + " of Inventory table will be deleted", "Delete?", JOptionPane.YES_NO_OPTION);
                 switch (confirmation){
@@ -2422,17 +2425,17 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        if(!arraylistInventory.isEmpty() && tableSelection == true) {
+        if(!arraylistInventory.isEmpty() && isInventoryTableSelected == true) {
             lblSearchError.setVisible(false);
             frameSearch.setVisible(true);
             frameSearch.setLocationRelativeTo(null);
         }
-        else if (!arraylistSales.isEmpty() && tableSelection == false) {
+        else if (!arraylistSales.isEmpty() && isInventoryTableSelected == false) {
             lblSearchErrorSales.setVisible(false);
             frameSearchSales.setVisible(true);
             frameSearchSales.setLocationRelativeTo(null);
         }
-        else if (arraylistSales.isEmpty() && tableSelection == true) {
+        else if (arraylistSales.isEmpty() && isInventoryTableSelected == true) {
             JOptionPane.showMessageDialog(rootPane, "There is no inventory data to perform search operation.", "Error", 0);
         }
         else {
@@ -3306,7 +3309,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }
     // sorts data for the arraylist for the binary search of selling price
     private void sortInventoryTemp() {
-        Collections.copy(temp, arraylistInventory);
+        temp.addAll(arraylistInventory);
+//        Collections.copy(temp, arraylistInventory);
         for (int i = 0; i < temp.size(); i++) {
             for (int j = i + 1 ; j < temp.size(); j++) {
                 InventoryManagement imFirst = temp.get(i);
