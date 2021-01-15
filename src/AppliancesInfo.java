@@ -3079,10 +3079,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         int quantity = Integer.parseInt(tfQuantitySalesEdit.getText().trim());
         int discount = Integer.parseInt(comboBoxDiscountEdit.getSelectedItem().toString().trim());
         int total = Integer.parseInt(tfTotalEdit.getText());
-        
-        
-        
-        
+
         Sales s = arraylistSales.get(indexEditSales);
         if (s.getFirstName().equalsIgnoreCase(firstName) && s.getLastName().equalsIgnoreCase(lastName) && s.getDate().equalsIgnoreCase(date)
         && s.getModelNumber().equalsIgnoreCase(modelNumber) && s.getBrand().equalsIgnoreCase(brand)
@@ -3316,7 +3313,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 InventoryManagement imFirst = temp.get(i);
                 InventoryManagement imSecond = temp.get(j);
                 if (imFirst.getSellingPrice() > imSecond.getSellingPrice()) {
-                        Collections.swap(arraylistInventory, i, j);
+                        Collections.swap(temp, i, j);
                 }
             }
         }
