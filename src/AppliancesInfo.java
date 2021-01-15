@@ -1,3 +1,4 @@
+import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -26,6 +27,7 @@ import javax.swing.JOptionPane;
 import java.util.Timer;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -52,6 +54,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private ArrayList <InventoryManagement> arraylistInventory = new ArrayList <> ();
     private ArrayList <Sales> arraylistSales = new ArrayList <> ();
     private ArrayList <InventoryManagement> temp = new ArrayList <> ();
+    private CardLayout cl = new CardLayout();
+    private JFrame frameSearch = new JFrame("Search");
     //Creating a document listener to add in the jtextfield
     DocumentListener doc = new DocumentListener() {
         @Override
@@ -101,9 +105,16 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
      * Creates new form DashboardPage
      */
     public AppliancesInfo() {
-        
         initComponents();
         setIcon();
+        panelCard.setLayout(cl);
+        panelCard.add(panelSearch, "1");
+        panelCard.add(panelSearchCombo, "2");
+        cl.show(panelCard, "1");
+        frameSearch.setSize(370, 215);
+        frameSearch.setResizable(false);
+        frameSearch.setLocationRelativeTo(null);
+        frameSearch.add(panelCard);
         //Adding keylistener and document listener
         tfQuantitySales.getDocument().addDocumentListener(doc);
         addKeyListener(this);
@@ -163,17 +174,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         comboBoxDiscount = new javax.swing.JComboBox<>();
         tfFirstName = new javax.swing.JTextField();
         lblLastName = new javax.swing.JLabel();
-        frameSearch = new javax.swing.JFrame();
-        panelSearch = new javax.swing.JPanel();
-        lblSearch = new javax.swing.JLabel();
-        tfSearch = new javax.swing.JTextField();
-        radioBtnCostPrice = new javax.swing.JRadioButton();
-        jButtonSearchArray = new javax.swing.JButton();
-        jButtonSearchCancel = new javax.swing.JButton();
-        radioBtnSellingPrice = new javax.swing.JRadioButton();
-        radioBtnModelName = new javax.swing.JRadioButton();
-        radioBtnBrand = new javax.swing.JRadioButton();
-        lblSearchError = new javax.swing.JLabel();
         frameEditInventory = new javax.swing.JFrame();
         panelEditInventory = new javax.swing.JPanel();
         lblEditInvModelNo = new javax.swing.JLabel();
@@ -255,6 +255,28 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         lblSetTotal = new javax.swing.JLabel();
         jDialogHelp = new javax.swing.JDialog();
         lblHelp = new javax.swing.JLabel();
+        btnGrpSearchCombo = new javax.swing.ButtonGroup();
+        panelCard = new javax.swing.JPanel();
+        panelSearch = new javax.swing.JPanel();
+        lblSearch = new javax.swing.JLabel();
+        tfSearch = new javax.swing.JTextField();
+        radioBtnCostPrice = new javax.swing.JRadioButton();
+        jButtonSearchArray = new javax.swing.JButton();
+        jButtonSearchCancel = new javax.swing.JButton();
+        radioBtnSellingPrice = new javax.swing.JRadioButton();
+        radioBtnModelName = new javax.swing.JRadioButton();
+        radioBtnBrand = new javax.swing.JRadioButton();
+        lblSearchError = new javax.swing.JLabel();
+        panelSearchCombo = new javax.swing.JPanel();
+        lblSearchCombo = new javax.swing.JLabel();
+        radioBtnCostPriceCombo = new javax.swing.JRadioButton();
+        jButtonSearchArrayCombo = new javax.swing.JButton();
+        jButtonSearchCancelCombo = new javax.swing.JButton();
+        radioBtnSellingPriceCombo = new javax.swing.JRadioButton();
+        radioBtnModelNameCombo = new javax.swing.JRadioButton();
+        radioBtnBrandCombo = new javax.swing.JRadioButton();
+        lblSearchErrorCombo = new javax.swing.JLabel();
+        comboBoxSearch = new javax.swing.JComboBox<>();
         panelBg = new javax.swing.JPanel();
         panelButtons = new javax.swing.JPanel();
         btnEdit = new javax.swing.JButton();
@@ -708,131 +730,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         frameAddSalesLayout.setVerticalGroup(
             frameAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelAddSales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
-        frameSearch.setTitle("Search");
-        frameSearch.setMinimumSize(new java.awt.Dimension(360, 210));
-        frameSearch.setResizable(false);
-        frameSearch.addWindowFocusListener(new java.awt.event.WindowFocusListener() {
-            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
-            }
-            public void windowLostFocus(java.awt.event.WindowEvent evt) {
-                frameSearchWindowLostFocus(evt);
-            }
-        });
-
-        panelSearch.setBackground(new java.awt.Color(0, 0, 51));
-
-        lblSearch.setForeground(new java.awt.Color(255, 255, 255));
-        lblSearch.setText("Search :");
-
-        radioBtnCostPrice.setBackground(new java.awt.Color(0, 0, 51));
-        buttonGroupSearch.add(radioBtnCostPrice);
-        radioBtnCostPrice.setForeground(new java.awt.Color(255, 255, 255));
-        radioBtnCostPrice.setSelected(true);
-        radioBtnCostPrice.setText("Cost Price");
-
-        jButtonSearchArray.setBackground(new java.awt.Color(0, 0, 51));
-        jButtonSearchArray.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jButtonSearchArray.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonSearchArray.setText("Search");
-        jButtonSearchArray.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonSearchArrayActionPerformed(evt);
-            }
-        });
-
-        jButtonSearchCancel.setBackground(new java.awt.Color(0, 0, 51));
-        jButtonSearchCancel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jButtonSearchCancel.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonSearchCancel.setText("Cancel");
-        jButtonSearchCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonSearchCancelActionPerformed(evt);
-            }
-        });
-
-        radioBtnSellingPrice.setBackground(new java.awt.Color(0, 0, 51));
-        buttonGroupSearch.add(radioBtnSellingPrice);
-        radioBtnSellingPrice.setForeground(new java.awt.Color(255, 255, 255));
-        radioBtnSellingPrice.setText("Selling Price");
-
-        radioBtnModelName.setBackground(new java.awt.Color(0, 0, 51));
-        buttonGroupSearch.add(radioBtnModelName);
-        radioBtnModelName.setForeground(new java.awt.Color(255, 255, 255));
-        radioBtnModelName.setText("Model Name");
-
-        radioBtnBrand.setBackground(new java.awt.Color(0, 0, 51));
-        buttonGroupSearch.add(radioBtnBrand);
-        radioBtnBrand.setForeground(new java.awt.Color(255, 255, 255));
-        radioBtnBrand.setText("Brand");
-
-        lblSearchError.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblSearchError.setForeground(new java.awt.Color(255, 255, 255));
-        lblSearchError.setText("No Search Results Found");
-
-        javax.swing.GroupLayout panelSearchLayout = new javax.swing.GroupLayout(panelSearch);
-        panelSearch.setLayout(panelSearchLayout);
-        panelSearchLayout.setHorizontalGroup(
-            panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelSearchLayout.createSequentialGroup()
-                .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelSearchLayout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addComponent(lblSearch)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSearchLayout.createSequentialGroup()
-                        .addComponent(radioBtnCostPrice)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelSearchLayout.createSequentialGroup()
-                                .addComponent(radioBtnSellingPrice)
-                                .addGap(16, 16, 16)
-                                .addComponent(radioBtnModelName)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(radioBtnBrand))
-                            .addGroup(panelSearchLayout.createSequentialGroup()
-                                .addGap(21, 21, 21)
-                                .addComponent(lblSearchError))
-                            .addGroup(panelSearchLayout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addComponent(jButtonSearchArray)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonSearchCancel)))))
-                .addContainerGap(18, Short.MAX_VALUE))
-        );
-        panelSearchLayout.setVerticalGroup(
-            panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelSearchLayout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblSearch)
-                    .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(radioBtnCostPrice)
-                    .addComponent(radioBtnSellingPrice)
-                    .addComponent(radioBtnModelName)
-                    .addComponent(radioBtnBrand))
-                .addGap(15, 15, 15)
-                .addComponent(lblSearchError)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonSearchArray)
-                    .addComponent(jButtonSearchCancel))
-                .addContainerGap(30, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout frameSearchLayout = new javax.swing.GroupLayout(frameSearch.getContentPane());
-        frameSearch.getContentPane().setLayout(frameSearchLayout);
-        frameSearchLayout.setHorizontalGroup(
-            frameSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        frameSearchLayout.setVerticalGroup(
-            frameSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         frameEditInventory.setTitle("Add an entry");
@@ -1544,7 +1441,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         jDialogHelp.setBackground(new java.awt.Color(255, 255, 255));
         jDialogHelp.setIconImage(null);
         jDialogHelp.setMinimumSize(new java.awt.Dimension(296, 410));
-        jDialogHelp.setPreferredSize(new java.awt.Dimension(296, 410));
 
         lblHelp.setText("<html><center><b>Help Section</b><br>Menu items in the menu bar contains the feature suggested by their names<br>they also can be used throughout the main window by simply pressing<br>their shortcut keys.<br><br>The buttons open up the forms corresponding to the selected table.<br>Edit and Delete button requires selection of selected row as well as selection of table.<br>Invoice button works only for the sales table.<br><br>Sales table does not accept data if there is no data inside inventory table.<br><br>It is highly recommended to use the program rather than default programs to input data<br>use of other programs can cause error while loading such files.</center></html>");
 
@@ -1565,9 +1461,250 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 .addContainerGap(332, Short.MAX_VALUE))
         );
 
+        panelCard.setMinimumSize(new java.awt.Dimension(370, 215));
+        panelCard.setPreferredSize(new java.awt.Dimension(370, 215));
+        panelCard.setLayout(new java.awt.CardLayout());
+
+        panelSearch.setBackground(new java.awt.Color(0, 0, 51));
+        panelSearch.setMinimumSize(new java.awt.Dimension(370, 215));
+        panelSearch.setPreferredSize(new java.awt.Dimension(370, 215));
+
+        lblSearch.setForeground(new java.awt.Color(255, 255, 255));
+        lblSearch.setText("Search :");
+
+        radioBtnCostPrice.setBackground(new java.awt.Color(0, 0, 51));
+        buttonGroupSearch.add(radioBtnCostPrice);
+        radioBtnCostPrice.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnCostPrice.setSelected(true);
+        radioBtnCostPrice.setText("Cost Price");
+
+        jButtonSearchArray.setBackground(new java.awt.Color(0, 0, 51));
+        jButtonSearchArray.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonSearchArray.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonSearchArray.setText("Search");
+        jButtonSearchArray.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSearchArrayActionPerformed(evt);
+            }
+        });
+
+        jButtonSearchCancel.setBackground(new java.awt.Color(0, 0, 51));
+        jButtonSearchCancel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonSearchCancel.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonSearchCancel.setText("Cancel");
+        jButtonSearchCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSearchCancelActionPerformed(evt);
+            }
+        });
+
+        radioBtnSellingPrice.setBackground(new java.awt.Color(0, 0, 51));
+        buttonGroupSearch.add(radioBtnSellingPrice);
+        radioBtnSellingPrice.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnSellingPrice.setText("Selling Price");
+
+        radioBtnModelName.setBackground(new java.awt.Color(0, 0, 51));
+        buttonGroupSearch.add(radioBtnModelName);
+        radioBtnModelName.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnModelName.setText("Model Name");
+
+        radioBtnBrand.setBackground(new java.awt.Color(0, 0, 51));
+        buttonGroupSearch.add(radioBtnBrand);
+        radioBtnBrand.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnBrand.setText("Brand");
+        radioBtnBrand.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                radioBtnBrandItemStateChanged(evt);
+            }
+        });
+
+        lblSearchError.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblSearchError.setForeground(new java.awt.Color(255, 255, 255));
+        lblSearchError.setText("No Search Results Found");
+
+        javax.swing.GroupLayout panelSearchLayout = new javax.swing.GroupLayout(panelSearch);
+        panelSearch.setLayout(panelSearchLayout);
+        panelSearchLayout.setHorizontalGroup(
+            panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSearchLayout.createSequentialGroup()
+                .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelSearchLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(lblSearch)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelSearchLayout.createSequentialGroup()
+                        .addComponent(radioBtnCostPrice)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelSearchLayout.createSequentialGroup()
+                                .addComponent(radioBtnSellingPrice)
+                                .addGap(16, 16, 16)
+                                .addComponent(radioBtnModelName)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(radioBtnBrand))
+                            .addGroup(panelSearchLayout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addComponent(lblSearchError))
+                            .addGroup(panelSearchLayout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(jButtonSearchArray)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonSearchCancel)))))
+                .addContainerGap(26, Short.MAX_VALUE))
+        );
+        panelSearchLayout.setVerticalGroup(
+            panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSearchLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSearch)
+                    .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(radioBtnCostPrice)
+                    .addComponent(radioBtnSellingPrice)
+                    .addComponent(radioBtnModelName)
+                    .addComponent(radioBtnBrand))
+                .addGap(15, 15, 15)
+                .addComponent(lblSearchError)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonSearchArray)
+                    .addComponent(jButtonSearchCancel))
+                .addContainerGap(44, Short.MAX_VALUE))
+        );
+
+        panelCard.add(panelSearch, "card2");
+
+        panelSearchCombo.setBackground(new java.awt.Color(0, 0, 51));
+        panelSearchCombo.setMinimumSize(new java.awt.Dimension(370, 215));
+        panelSearchCombo.setPreferredSize(new java.awt.Dimension(370, 215));
+
+        lblSearchCombo.setForeground(new java.awt.Color(255, 255, 255));
+        lblSearchCombo.setText("Search :");
+
+        radioBtnCostPriceCombo.setBackground(new java.awt.Color(0, 0, 51));
+        btnGrpSearchCombo.add(radioBtnCostPriceCombo);
+        radioBtnCostPriceCombo.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnCostPriceCombo.setText("Cost Price");
+        radioBtnCostPriceCombo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                radioBtnCostPriceComboItemStateChanged(evt);
+            }
+        });
+
+        jButtonSearchArrayCombo.setBackground(new java.awt.Color(0, 0, 51));
+        jButtonSearchArrayCombo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonSearchArrayCombo.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonSearchArrayCombo.setText("Search");
+        jButtonSearchArrayCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSearchArrayComboActionPerformed(evt);
+            }
+        });
+
+        jButtonSearchCancelCombo.setBackground(new java.awt.Color(0, 0, 51));
+        jButtonSearchCancelCombo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonSearchCancelCombo.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonSearchCancelCombo.setText("Cancel");
+        jButtonSearchCancelCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSearchCancelComboActionPerformed(evt);
+            }
+        });
+
+        radioBtnSellingPriceCombo.setBackground(new java.awt.Color(0, 0, 51));
+        btnGrpSearchCombo.add(radioBtnSellingPriceCombo);
+        radioBtnSellingPriceCombo.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnSellingPriceCombo.setText("Selling Price");
+        radioBtnSellingPriceCombo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                radioBtnSellingPriceComboItemStateChanged(evt);
+            }
+        });
+
+        radioBtnModelNameCombo.setBackground(new java.awt.Color(0, 0, 51));
+        btnGrpSearchCombo.add(radioBtnModelNameCombo);
+        radioBtnModelNameCombo.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnModelNameCombo.setText("Model Name");
+        radioBtnModelNameCombo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                radioBtnModelNameComboItemStateChanged(evt);
+            }
+        });
+
+        radioBtnBrandCombo.setBackground(new java.awt.Color(0, 0, 51));
+        btnGrpSearchCombo.add(radioBtnBrandCombo);
+        radioBtnBrandCombo.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnBrandCombo.setSelected(true);
+        radioBtnBrandCombo.setText("Brand");
+
+        lblSearchErrorCombo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblSearchErrorCombo.setForeground(new java.awt.Color(255, 255, 255));
+        lblSearchErrorCombo.setText("No Search Results Found");
+
+        comboBoxSearch.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
+
+        javax.swing.GroupLayout panelSearchComboLayout = new javax.swing.GroupLayout(panelSearchCombo);
+        panelSearchCombo.setLayout(panelSearchComboLayout);
+        panelSearchComboLayout.setHorizontalGroup(
+            panelSearchComboLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSearchComboLayout.createSequentialGroup()
+                .addGroup(panelSearchComboLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelSearchComboLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(lblSearchCombo)
+                        .addGap(18, 18, 18)
+                        .addComponent(comboBoxSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelSearchComboLayout.createSequentialGroup()
+                        .addComponent(radioBtnCostPriceCombo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelSearchComboLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelSearchComboLayout.createSequentialGroup()
+                                .addComponent(radioBtnSellingPriceCombo)
+                                .addGap(16, 16, 16)
+                                .addComponent(radioBtnModelNameCombo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(radioBtnBrandCombo))
+                            .addGroup(panelSearchComboLayout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addComponent(lblSearchErrorCombo))
+                            .addGroup(panelSearchComboLayout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(jButtonSearchArrayCombo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonSearchCancelCombo)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelSearchComboLayout.setVerticalGroup(
+            panelSearchComboLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSearchComboLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(panelSearchComboLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSearchCombo)
+                    .addComponent(comboBoxSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(panelSearchComboLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(radioBtnCostPriceCombo)
+                    .addComponent(radioBtnSellingPriceCombo)
+                    .addComponent(radioBtnModelNameCombo)
+                    .addComponent(radioBtnBrandCombo))
+                .addGap(15, 15, 15)
+                .addComponent(lblSearchErrorCombo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelSearchComboLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonSearchArrayCombo)
+                    .addComponent(jButtonSearchCancelCombo))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        panelCard.add(panelSearchCombo, "card3");
+
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setTitle("Mobile Inventory Management");
         setBackground(new java.awt.Color(255, 250, 250));
+        setMinimumSize(new java.awt.Dimension(360, 230));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -2327,7 +2464,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             sellingPrice = Integer.parseInt(tfSellingPrice.getText().trim());
             quantity = Integer.parseInt(tfQuantity.getText().trim()); 
             
-             if (arraylistInventory.size() > 0 && arraylistInventory.size() < 12) {
+            if (arraylistInventory.size() > 0 && arraylistInventory.size() < 12) {
             InventoryManagement im = new InventoryManagement(modelNo, modelName, brand, os, range, costPrice, sellingPrice, quantity);
             arraylistInventory.add(im);
             sortInventory();
@@ -2426,11 +2563,14 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         if(!arraylistInventory.isEmpty() && isInventoryTableSelected == true) {
+            lblSearchErrorCombo.setVisible(false);
             lblSearchError.setVisible(false);
             frameSearch.setVisible(true);
             frameSearch.setLocationRelativeTo(null);
+
         }
         else if (!arraylistSales.isEmpty() && isInventoryTableSelected == false) {
+            lblSearchErrorCombo.setVisible(false);
             lblSearchErrorSales.setVisible(false);
             frameSearchSales.setVisible(true);
             frameSearchSales.setLocationRelativeTo(null);
@@ -2553,33 +2693,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         }
         }
         else {
-            List <Integer> listInt = new ArrayList <>();
-            String search = getStringFromTextfield(tfSearch);
-            
-            
-            if(search!=null){
-                for (int i = 0; i < arraylistInventory.size(); i++) {
-                    InventoryManagement im = arraylistInventory.get(i);
-                    if (im.getBrand().equals(search)) {
-                        listInt.add(i+1);
-                    }
-                }
-                if(!listInt.isEmpty()) {
-                    int [] index = listInt.stream().mapToInt(i -> i).toArray();
-                    JOptionPane.showMessageDialog(rootPane, "Index: " + Arrays.toString(index), "Search results", 0);
-                }
-                else {
-                    lblSearchError.setVisible(true);
-                    TimerTask task = new TimerTask () {
-                    public void run() {
-                        lblSearchError.setVisible(false);
-                    }
-                    };
-                    long delay = 1000L;
-                    Timer timer = new Timer("Timer#1");
-                    timer.schedule(task, delay);
-                }
-            }    
+    
         }                       
     }//GEN-LAST:event_jButtonSearchArrayActionPerformed
 
@@ -2830,10 +2944,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private void frameAddSalesWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameAddSalesWindowLostFocus
         frameAddSales.requestFocus();
     }//GEN-LAST:event_frameAddSalesWindowLostFocus
-
-    private void frameSearchWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameSearchWindowLostFocus
-        frameSearch.requestFocus();
-    }//GEN-LAST:event_frameSearchWindowLostFocus
 
     private void frameEditInventoryWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameEditInventoryWindowLostFocus
         frameEditInventory.requestFocus();
@@ -3292,14 +3402,70 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         
         jDialogHelp.setVisible(true);
     }//GEN-LAST:event_jMnuItmHelpActionPerformed
+
+    private void radioBtnBrandItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_radioBtnBrandItemStateChanged
+        cl.show(panelCard, "2");
+        radioBtnBrandCombo.setSelected(true);
+    }//GEN-LAST:event_radioBtnBrandItemStateChanged
+
+    private void jButtonSearchArrayComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchArrayComboActionPerformed
+        List <Integer> listInt = new ArrayList <>();
+        String search = comboBoxSearch.getSelectedItem().toString().trim();
+            
+        if(search!=null){
+            for (int i = 0; i < arraylistInventory.size(); i++) {
+                InventoryManagement im = arraylistInventory.get(i);
+                if (im.getBrand().equals(search)) {
+                    listInt.add(i+1);
+                }
+            }
+            if(!listInt.isEmpty()) {
+                int [] index = listInt.stream().mapToInt(i -> i).toArray();
+                JOptionPane.showMessageDialog(rootPane, "Index: " + Arrays.toString(index) + "\nThere are " + index.length + " numbers of " + search + " items.", "Search results", 0);
+            }
+            else {
+                lblSearchErrorCombo.setVisible(true);
+                TimerTask task = new TimerTask () {
+                public void run() {
+                lblSearchErrorCombo.setVisible(false);
+                }
+                };
+                long delay = 1000L;
+                Timer timer = new Timer("Timer#1");
+                timer.schedule(task, delay);
+                }
+        }
+    }//GEN-LAST:event_jButtonSearchArrayComboActionPerformed
+
+    private void jButtonSearchCancelComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchCancelComboActionPerformed
+        comboBoxSearch.setSelectedIndex(0);
+        frameSearch.dispose();
+    }//GEN-LAST:event_jButtonSearchCancelComboActionPerformed
+
+    private void radioBtnModelNameComboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_radioBtnModelNameComboItemStateChanged
+        cl.show(panelCard, "1");
+        radioBtnModelName.setSelected(true);
+    }//GEN-LAST:event_radioBtnModelNameComboItemStateChanged
+
+    private void radioBtnSellingPriceComboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_radioBtnSellingPriceComboItemStateChanged
+        cl.show(panelCard, "1");
+        radioBtnSellingPrice.setSelected(true);
+    }//GEN-LAST:event_radioBtnSellingPriceComboItemStateChanged
+
+    private void radioBtnCostPriceComboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_radioBtnCostPriceComboItemStateChanged
+        cl.show(panelCard, "1");
+        radioBtnCostPrice.setSelected(true);
+    }//GEN-LAST:event_radioBtnCostPriceComboItemStateChanged
     // sorts the inventory according to the cost price for the binary search
     private void sortInventory () {
         for (int i = 0; i < arraylistInventory.size(); i++) {
             for (int j = i + 1 ; j < arraylistInventory.size(); j++) {
-                InventoryManagement imFirst = arraylistInventory.get(i);
-                InventoryManagement imSecond = arraylistInventory.get(j);
-                if (imFirst.getCost() > imSecond.getCost()) {
+                if (i!= j) {
+                    InventoryManagement imFirst = arraylistInventory.get(i);
+                    InventoryManagement imSecond = arraylistInventory.get(j);
+                    if (imFirst.getCost() > imSecond.getCost()) {
                         Collections.swap(arraylistInventory, i, j);
+                    }
                 }
             }
         }
@@ -3310,10 +3476,12 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
 //        Collections.copy(temp, arraylistInventory);
         for (int i = 0; i < temp.size(); i++) {
             for (int j = i + 1 ; j < temp.size(); j++) {
-                InventoryManagement imFirst = temp.get(i);
-                InventoryManagement imSecond = temp.get(j);
-                if (imFirst.getSellingPrice() > imSecond.getSellingPrice()) {
-                        Collections.swap(temp, i, j);
+                if (i != j) {
+                    InventoryManagement imFirst = temp.get(i);
+                    InventoryManagement imSecond = temp.get(j);
+                    if (imFirst.getSellingPrice() > imSecond.getSellingPrice()) {
+                    Collections.swap(temp, i, j);
+                    }
                 }
             }
         }
@@ -3675,6 +3843,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private javax.swing.JButton btnEdit;
     private javax.swing.ButtonGroup btnGrpAddInventory;
     private javax.swing.ButtonGroup btnGrpEditInventory;
+    private javax.swing.ButtonGroup btnGrpSearchCombo;
     private javax.swing.JButton btnInvoice;
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnSave;
@@ -3687,6 +3856,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private javax.swing.JComboBox<String> comboBoxDiscountEdit;
     private javax.swing.JComboBox<String> comboBoxModelNumber;
     private javax.swing.JComboBox<String> comboBoxModelNumberEdit;
+    private javax.swing.JComboBox<String> comboBoxSearch;
     private javax.swing.JComboBox<String> comboEditInvBrand;
     private javax.swing.JComboBox<String> comboEditInvOs;
     private javax.swing.JComboBox<String> comboOs;
@@ -3695,7 +3865,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private javax.swing.JFrame frameEditInventory;
     private javax.swing.JFrame frameEditSales;
     private javax.swing.JFrame frameInvoice;
-    private javax.swing.JFrame frameSearch;
     private javax.swing.JFrame frameSearchSales;
     private javax.swing.JButton jBtnAddSales;
     private javax.swing.JButton jBtnCancelSalesEdit;
@@ -3706,8 +3875,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private javax.swing.JButton jButtonEditInventoryCancel;
     private javax.swing.JButton jButtonEditInventorySave;
     private javax.swing.JButton jButtonSearchArray;
+    private javax.swing.JButton jButtonSearchArrayCombo;
     private javax.swing.JButton jButtonSearchArraySales;
     private javax.swing.JButton jButtonSearchCancel;
+    private javax.swing.JButton jButtonSearchCancelCombo;
     private javax.swing.JButton jButtonSearchCancelSales;
     private javax.swing.JDialog jDialogAbout;
     private javax.swing.JDialog jDialogHelp;
@@ -3767,7 +3938,9 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private javax.swing.JLabel lblSalePrice;
     private javax.swing.JLabel lblSalePriceEdit;
     private javax.swing.JLabel lblSearch;
+    private javax.swing.JLabel lblSearchCombo;
     private javax.swing.JLabel lblSearchError;
+    private javax.swing.JLabel lblSearchErrorCombo;
     private javax.swing.JLabel lblSearchErrorSales;
     private javax.swing.JLabel lblSearchSales;
     private javax.swing.JLabel lblSellingPrice;
@@ -3785,14 +3958,18 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private javax.swing.JPanel panelBg;
     private javax.swing.JPanel panelBtn;
     private javax.swing.JPanel panelButtons;
+    private javax.swing.JPanel panelCard;
     private javax.swing.JPanel panelEditInventory;
     private javax.swing.JPanel panelEditSales;
     private javax.swing.JPanel panelInvoice;
     private javax.swing.JPanel panelSearch;
+    private javax.swing.JPanel panelSearchCombo;
     private javax.swing.JPanel panelSearchSales;
     private javax.swing.JRadioButton radioBtnBrand;
+    private javax.swing.JRadioButton radioBtnBrandCombo;
     private javax.swing.JRadioButton radioBtnBrandSales;
     private javax.swing.JRadioButton radioBtnCostPrice;
+    private javax.swing.JRadioButton radioBtnCostPriceCombo;
     private javax.swing.JRadioButton radioBtnCustomerName;
     private javax.swing.JRadioButton radioBtnEditInvHigh;
     private javax.swing.JRadioButton radioBtnEditInvLow;
@@ -3801,8 +3978,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private javax.swing.JRadioButton radioBtnLow;
     private javax.swing.JRadioButton radioBtnMid;
     private javax.swing.JRadioButton radioBtnModelName;
+    private javax.swing.JRadioButton radioBtnModelNameCombo;
     private javax.swing.JRadioButton radioBtnModelNumberSales;
     private javax.swing.JRadioButton radioBtnSellingPrice;
+    private javax.swing.JRadioButton radioBtnSellingPriceCombo;
     private javax.swing.JRadioButton radioBtnTotal;
     private javax.swing.JScrollPane scrlPaneInventory;
     private javax.swing.JScrollPane scrlPaneSales;
