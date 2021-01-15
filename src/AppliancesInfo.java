@@ -3900,7 +3900,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         frameAddSales.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/add.JPG")));
         jDialogHelp.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/questionmark.png")));
         jDialogAbout.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/about.png")));
+        frameSearch.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/search.png")));
+        frameSearchSales.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/search.png")));
     }
+    // reads the inventory's csv file and adds to the arraylist
     private void csvReaderInventory(String pathInventory) {
         File file= new File(pathInventory);
         Scanner inputStream;
@@ -3923,7 +3926,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 arraylistInventory.add(im);
                 comboBoxModelNumber.addItem(modelNo);
             }
-
             inputStream.close();
         }catch (FileNotFoundException | NumberFormatException e) {
             JOptionPane.showMessageDialog(rootPane, "Error Occured " + e, "Error!", 0);
@@ -3956,6 +3958,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             JOptionPane.showMessageDialog(rootPane, "Error Occured " + e, "Error!", 0);
         } 
     }
+    // writes the table's data to the csv
     private void csvWriter(String path) {
         try {
             String pathSales = path.replace(".csv", "_sales.csv");
@@ -3999,6 +4002,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             JOptionPane.showMessageDialog(rootPane, "IO Exception.\n" + ie, "Error!", 0);
         }
     }
+    // clear's sales frame's components
     private void clearSalesForm() {
         tfFirstName.setText(null);
         tfLastName.setText(null);
@@ -4023,6 +4027,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         tfQuantity.setText(null);
         
     }
+    // calls the operating system's print services
     private void printInvoice (JPanel print) {
         // Using printer to print out the invoice
         PrinterJob printer = PrinterJob.getPrinterJob();
@@ -4056,6 +4061,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             }
         }
     }
+    // saves the invoice as a picture
     private void savePicture(JPanel panel, String first, String last) {
         //getting the size of the panel and setting the image size to it
         Dimension size = panel.getSize();
@@ -4310,5 +4316,4 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     public void keyReleased(KeyEvent e) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
 }
