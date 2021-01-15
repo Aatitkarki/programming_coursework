@@ -1,6 +1,7 @@
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -51,6 +52,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private ArrayList <InventoryManagement> arraylistInventory = new ArrayList <> ();
     private ArrayList <Sales> arraylistSales = new ArrayList <> ();
     private ArrayList <InventoryManagement> temp = new ArrayList <> ();
+    //Creating a document listener to add in the jtextfield
     DocumentListener doc = new DocumentListener() {
         @Override
         public void changedUpdate (DocumentEvent evt) {
@@ -102,6 +104,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         
         initComponents();
         setIcon();
+        //Adding keylistener and document listener
         tfQuantitySales.getDocument().addDocumentListener(doc);
         addKeyListener(this);
         
@@ -250,6 +253,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         lblSetDiscount = new javax.swing.JLabel();
         lblSetQuantity = new javax.swing.JLabel();
         lblSetTotal = new javax.swing.JLabel();
+        jDialogHelp = new javax.swing.JDialog();
+        lblHelp = new javax.swing.JLabel();
         panelBg = new javax.swing.JPanel();
         panelButtons = new javax.swing.JPanel();
         btnEdit = new javax.swing.JButton();
@@ -275,9 +280,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         jMnuItmRemoveBrand = new javax.swing.JMenuItem();
         jMnuAbt = new javax.swing.JMenu();
         jMnuItmAbout = new javax.swing.JMenuItem();
+        jMnuItmHelp = new javax.swing.JMenuItem();
         jMnuItmExit = new javax.swing.JMenuItem();
 
         jDialogAbout.setTitle("About");
+        jDialogAbout.setBackground(new java.awt.Color(255, 255, 255));
 
         lblAbt.setText("<html><center>Mobile Inventory Management<br>Developed by:<br>Anish Chaudhary<br>Ashesh Rai<br>Roshani Karki<br>Suresh Karki</center></html>");
 
@@ -352,11 +359,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         });
 
         comboBoxBrand.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
-        comboBoxBrand.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboBoxBrandActionPerformed(evt);
-            }
-        });
 
         comboOs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "iOS", "Android", "Symbian", "Others" }));
 
@@ -557,11 +559,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         lblSalePrice.setText("Total:");
 
         tfDate.setToolTipText("dd-mm-yy (e.g.22-10-2010 )");
-        tfDate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfDateActionPerformed(evt);
-            }
-        });
         tfDate.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 tfDateKeyTyped(evt);
@@ -1249,11 +1246,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 comboBoxModelNumberEditItemStateChanged(evt);
             }
         });
-        comboBoxModelNumberEdit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboBoxModelNumberEditActionPerformed(evt);
-            }
-        });
 
         comboBoxBrandSalesEdit.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
 
@@ -1548,6 +1540,31 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 .addComponent(panelInvoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jDialogHelp.setTitle("About");
+        jDialogHelp.setBackground(new java.awt.Color(255, 255, 255));
+        jDialogHelp.setIconImage(null);
+        jDialogHelp.setMinimumSize(new java.awt.Dimension(296, 410));
+        jDialogHelp.setPreferredSize(new java.awt.Dimension(296, 410));
+
+        lblHelp.setText("<html><center><b>Help Section</b><br>Menu items in the menu bar contains the feature suggested by their names<br>they also can be used throughout the main window by simply pressing<br>their shortcut keys.<br><br>The buttons open up the forms corresponding to the selected table.<br>Edit and Delete button requires selection of selected row as well as selection of table.<br>Invoice button works only for the sales table.<br><br>Sales table does not accept data if there is no data inside inventory table.<br><br>It is highly recommended to use the program rather than default programs to input data<br>use of other programs can cause error while loading such files.</center></html>");
+
+        javax.swing.GroupLayout jDialogHelpLayout = new javax.swing.GroupLayout(jDialogHelp.getContentPane());
+        jDialogHelp.getContentPane().setLayout(jDialogHelpLayout);
+        jDialogHelpLayout.setHorizontalGroup(
+            jDialogHelpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialogHelpLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblHelp)
+                .addContainerGap(220, Short.MAX_VALUE))
+        );
+        jDialogHelpLayout.setVerticalGroup(
+            jDialogHelpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialogHelpLayout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addComponent(lblHelp)
+                .addContainerGap(332, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setTitle("Mobile Inventory Management");
         setBackground(new java.awt.Color(255, 250, 250));
@@ -1624,29 +1641,30 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         panelButtonsLayout.setHorizontalGroup(
             panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelButtonsLayout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
-                .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(btnAdd, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEdit, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDelete, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnInvoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnSearch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelButtonsLayout.createSequentialGroup()
+                        .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnEdit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDelete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnInvoice, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSearch, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap())))
         );
         panelButtonsLayout.setVerticalGroup(
             panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelButtonsLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(btnAdd)
-                .addGap(28, 28, 28)
-                .addComponent(btnEdit)
                 .addGap(27, 27, 27)
+                .addComponent(btnAdd)
+                .addGap(26, 26, 26)
+                .addComponent(btnEdit)
+                .addGap(28, 28, 28)
                 .addComponent(btnDelete)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addGap(34, 34, 34)
                 .addComponent(btnInvoice)
                 .addGap(32, 32, 32)
-                .addComponent(btnSearch)
-                .addGap(23, 23, 23))
+                .addComponent(btnSearch))
         );
 
         tabbedPaneTbl.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -1689,11 +1707,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         tblPnlInventory.setLayout(tblPnlInventoryLayout);
         tblPnlInventoryLayout.setHorizontalGroup(
             tblPnlInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrlPaneInventory, javax.swing.GroupLayout.DEFAULT_SIZE, 685, Short.MAX_VALUE)
+            .addComponent(scrlPaneInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 685, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         tblPnlInventoryLayout.setVerticalGroup(
             tblPnlInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrlPaneInventory, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
+            .addComponent(scrlPaneInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         tabbedPaneTbl.addTab("Appliances Information System", tblPnlInventory);
@@ -1732,11 +1750,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         tblPnlSales.setLayout(tblPnlSalesLayout);
         tblPnlSalesLayout.setHorizontalGroup(
             tblPnlSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrlPaneSales, javax.swing.GroupLayout.DEFAULT_SIZE, 685, Short.MAX_VALUE)
+            .addComponent(scrlPaneSales, javax.swing.GroupLayout.PREFERRED_SIZE, 685, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         tblPnlSalesLayout.setVerticalGroup(
             tblPnlSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrlPaneSales, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
+            .addComponent(scrlPaneSales, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         tabbedPaneTbl.addTab("Sales Information System", tblPnlSales);
@@ -1748,15 +1766,15 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             .addGroup(panelBgLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addComponent(panelButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tabbedPaneTbl))
+                .addGap(6, 6, 6)
+                .addComponent(tabbedPaneTbl, javax.swing.GroupLayout.PREFERRED_SIZE, 690, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         panelBgLayout.setVerticalGroup(
             panelBgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBgLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(11, 11, 11)
                 .addComponent(panelButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(tabbedPaneTbl)
+            .addComponent(tabbedPaneTbl, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         jMnuFile.setText("File");
@@ -1829,6 +1847,15 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         });
         jMnuAbt.add(jMnuItmAbout);
 
+        jMnuItmHelp.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        jMnuItmHelp.setText("Help");
+        jMnuItmHelp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMnuItmHelpActionPerformed(evt);
+            }
+        });
+        jMnuAbt.add(jMnuItmHelp);
+
         jMnuItmExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         jMnuItmExit.setText("Exit");
         jMnuItmExit.addActionListener(new java.awt.event.ActionListener() {
@@ -1846,11 +1873,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelBg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelBg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelBg, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelBg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -1913,7 +1940,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jMnuItmExitActionPerformed
 
     private void jMnuItmAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmAboutActionPerformed
-        // TODO add your handling code here:
         jDialogAbout.setLocationRelativeTo(null);
         jDialogAbout.setSize(300,200);
         
@@ -1921,7 +1947,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jMnuItmAboutActionPerformed
 
     private void jMnuItmOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmOpenActionPerformed
-        // TODO add your handling code here:
         if(isSaved) {
             String dir = System.getProperty("user.dir");
             if (System.getProperty("os.name").contains("Windows")) {
@@ -1989,7 +2014,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jMnuItmOpenActionPerformed
 
     private void jMnuItmSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmSaveAsActionPerformed
-        // TODO add your handling code here:
         String dir = System.getProperty("user.dir");
         if (System.getProperty("os.name").contains("Windows")) {
             dir += "\\resources\\CSV Files";
@@ -2035,7 +2059,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jMnuItmSaveAsActionPerformed
 
     private void jMnuItmNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmNewActionPerformed
-        // TODO add your handling code here:
         if(isSaved) {
             clearTableInventory();
             clearTableSales();
@@ -2063,7 +2086,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jMnuItmNewActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        // TODO add your handling code here:
         if (tableSelection == true) {
             if (arraylistInventory.size() < 12) {
                 frameAddInventory.setVisible(true);
@@ -2109,12 +2131,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void jButtonClearInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearInventoryActionPerformed
-        // TODO add your handling code here:
         clearInventoryForm();
     }//GEN-LAST:event_jButtonClearInventoryActionPerformed
 
     private void jMnuItmSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmSaveActionPerformed
-        // TODO add your handling code here:
         if (path != "" && path != null) {
             csvWriter(path);
             JOptionPane.showMessageDialog(rootPane, "Saved.", "Success", JOptionPane.PLAIN_MESSAGE);
@@ -2125,7 +2145,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jMnuItmSaveActionPerformed
 
     private void btnInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInvoiceActionPerformed
-        // TODO add your handling code here:
         if (!arraylistSales.isEmpty()) {
             if(tblSales.getSelectedRow() >= 0) {
                 int selection = tblSales.getSelectedRow();
@@ -2173,7 +2192,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_btnInvoiceActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        // TODO add your handling code here:
         if (tableSelection == true) {
             indexEditInv = tblInventory.getSelectedRow();
             if (indexEditInv >= 0) {
@@ -2253,7 +2271,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void tfCostPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCostPriceKeyTyped
-        // TODO add your handling code here:
         char key = evt.getKeyChar();
         if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE)) {
             evt.consume();
@@ -2261,7 +2278,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_tfCostPriceKeyTyped
 
     private void tfQuantityKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfQuantityKeyTyped
-        // TODO add your handling code here:
         char key = evt.getKeyChar();
         if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE)) {
             evt.consume();
@@ -2269,7 +2285,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_tfQuantityKeyTyped
 
     private void tfQuantitySalesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfQuantitySalesKeyTyped
-        // TODO add your handling code here:
         char key = evt.getKeyChar();
         if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE)) {
             evt.consume();
@@ -2277,7 +2292,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_tfQuantitySalesKeyTyped
 
     private void tfDateKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfDateKeyTyped
-        // TODO add your handling code here:
         char key = evt.getKeyChar();
         if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE || key == '-'|| key=='/' || key=='.')) {
            
@@ -2287,7 +2301,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_tfDateKeyTyped
 
     private void tabbedPaneTblStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabbedPaneTblStateChanged
-        // TODO add your handling code here:
         if (tabbedPaneTbl.getSelectedIndex() == 0) {
             tableSelection = true;
         }
@@ -2297,7 +2310,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_tabbedPaneTblStateChanged
 
     private void jButtonAddInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddInventoryActionPerformed
-        // TODO add your handling code here:
         String modelNo = null;
         String modelName = null;
         String brand = null;
@@ -2367,7 +2379,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jButtonAddInventoryActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
         if (tableSelection == true) {
             if (tblInventory.getSelectedRow() >= 0) {
                 int confirmation = JOptionPane.showConfirmDialog(rootPane, "Index " + (tblInventory.getSelectedRow() + 1) + " of Inventory table will be deleted", "Delete?", JOptionPane.YES_NO_OPTION);
@@ -2411,7 +2422,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        // TODO add your handling code here:
         if(!arraylistInventory.isEmpty() && tableSelection == true) {
             lblSearchError.setVisible(false);
             frameSearch.setVisible(true);
@@ -2431,7 +2441,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void tfSellingPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSellingPriceKeyTyped
-        // TODO add your handling code here:
         char key = evt.getKeyChar();
         if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE)) {
             evt.consume();
@@ -2465,7 +2474,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             return data;
         }
     private void jButtonSearchArrayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchArrayActionPerformed
-        // TODO add your handling code here:
         String searchSelection = radioBtnCostPrice.isSelected() == true ? "Cost" : radioBtnSellingPrice.isSelected() == true ? "Selling" : radioBtnModelName.isSelected() == true ? "Model" : radioBtnBrand.isSelected() == true? "Brand" : null;
         if(searchSelection.equals("Cost")) {
            
@@ -2548,38 +2556,31 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             
             if(search!=null){
                 for (int i = 0; i < arraylistInventory.size(); i++) {
-                InventoryManagement im = arraylistInventory.get(i);
-                if (im.getBrand().equals(search)) {
-                    listInt.add(i+1);
+                    InventoryManagement im = arraylistInventory.get(i);
+                    if (im.getBrand().equals(search)) {
+                        listInt.add(i+1);
+                    }
                 }
-            }
-            if(!listInt.isEmpty()) {
-                int [] index = listInt.stream().mapToInt(i -> i).toArray();
-                JOptionPane.showMessageDialog(rootPane, "Index: " + Arrays.toString(index), "Search results", 0);
-            }
-            else {
-                lblSearchError.setVisible(true);
-                TimerTask task = new TimerTask () {
+                if(!listInt.isEmpty()) {
+                    int [] index = listInt.stream().mapToInt(i -> i).toArray();
+                    JOptionPane.showMessageDialog(rootPane, "Index: " + Arrays.toString(index), "Search results", 0);
+                }
+                else {
+                    lblSearchError.setVisible(true);
+                    TimerTask task = new TimerTask () {
                     public void run() {
                         lblSearchError.setVisible(false);
                     }
-                };
-                long delay = 1000L;
-                Timer timer = new Timer("Timer#1");
-                timer.schedule(task, delay);
-            }
-            
-            }
-            
-        }
-            
-            
-            
-            
+                    };
+                    long delay = 1000L;
+                    Timer timer = new Timer("Timer#1");
+                    timer.schedule(task, delay);
+                }
+            }    
+        }                       
     }//GEN-LAST:event_jButtonSearchArrayActionPerformed
 
     private void lblSellingPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lblSellingPriceKeyTyped
-        // TODO add your handling code here:
         char key = evt.getKeyChar();
         if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE)) {
             evt.consume();
@@ -2587,7 +2588,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_lblSellingPriceKeyTyped
 
     private void tfEditInvCostPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfEditInvCostPriceKeyTyped
-        // TODO add your handling code here:
         char key = evt.getKeyChar();
         if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE)) {
             evt.consume();
@@ -2595,7 +2595,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_tfEditInvCostPriceKeyTyped
 
     private void jButtonEditInventorySaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditInventorySaveActionPerformed
-        // TODO add your handling code here:
         String modelNo = tfEditInvModelNo.getText().trim();
         String modelName = tfEditInvModelName.getText().trim();
         String brand = comboEditInvBrand.getSelectedItem().toString().trim();
@@ -2634,12 +2633,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jButtonEditInventorySaveActionPerformed
 
     private void jButtonEditInventoryCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditInventoryCancelActionPerformed
-        // TODO add your handling code here:
         frameEditInventory.dispose();
     }//GEN-LAST:event_jButtonEditInventoryCancelActionPerformed
 
     private void tfEditInvQuantityKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfEditInvQuantityKeyTyped
-        // TODO add your handling code here:
         char key = evt.getKeyChar();
         if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE)) {
             evt.consume();
@@ -2647,7 +2644,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_tfEditInvQuantityKeyTyped
 
     private void tfEditInvSellingPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfEditInvSellingPriceKeyTyped
-        // TODO add your handling code here:
         char key = evt.getKeyChar();
         if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE)) {
             evt.consume();
@@ -2655,7 +2651,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_tfEditInvSellingPriceKeyTyped
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        // TODO add your handling code here:
         if(isSaved) {
             int confirmation = JOptionPane.showConfirmDialog(rootPane, "You are exiting the application.", "Exit?", JOptionPane.YES_NO_OPTION);
             switch (confirmation){
@@ -2686,7 +2681,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_formWindowClosing
 
     private void jMnuItmAddBrandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmAddBrandActionPerformed
-        // TODO add your handling code here:
         String newBrand = null;
         String dir = System.getProperty("user.dir");
         
@@ -2730,7 +2724,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jMnuItmAddBrandActionPerformed
 
     private void jBtnAddSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAddSalesActionPerformed
-        // TODO add your handling code here:
         String firstName = null;
         String lastName = null;
         String date = null;
@@ -2824,32 +2817,26 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jBtnAddSalesActionPerformed
 
     private void jBtnClearSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnClearSalesActionPerformed
-        // TODO add your handling code here:
         clearSalesForm();    
     }//GEN-LAST:event_jBtnClearSalesActionPerformed
 
     private void frameAddInventoryWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameAddInventoryWindowLostFocus
-        // TODO add your handling code here:
         frameAddInventory.requestFocus();
     }//GEN-LAST:event_frameAddInventoryWindowLostFocus
 
     private void frameAddSalesWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameAddSalesWindowLostFocus
-        // TODO add your handling code here:
         frameAddSales.requestFocus();
     }//GEN-LAST:event_frameAddSalesWindowLostFocus
 
     private void frameSearchWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameSearchWindowLostFocus
-        // TODO add your handling code here:
         frameSearch.requestFocus();
     }//GEN-LAST:event_frameSearchWindowLostFocus
 
     private void frameEditInventoryWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameEditInventoryWindowLostFocus
-        // TODO add your handling code here:
         frameEditInventory.requestFocus();
     }//GEN-LAST:event_frameEditInventoryWindowLostFocus
 
     private void jButtonSearchArraySalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchArraySalesActionPerformed
-        // TODO add your handling code here:
         String searchSelection = radioBtnTotal.isSelected() == true ? "Total" : radioBtnCustomerName.isSelected() == true ? "Last" : radioBtnModelNumberSales.isSelected() == true ? "Model" : radioBtnBrandSales.isSelected() == true? "Brand" : null;
         if (searchSelection.equals("Total")) {
             List <Integer> listInt = new ArrayList <>();
@@ -2982,11 +2969,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jButtonSearchArraySalesActionPerformed
 
     private void frameSearchSalesWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameSearchSalesWindowLostFocus
-        // TODO add your handling code here:
+        frameSearchSales.requestFocus();
     }//GEN-LAST:event_frameSearchSalesWindowLostFocus
 
     private void comboBoxModelNumberItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboBoxModelNumberItemStateChanged
-        // TODO add your handling code here:
         if(!isEditSales) {
             String getModelNumber = comboBoxModelNumber.getSelectedItem().toString();
             if(!getModelNumber.isEmpty()) {
@@ -3013,7 +2999,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_comboBoxModelNumberItemStateChanged
 
     private void comboBoxDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxDiscountActionPerformed
-        // TODO add your handling code here:
         try {
             String modelNum = comboBoxModelNumber.getSelectedItem().toString();
             String brand = comboBoxBrandSales.getSelectedItem().toString();
@@ -3045,7 +3030,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_comboBoxDiscountActionPerformed
 
     private void tfQuantitySalesEditKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfQuantitySalesEditKeyTyped
-        // TODO add your handling code here:
         char key = evt.getKeyChar();
         if (!((key >= '0') && (key <= '9') || key == evt.VK_BACK_SPACE || key == evt.VK_DELETE)) {
             evt.consume();
@@ -3084,7 +3068,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_tfQuantitySalesEditKeyTyped
 
     private void jBtnSaveSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSaveSalesActionPerformed
-        // TODO add your handling code here:
         String firstName = tfFirstNameEdit.getText().trim();
         String lastName = tfLastNameEdit.getText().trim();
         String date = tfDateEdit.getText().trim();
@@ -3125,12 +3108,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jBtnSaveSalesActionPerformed
 
     private void jBtnCancelSalesEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnCancelSalesEditActionPerformed
-        // TODO add your handling code here:
         frameEditSales.dispose();
     }//GEN-LAST:event_jBtnCancelSalesEditActionPerformed
 
     private void comboBoxModelNumberEditItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboBoxModelNumberEditItemStateChanged
-        // TODO add your handling code here:
         isEditSales = false;
         String getModelNumber = comboBoxModelNumber.getSelectedItem().toString();
         if(!getModelNumber.isEmpty()) {
@@ -3156,7 +3137,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_comboBoxModelNumberEditItemStateChanged
 
     private void comboBoxDiscountEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxDiscountEditActionPerformed
-        // TODO add your handling code here:
         try {
             String modelNum = comboBoxModelNumber.getSelectedItem().toString();
             String brand = comboBoxBrandSales.getSelectedItem().toString();
@@ -3190,12 +3170,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_comboBoxDiscountEditActionPerformed
 
     private void frameEditSalesWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameEditSalesWindowLostFocus
-        // TODO add your handling code here:
         frameEditSales.requestFocus();
     }//GEN-LAST:event_frameEditSalesWindowLostFocus
 
     private void tfFirstNameEditKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFirstNameEditKeyTyped
-        // TODO add your handling code here:
         char key = evt.getKeyChar();
         if(key == evt.VK_SPACE){
             evt.consume();
@@ -3203,7 +3181,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_tfFirstNameEditKeyTyped
 
     private void tfModelNoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfModelNoKeyTyped
-        // TODO add your handling code here:
         char key = evt.getKeyChar();
         if(key == evt.VK_SPACE){
             evt.consume();
@@ -3211,7 +3188,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_tfModelNoKeyTyped
 
     private void tfModelNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfModelNameKeyTyped
-        // TODO add your handling code here:
         char key = evt.getKeyChar();
         if(key == evt.VK_SPACE){
             evt.consume();
@@ -3219,7 +3195,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_tfModelNameKeyTyped
 
     private void tfLastNameEditKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfLastNameEditKeyTyped
-        // TODO add your handling code here:
         char key = evt.getKeyChar();
         if(key == evt.VK_SPACE){
             evt.consume();
@@ -3227,7 +3202,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_tfLastNameEditKeyTyped
 
     private void tfDateEditKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfDateEditKeyTyped
-        // TODO add your handling code here:
         char key = evt.getKeyChar();
         if(key == evt.VK_SPACE){
             evt.consume();
@@ -3235,27 +3209,19 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_tfDateEditKeyTyped
 
     private void frameAddSalesWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameAddSalesWindowClosing
-        // TODO add your handling code here:
         clearSalesForm();
         frameAddSales.dispose();
     }//GEN-LAST:event_frameAddSalesWindowClosing
 
-    private void comboBoxModelNumberEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxModelNumberEditActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboBoxModelNumberEditActionPerformed
-
     private void frameInvoiceWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameInvoiceWindowLostFocus
-        // TODO add your handling code here:
         frameInvoice.requestFocus();
     }//GEN-LAST:event_frameInvoiceWindowLostFocus
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
-        // TODO add your handling code here:
         printInvoice(panelInvoice);
     }//GEN-LAST:event_btnPrintActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        // TODO add your handling code here:
         savePicture(panelInvoice, lblSetFirstName.getText(), lblSetLastName.getText());
     }//GEN-LAST:event_btnSaveActionPerformed
 
@@ -3320,15 +3286,13 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         frameSearch.dispose();
     }//GEN-LAST:event_jButtonSearchCancelActionPerformed
 
-    private void tfDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfDateActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tfDateActionPerformed
-
-    private void comboBoxBrandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxBrandActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboBoxBrandActionPerformed
-
-    
+    private void jMnuItmHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmHelpActionPerformed
+        jDialogHelp.setLocationRelativeTo(null);
+        jDialogHelp.setSize(300,200);
+        
+        jDialogHelp.setVisible(true);
+    }//GEN-LAST:event_jMnuItmHelpActionPerformed
+    // sorts the inventory according to the cost price for the binary search
     private void sortInventory () {
         for (int i = 0; i < arraylistInventory.size(); i++) {
             for (int j = i + 1 ; j < arraylistInventory.size(); j++) {
@@ -3340,6 +3304,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             }
         }
     }
+    // sorts data for the arraylist for the binary search of selling price
     private void sortInventoryTemp() {
         Collections.copy(temp, arraylistInventory);
         for (int i = 0; i < temp.size(); i++) {
@@ -3352,10 +3317,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             }
         }
     }
-    
+    // adds inventory's arraylist data to the inventory table
     private void addToInventoryTable () {
-
         String [] arrayForTable = {null, null, null, null, null, null, null, null};
+        //adding the arraylist data to an array
         for (InventoryManagement im : arraylistInventory) {
             arrayForTable[0] = im.getModelNo();
             arrayForTable[1] = im.getModelName();
@@ -3370,7 +3335,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             int nextRow = 0;
             boolean emptyRowFlag = false;
             String s;
-        
+            // checking all the rows to find the available row to enter the data
             do{
                 s = (String) tblInventory.getValueAt(nextRow, 0);
                 if(s != null && s.length() != 0) {
@@ -3380,18 +3345,19 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                     emptyRowFlag = true;
                 }
             }   while(nextRow < rowCount && !emptyRowFlag);
+            // entering the array's data into the table
             if(nextRow < rowCount) {
                 int colCount = tblInventory.getColumnCount();
                 for (int i = 0; i < colCount; i++) {
                     tblInventory.setValueAt(arrayForTable[i], nextRow, i);
                 }
-            
             }
             else {
                 JOptionPane.showMessageDialog(rootPane, "No empty rows found!", "Error", 0);
             }
         }
     }
+    // adds sales' arraylist data to the sales table
     private void addToSalesTable() {
         String [] arrayForTable = {null, null, null, null, null, null, null, null};
         for (Sales sales : arraylistSales) {
@@ -3417,7 +3383,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 else {
                     emptyRowFlag = true;
                 } 
-      
             }   while(nextRow < rowCount && !emptyRowFlag);
             if(nextRow < rowCount) {
                 int colCount = tblSales.getColumnCount();
@@ -3431,17 +3396,19 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             }
         }
     }
-    
+    //clears the inventory table
     private void clearTableInventory() {
-        
+        // getting the row and coluumn count
         int rowCount = tblInventory.getRowCount();
         int colCount = tblInventory.getColumnCount();
+        // looping through the row and columns and entering null values
         for (int i = rowCount - 1; i >=0; i--) {
             for (int j = 0; j < colCount; j++) {
                 tblInventory.setValueAt(null, i, j);
             }
         }    
     }
+    // clears the sales table
     private void clearTableSales() {
         int rowCount = tblSales.getRowCount();
             int colCount = tblSales.getColumnCount();
@@ -3451,6 +3418,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 }
             }
     }
+    // reads and returns an array for the brand's combo boxes
     private String[] elementsForComboBoxBrand () {
         String [] comboStrings = {};
         List <String> listStrings = new ArrayList <>();
@@ -3458,27 +3426,30 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         try {
             File file= new File(dir);
             if(file.createNewFile()){
-                
-            }else{
-            Scanner myReader = new Scanner(file);
-            String data="";
-                while (myReader.hasNextLine()) {
-                 data = myReader.nextLine();
-                 if(!data.equals("")){
-                    listStrings.add(data);
-                 }
-                }
-             myReader.close();
+                JOptionPane.showMessageDialog(rootPane, "No brands found.", "Error", 0);
             }
-       
+            else{
+                Scanner myReader = new Scanner(file);
+                String data="";
+            // looping through the brands.txt file and entering the data in the List
+                while (myReader.hasNextLine()) {
+                    data = myReader.nextLine();
+                    if(!data.equals("")){
+                        listStrings.add(data);
+                    }
+                }
+                myReader.close();
+            }
         }
         catch (IOException ie) {
             JOptionPane.showMessageDialog(rootPane, "Soemthing went wrong" + ie, "Error", 0);
         }
+        // entering all the list data into the array comboStrings
         comboStrings = (String[]) listStrings.toArray(new String[listStrings.size()]);
+        listStrings.clear();
         return comboStrings;
     }
-    
+    // binary search method for cost price
     private int binarySearchInventoryCost(int low, int high, int search) {
         int values = -1;
         if (high >= low) {
@@ -3499,6 +3470,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         }
         return values;
     }
+    // binary search method for selling price
     private int binarySearchSelling(int low, int high, int search) {
         int values = -1;
         if (high >= low) {
@@ -3508,20 +3480,19 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 values = mid;
                 return values;
             }
-
             if (im.getCost() > search) 
                 return binarySearchInventoryCost(low, mid - 1, search);
-            
-            
             return binarySearchInventoryCost(mid + 1, high, search);
-            
         }
         return values;
     }
+    // setting icons for the dialog boxes and frames
     private void setIcon() {
         setIconImage (Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/mobile.png")));
         frameAddInventory.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/add.JPG")));
         frameAddSales.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/add.JPG")));
+        jDialogHelp.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/questionmark.png")));
+        jDialogAbout.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/about.png")));
     }
     private void csvReaderInventory(String pathInventory) {
         File file= new File(pathInventory);
@@ -3547,11 +3518,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             }
 
             inputStream.close();
-        }catch (FileNotFoundException e) {
+        }catch (FileNotFoundException | NumberFormatException e) {
             JOptionPane.showMessageDialog(rootPane, "Error Occured " + e, "Error!", 0);
-        }
-        catch (NumberFormatException nfe) {
-            JOptionPane.showMessageDialog(rootPane, "Error Occured " + nfe, "Error!", 0);
         }
     }
     private void csvReaderSales(String pathSales) {
@@ -3696,11 +3664,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             JOptionPane.showMessageDialog(rootPane, "Invoice saved as image", "Saved!", 0);
             frameInvoice.dispose();
         }
-        catch(IOException ie) {
+        catch(IOException | HeadlessException ie) {
             JOptionPane.showMessageDialog(rootPane, "Failed to save.\n" + ie, "Error!", 0);
-        }
-        catch(Exception e) {
-            JOptionPane.showMessageDialog(rootPane, "Failed to save.\n" + e, "Error!", 0);
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -3744,11 +3709,13 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private javax.swing.JButton jButtonSearchCancel;
     private javax.swing.JButton jButtonSearchCancelSales;
     private javax.swing.JDialog jDialogAbout;
+    private javax.swing.JDialog jDialogHelp;
     private javax.swing.JMenu jMnuAbt;
     private javax.swing.JMenu jMnuFile;
     private javax.swing.JMenuItem jMnuItmAbout;
     private javax.swing.JMenuItem jMnuItmAddBrand;
     private javax.swing.JMenuItem jMnuItmExit;
+    private javax.swing.JMenuItem jMnuItmHelp;
     private javax.swing.JMenuItem jMnuItmNew;
     private javax.swing.JMenuItem jMnuItmOpen;
     private javax.swing.JMenuItem jMnuItmRemoveBrand;
@@ -3776,6 +3743,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private javax.swing.JLabel lblEditInvSellingPrice;
     private javax.swing.JLabel lblFirstName;
     private javax.swing.JLabel lblFirstNameEdit;
+    private javax.swing.JLabel lblHelp;
     private javax.swing.JLabel lblInvoiceBrand;
     private javax.swing.JLabel lblInvoiceDate;
     private javax.swing.JLabel lblInvoiceDiscount;
@@ -3893,6 +3861,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                     jMnuItmExitActionPerformed(evt1);
                 }
             }
+        }
+        else if (key == KeyEvent.VK_F1) {
         }
         throw new UnsupportedOperationException("Not supported yet.");
     }
