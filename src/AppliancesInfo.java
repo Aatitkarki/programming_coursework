@@ -51,6 +51,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private boolean isInventoryTableSelected = true;
     private boolean isSaved = true;
     private boolean isEditSales = false;
+    private boolean isNew=false;
     private String path = "";
     private ArrayList <InventoryManagement> arraylistInventory = new ArrayList <> ();
     private ArrayList <Sales> arraylistSales = new ArrayList <> ();
@@ -100,9 +101,9 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 }
             }
             catch (NullPointerException | NumberFormatException | ArithmeticException e) {
-                if (!tfQuantitySales.getText().isEmpty() || !tfQuantitySales.getText().equals("")) {
-                    JOptionPane.showMessageDialog(frameAddSales, e, "Error!", 0);
-                }
+//                if (!tfQuantitySales.getText().isEmpty() || !tfQuantitySales.getText().equals("")) {
+//                    JOptionPane.showMessageDialog(frameAddSales, e, "Error!", 0);
+//                }
             }
         }
     };
@@ -320,7 +321,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         lblSearchCombo = new javax.swing.JLabel();
         radioBtnCostPriceCombo = new javax.swing.JRadioButton();
         jButtonSearchArrayCombo = new javax.swing.JButton();
-        jButtonSearchCancelCombo = new javax.swing.JButton();
         radioBtnSellingPriceCombo = new javax.swing.JRadioButton();
         radioBtnModelNameCombo = new javax.swing.JRadioButton();
         radioBtnBrandCombo = new javax.swing.JRadioButton();
@@ -341,7 +341,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         lblSearchSalesCombo = new javax.swing.JLabel();
         radioBtnTotalCombo = new javax.swing.JRadioButton();
         jButtonSearchArraySalesCombo = new javax.swing.JButton();
-        jButtonSearchCancelSalesCombo = new javax.swing.JButton();
         radioBtnCustomerNameCombo = new javax.swing.JRadioButton();
         radioBtnModelNumberSalesCombo = new javax.swing.JRadioButton();
         radioBtnBrandSalesCombo = new javax.swing.JRadioButton();
@@ -617,7 +616,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             .addComponent(panelAddInventory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        frameAddSales.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         frameAddSales.setTitle("Add an entry");
         frameAddSales.setAlwaysOnTop(true);
         frameAddSales.setMinimumSize(new java.awt.Dimension(400, 500));
@@ -693,10 +691,15 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
 
         tfTotal.setEditable(false);
 
-        comboBoxModelNumber.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "" }));
+        comboBoxModelNumber.setModel(new javax.swing.DefaultComboBoxModel<>());
         comboBoxModelNumber.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 comboBoxModelNumberItemStateChanged(evt);
+            }
+        });
+        comboBoxModelNumber.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxModelNumberActionPerformed(evt);
             }
         });
 
@@ -1460,7 +1463,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         radioBtnModelName.setBackground(new java.awt.Color(0, 0, 51));
         btnGroupSearch.add(radioBtnModelName);
         radioBtnModelName.setForeground(new java.awt.Color(255, 255, 255));
-        radioBtnModelName.setText("Model Name");
+        radioBtnModelName.setText("Model Num");
 
         radioBtnBrand.setBackground(new java.awt.Color(0, 0, 51));
         btnGroupSearch.add(radioBtnBrand);
@@ -1526,7 +1529,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonSearchArray)
                     .addComponent(jButtonSearchCancel))
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         panelCard.add(panelSearch, "card2");
@@ -1551,20 +1554,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         jButtonSearchArrayCombo.setBackground(new java.awt.Color(0, 0, 51));
         jButtonSearchArrayCombo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jButtonSearchArrayCombo.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonSearchArrayCombo.setText("Search");
+        jButtonSearchArrayCombo.setText("Smartphone of a Brand");
         jButtonSearchArrayCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSearchArrayComboActionPerformed(evt);
-            }
-        });
-
-        jButtonSearchCancelCombo.setBackground(new java.awt.Color(0, 0, 51));
-        jButtonSearchCancelCombo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jButtonSearchCancelCombo.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonSearchCancelCombo.setText("Cancel");
-        jButtonSearchCancelCombo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonSearchCancelComboActionPerformed(evt);
             }
         });
 
@@ -1581,7 +1574,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         radioBtnModelNameCombo.setBackground(new java.awt.Color(0, 0, 51));
         btnGrpSearchCombo.add(radioBtnModelNameCombo);
         radioBtnModelNameCombo.setForeground(new java.awt.Color(255, 255, 255));
-        radioBtnModelNameCombo.setText("Model Name");
+        radioBtnModelNameCombo.setText("Model Num");
         radioBtnModelNameCombo.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 radioBtnModelNameComboItemStateChanged(evt);
@@ -1626,9 +1619,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                                 .addComponent(lblSearchErrorCombo))
                             .addGroup(panelSearchComboLayout.createSequentialGroup()
                                 .addGap(17, 17, 17)
-                                .addComponent(jButtonSearchArrayCombo)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonSearchCancelCombo)))))
+                                .addComponent(jButtonSearchArrayCombo)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelSearchComboLayout.setVerticalGroup(
@@ -1647,10 +1638,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 .addGap(15, 15, 15)
                 .addComponent(lblSearchErrorCombo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelSearchComboLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonSearchArrayCombo)
-                    .addComponent(jButtonSearchCancelCombo))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jButtonSearchArrayCombo)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         panelCard.add(panelSearchCombo, "card3");
@@ -1739,7 +1728,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                                 .addComponent(jButtonSearchArraySales)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButtonSearchCancelSales)))))
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelSearchSalesLayout.setVerticalGroup(
             panelSearchSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1760,7 +1749,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 .addGroup(panelSearchSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonSearchArraySales)
                     .addComponent(jButtonSearchCancelSales))
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         panelCardSales.add(panelSearchSales, "card2");
@@ -1790,11 +1779,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 jButtonSearchArraySalesComboActionPerformed(evt);
             }
         });
-
-        jButtonSearchCancelSalesCombo.setBackground(new java.awt.Color(0, 0, 51));
-        jButtonSearchCancelSalesCombo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jButtonSearchCancelSalesCombo.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonSearchCancelSalesCombo.setText("Cancel");
 
         radioBtnCustomerNameCombo.setBackground(new java.awt.Color(0, 0, 51));
         btnGrpSearchSalesCombo.add(radioBtnCustomerNameCombo);
@@ -1827,6 +1811,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         lblSearchErrorSalesCombo.setText("No Search Results Found");
 
         comboBoxSearchCombo.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
+        comboBoxSearchCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxSearchComboActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelSearchSalesComboLayout = new javax.swing.GroupLayout(panelSearchSalesCombo);
         panelSearchSalesCombo.setLayout(panelSearchSalesComboLayout);
@@ -1855,9 +1844,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                                 .addComponent(lblSearchErrorSalesCombo))
                             .addGroup(panelSearchSalesComboLayout.createSequentialGroup()
                                 .addGap(17, 17, 17)
-                                .addComponent(jButtonSearchArraySalesCombo)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonSearchCancelSalesCombo)))))
+                                .addComponent(jButtonSearchArraySalesCombo)))))
                 .addContainerGap(36, Short.MAX_VALUE))
         );
         panelSearchSalesComboLayout.setVerticalGroup(
@@ -1876,9 +1863,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 .addGap(15, 15, 15)
                 .addComponent(lblSearchErrorSalesCombo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelSearchSalesComboLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonSearchArraySalesCombo)
-                    .addComponent(jButtonSearchCancelSalesCombo))
+                .addComponent(jButtonSearchArraySalesCombo)
                 .addContainerGap(49, Short.MAX_VALUE))
         );
 
@@ -2347,6 +2332,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         int result = jFileSaver.showSaveDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             path = jFileSaver.getSelectedFile().toString();
+            path+=".csv";
             File newFile = new File(path);
             boolean check;
             try{
@@ -2377,10 +2363,14 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
 
     private void jMnuItmNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmNewActionPerformed
         if(isSaved) {
+            
             clearTableInventory();
             clearTableSales();
             arraylistInventory.clear();
             arraylistSales.clear();
+            comboBoxModelNumber.removeAllItems();
+            isNew = true;
+            
         }
         else {
             int confirmation = JOptionPane.showConfirmDialog(rootPane, "Unsaved changes. Save?", "Save?", JOptionPane.YES_NO_OPTION);
@@ -2394,6 +2384,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                     clearTableSales();
                     arraylistInventory.clear();
                     arraylistSales.clear();
+                    comboBoxModelNumber.removeAllItems();
+                    isNew = true;
                     jMnuItmNewActionPerformed(evt);
                     break;
                 case JOptionPane.CLOSED_OPTION:
@@ -2719,7 +2711,9 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 }
             }
         isSaved = false;
+        isNew=false;
         comboBoxModelNumber.addItem(modelName);
+        
         frameAddInventory.dispose();
             
             
@@ -2851,7 +2845,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             }
             else {
                 frameSearch.dispose();
-                JOptionPane.showMessageDialog(rootPane, "Index: " + index, "Search results", 0);
+                InventoryManagement im = arraylistInventory.get(index);
+                JOptionPane.showMessageDialog(rootPane, "Model Name: " + im.getModelName() +"\nBrand Name: "+im.getBrand()+"\nOperating System: "+im.getOs()+"\nCost Price"+im.getCost(), "Search results", 0);
             }
             }
         }
@@ -2873,7 +2868,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             }
             else {
                 frameSearch.dispose();
-                JOptionPane.showMessageDialog(rootPane, "Index: " + index, "Search results", 0);
+                InventoryManagement im = arraylistInventory.get(index);
+                JOptionPane.showMessageDialog(rootPane, "Model Name: " + im.getModelName() +"\nBrand Name: "+im.getBrand()+"\nOperating System: "+im.getOs()+"\nCost Price"+im.getCost(), "Search results", 0);
             }
             }
             
@@ -3071,6 +3067,9 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             quantity = Integer.parseInt(tfQuantitySales.getText().trim());
             discount = Integer.parseInt(comboBoxDiscount.getSelectedItem().toString());
             total = Integer.parseInt(tfTotal.getText());
+        
+        
+        
         }
         catch (NullPointerException npe) {
             JOptionPane.showMessageDialog(frameAddSales, "Please enter all the inputs.\n" + npe, "Error!", 0);
@@ -3095,7 +3094,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                             arraylistSales.add(sales);
                             clearTableSales();
                             addToSalesTable();
-                            int newQuantity = quantity - im.getQuantity();
+                            int newQuantity =im.getQuantity()-quantity;
                             im.setQuantity(newQuantity);
                             clearTableInventory();
                             addToInventoryTable();
@@ -3126,7 +3125,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                             Sales sales = new Sales(firstName, lastName, date, modelNumber, brand, discount, quantity, total);
                             arraylistSales.add(sales);
                             addToSalesTable();
-                            int newQuantity = quantity - im.getQuantity();
+                            int newQuantity = im.getQuantity()-quantity;
                             im.setQuantity(newQuantity);
                             clearTableInventory();
                             addToInventoryTable();
@@ -3269,8 +3268,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jButtonSearchArraySalesActionPerformed
 
     private void comboBoxModelNumberItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboBoxModelNumberItemStateChanged
+        
+        
+       if(isNew){
         if(!isEditSales) {
-            String getModelNumber = comboBoxModelNumber.getSelectedItem().toString();
+             String getModelNumber = comboBoxModelNumber.getSelectedItem().toString();
             if(!getModelNumber.isEmpty()) {
                 for (InventoryManagement im : arraylistInventory) {
                     if (im.getModelNo().equalsIgnoreCase(getModelNumber)) {
@@ -3292,6 +3294,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 JOptionPane.showMessageDialog(rootPane, "No such model number exists", "Error!", 0);
             }
         }
+       }
     }//GEN-LAST:event_comboBoxModelNumberItemStateChanged
 
     private void comboBoxDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxDiscountActionPerformed
@@ -3582,10 +3585,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         }
     }//GEN-LAST:event_jMnuItmRemoveBrandActionPerformed
 
-    private void jButtonSearchCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchCancelActionPerformed
-        frameSearch.dispose();
-    }//GEN-LAST:event_jButtonSearchCancelActionPerformed
-
     private void jMnuItmHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmHelpActionPerformed
         jDialogHelp.setLocationRelativeTo(null);
         jDialogHelp.setSize(300,200);
@@ -3605,7 +3604,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             for (int i = 0; i < arraylistInventory.size(); i++) {
                 InventoryManagement im = arraylistInventory.get(i);
                 if (im.getBrand().equals(search)) {
-                    listInt.add(i+1);
+                    listInt.add(i);
                 }
             }
             if(!listInt.isEmpty()) {
@@ -3625,11 +3624,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             }
         }
     }//GEN-LAST:event_jButtonSearchArrayComboActionPerformed
-
-    private void jButtonSearchCancelComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchCancelComboActionPerformed
-        comboBoxSearch.setSelectedIndex(0);
-        frameSearch.dispose();
-    }//GEN-LAST:event_jButtonSearchCancelComboActionPerformed
 
     private void radioBtnModelNameComboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_radioBtnModelNameComboItemStateChanged
         cl.show(panelCard, "1");
@@ -3694,6 +3688,18 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         clSales.show(panelCardSales, "1");
         radioBtnTotal.setSelected(true);
     }//GEN-LAST:event_radioBtnTotalComboItemStateChanged
+
+    private void jButtonSearchCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchCancelActionPerformed
+        frameSearch.dispose();
+    }//GEN-LAST:event_jButtonSearchCancelActionPerformed
+
+    private void comboBoxSearchComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxSearchComboActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxSearchComboActionPerformed
+
+    private void comboBoxModelNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxModelNumberActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxModelNumberActionPerformed
     // sorts the inventory according to the cost price for the binary search
     private void sortInventory () {
         for (int i = 0; i < arraylistInventory.size(); i++) {
@@ -3888,8 +3894,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 return values;
             }
             if (im.getCost() > search) 
-                return binarySearchInventoryCost(low, mid - 1, search);
-            return binarySearchInventoryCost(mid + 1, high, search);
+                return binarySearchSelling(low, mid - 1, search);
+            return binarySearchSelling(mid + 1, high, search);
         }
         return values;
     }
@@ -4011,6 +4017,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         comboBoxDiscount.setSelectedIndex(0);
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
+                comboBoxModelNumber.setSelectedIndex(0);
+                comboBoxBrandSales.setSelectedIndex(0);
                 tfQuantitySales.setText("0");
             }
         });
@@ -4129,9 +4137,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private javax.swing.JButton jButtonSearchArraySales;
     private javax.swing.JButton jButtonSearchArraySalesCombo;
     private javax.swing.JButton jButtonSearchCancel;
-    private javax.swing.JButton jButtonSearchCancelCombo;
     private javax.swing.JButton jButtonSearchCancelSales;
-    private javax.swing.JButton jButtonSearchCancelSalesCombo;
     private javax.swing.JDialog jDialogAbout;
     private javax.swing.JDialog jDialogHelp;
     private javax.swing.JMenu jMnuAbt;
