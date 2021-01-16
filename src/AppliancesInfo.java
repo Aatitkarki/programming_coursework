@@ -175,11 +175,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         frameSearchSales.setResizable(false);
         frameSearchSales.setLocationRelativeTo(null);
         frameSearchSales.add(panelCardSales);
-        //Adding keylistener and document listeners
+        //Adding keylistener and document listeners to the constructor 
         tfQuantitySales.getDocument().addDocumentListener(doc);
         tfQuantitySalesEdit.getDocument().addDocumentListener(docEdit);
-        addKeyListener(this);
-        
+        //adding keylistener here because other good ways to initialize the keylistener with the frame was not found
+        addKeyListener(this);    
     }
 
     /**
@@ -345,7 +345,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         radioBtnModelNumberSalesCombo = new javax.swing.JRadioButton();
         radioBtnBrandSalesCombo = new javax.swing.JRadioButton();
         lblSearchErrorSalesCombo = new javax.swing.JLabel();
-        comboBoxSearchCombo = new javax.swing.JComboBox<>();
+        comboBoxSearchSales = new javax.swing.JComboBox<>();
         btnGroupSearchSales = new javax.swing.ButtonGroup();
         btnGrpSearchSalesCombo = new javax.swing.ButtonGroup();
         panelBg = new javax.swing.JPanel();
@@ -651,6 +651,12 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         lblSalePrice.setForeground(new java.awt.Color(255, 255, 255));
         lblSalePrice.setText("Total:");
 
+        tfLastName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfLastNameKeyTyped(evt);
+            }
+        });
+
         tfDate.setToolTipText("dd-mm-yyyy, dd.mm.yyyy, dd/mm/yyyy");
         tfDate.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -697,11 +703,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 comboBoxModelNumberItemStateChanged(evt);
             }
         });
-        comboBoxModelNumber.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboBoxModelNumberActionPerformed(evt);
-            }
-        });
 
         comboBoxBrandSales.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
         comboBoxBrandSales.setEnabled(false);
@@ -714,6 +715,12 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         comboBoxDiscount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboBoxDiscountActionPerformed(evt);
+            }
+        });
+
+        tfFirstName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfFirstNameKeyTyped(evt);
             }
         });
 
@@ -1810,12 +1817,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         lblSearchErrorSalesCombo.setForeground(new java.awt.Color(255, 255, 255));
         lblSearchErrorSalesCombo.setText("No Search Results Found");
 
-        comboBoxSearchCombo.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
-        comboBoxSearchCombo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboBoxSearchComboActionPerformed(evt);
-            }
-        });
+        comboBoxSearchSales.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
 
         javax.swing.GroupLayout panelSearchSalesComboLayout = new javax.swing.GroupLayout(panelSearchSalesCombo);
         panelSearchSalesCombo.setLayout(panelSearchSalesComboLayout);
@@ -1827,7 +1829,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         .addGap(40, 40, 40)
                         .addComponent(lblSearchSalesCombo)
                         .addGap(18, 18, 18)
-                        .addComponent(comboBoxSearchCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(comboBoxSearchSales, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelSearchSalesComboLayout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addComponent(radioBtnTotalCombo)
@@ -1853,7 +1855,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 .addGap(30, 30, 30)
                 .addGroup(panelSearchSalesComboLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSearchSalesCombo)
-                    .addComponent(comboBoxSearchCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(comboBoxSearchSales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addGroup(panelSearchSalesComboLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioBtnTotalCombo)
@@ -2363,14 +2365,12 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
 
     private void jMnuItmNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmNewActionPerformed
         if(isSaved) {
-            
             clearTableInventory();
             clearTableSales();
             arraylistInventory.clear();
             arraylistSales.clear();
             comboBoxModelNumber.removeAllItems();
             isNew = true;
-            
         }
         else {
             int confirmation = JOptionPane.showConfirmDialog(rootPane, "Unsaved changes. Save?", "Save?", JOptionPane.YES_NO_OPTION);
@@ -2411,7 +2411,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         case JOptionPane.CLOSED_OPTION:
                             break;
                    }
-
             }
         }
         else {
@@ -2518,13 +2517,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 String quantityOld = String.valueOf(imOld.getQuantity());
                 
                 tfEditInvModelNo.setText(modelNoOld);
-                tfEditInvModelName.setText(modelNameOld);
-                
+                tfEditInvModelName.setText(modelNameOld);               
                 comboEditInvBrand.setSelectedItem(brandOld);
                 comboEditInvOs.setSelectedItem(osOld);
                 
-                
-
                 if (rangeOld.equals("High")) {
                     radioBtnEditInvHigh.setSelected(true);
                 }
@@ -2535,12 +2531,9 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                     radioBtnEditInvLow.setSelected(true);
                 }
                 
-                tfEditInvCostPrice.setText(costOld);
-                
+                tfEditInvCostPrice.setText(costOld);               
                 tfEditInvSellingPrice.setText(sellingPriceOld);
-                
-                tfEditInvQuantity.setText(quantityOld);
-                
+                tfEditInvQuantity.setText(quantityOld);               
                 isSaved = false;
             }
             else {
@@ -2827,53 +2820,50 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }
     private void jButtonSearchArrayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchArrayActionPerformed
         String searchSelection = radioBtnCostPrice.isSelected() == true ? "Cost" : radioBtnSellingPrice.isSelected() == true ? "Selling" : radioBtnModelName.isSelected() == true ? "Model" : radioBtnBrand.isSelected() == true? "Brand" : null;
-        if(searchSelection.equals("Cost")) {
-           
+        if(searchSelection.equals("Cost")) { 
             int search = getIntFromTextField(tfSearch);
-            if(search !=-1){
+            if(search > -1){
                 int index = binarySearchInventoryCost(0, arraylistInventory.size() - 1, search);
-            if (index == -1) {
-                lblSearchError.setVisible(true);
-                TimerTask task = new TimerTask () {
-                    public void run() {
+                if (index == -1) {
+                    lblSearchError.setVisible(true);
+                    TimerTask task = new TimerTask () {
+                        public void run() {
                         lblSearchError.setVisible(false);
-                    }
-                };
-                long delay = 1000L;
-                Timer timer = new Timer("Timer#1");
-                timer.schedule(task, delay);  
-            }
-            else {
-                frameSearch.dispose();
-                InventoryManagement im = arraylistInventory.get(index);
-                JOptionPane.showMessageDialog(rootPane, "Model Name: " + im.getModelName() +"\nBrand Name: "+im.getBrand()+"\nOperating System: "+im.getOs()+"\nCost Price"+im.getCost(), "Search results", 0);
-            }
+                        }
+                    };
+                    long delay = 1000L;
+                    Timer timer = new Timer("Timer#1");
+                    timer.schedule(task, delay);  
+                }
+                else {
+                    frameSearch.dispose();
+                    InventoryManagement im = arraylistInventory.get(index);
+                    JOptionPane.showMessageDialog(rootPane, "Model Name : " + im.getModelName() +"\nBrand Name : "+im.getBrand()+"\nOperating System : "+im.getOs()+"\nCost Price : "+im.getCost(), "Search results", 0);
+                }
             }
         }
         else if (searchSelection.equals("Selling")) {
             int search = getIntFromTextField(tfSearch);
-            if(search !=-1){
-           sortInventoryTemp();
+            if(search > -1){
+            sortInventoryTemp();
             int index = binarySearchSelling(0, temp.size() - 1, search);
-            if (index == -1) {
-                lblSearchError.setVisible(true);
-                TimerTask task = new TimerTask () {
-                    public void run() {
+                if (index == -1) {
+                    lblSearchError.setVisible(true);
+                    TimerTask task = new TimerTask () {
+                        public void run() {
                         lblSearchError.setVisible(false);
-                    }
-                };
-                long delay = 1000L;
-                Timer timer = new Timer("Timer#1");
-                timer.schedule(task, delay);  
-            }
-            else {
-                frameSearch.dispose();
-                InventoryManagement im = arraylistInventory.get(index);
-                JOptionPane.showMessageDialog(rootPane, "Model Name: " + im.getModelName() +"\nBrand Name: "+im.getBrand()+"\nOperating System: "+im.getOs()+"\nCost Price"+im.getCost(), "Search results", 0);
-            }
-            }
-            
-            
+                        }
+                    };
+                    long delay = 1000L;
+                    Timer timer = new Timer("Timer#1");
+                    timer.schedule(task, delay);  
+                }
+                else {
+                    frameSearch.dispose();
+                    InventoryManagement im = arraylistInventory.get(index);
+                    JOptionPane.showMessageDialog(rootPane, "Model Name : " + im.getModelName() +"\nBrand Name : "+im.getBrand()+"\nOperating System : "+im.getOs()+"\nCost Price : "+im.getCost(), "Search results", 0);
+                }
+            }        
         }
         else {
             List <Integer> listInt = new ArrayList <>();
@@ -2888,14 +2878,14 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 }
                 if(!listInt.isEmpty()) {
                     int [] index = listInt.stream().mapToInt(i -> i).toArray();
-                    JOptionPane.showMessageDialog(rootPane, "Index: " + Arrays.toString(index), "Search results", 0);
+                    showSearchResultsInventory(index);
                 }
                 else {
                     lblSearchError.setVisible(true);
                     TimerTask task = new TimerTask () {
-                    public void run() {
-                    lblSearchError.setVisible(false);
-                    }
+                        public void run() {
+                        lblSearchError.setVisible(false);
+                        }
                     };
                 long delay = 1000L;
                 Timer timer = new Timer("Timer#1");
@@ -2920,7 +2910,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_tfEditInvCostPriceKeyTyped
 
     private void jButtonEditInventorySaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditInventorySaveActionPerformed
-        
         String modelNo = tfEditInvModelNo.getText().trim();
         String modelName = tfEditInvModelName.getText().trim();
         String brand = comboEditInvBrand.getSelectedItem().toString().trim();
@@ -3031,14 +3020,19 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 bw.write(capBrand);
                 bw.close();
                 JOptionPane.showMessageDialog(rootPane, capBrand + " successfully added to brands.", "Success!", JOptionPane.INFORMATION_MESSAGE);
-//                elementsForComboBoxBrand();
+                // elementsForComboBoxBrand();
                 comboBoxBrand.addItem(capBrand);
                 comboBoxBrand.revalidate();
                 comboBoxBrand.repaint();
                 comboBoxBrandSales.addItem(capBrand);
                 comboBoxBrandSales.revalidate();
                 comboBoxBrandSales.repaint();
-            
+                comboBoxSearch.addItem(capBrand);
+                comboBoxSearch.revalidate();
+                comboBoxSearch.repaint();
+                comboBoxSearchSales.addItem(capBrand);
+                comboBoxSearchSales.revalidate();
+                comboBoxSearchSales.repaint();
             }
         }
         catch (IOException ie) {
@@ -3182,12 +3176,12 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             for (int i = 0; i < arraylistInventory.size(); i++) {
                 Sales sales = arraylistSales.get(i);
                 if (sales.getTotal() == search) {
-                    listInt.add(i+1);
+                    listInt.add(i);
                 }
             }
             if(!listInt.isEmpty()) {
                 int [] index = listInt.stream().mapToInt(i -> i).toArray();
-                JOptionPane.showMessageDialog(rootPane, "Index: " + Arrays.toString(index), "Search results", 0);
+                showSearchResultsSales(index);
             }
             else {
                 lblSearchError.setVisible(true);
@@ -3214,12 +3208,12 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             for (int i = 0; i < arraylistInventory.size(); i++) {
                 Sales sales = arraylistSales.get(i);
                 if (search.equals(sales.getLastName())) {
-                    listInt.add(i+1);
+                    listInt.add(i);
                 }
             }
             if(!listInt.isEmpty()) {
                 int [] index = listInt.stream().mapToInt(i -> i).toArray();
-                JOptionPane.showMessageDialog(rootPane, "Index: " + Arrays.toString(index), "Search results", 0);
+                showSearchResultsSales(index);
             }
             else {
                 lblSearchError.setVisible(true);
@@ -3246,12 +3240,12 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             for (int i = 0; i < arraylistInventory.size(); i++) {
                 Sales sales = arraylistSales.get(i);
                 if (search.equals(sales.getModelNumber())) {
-                    listInt.add(i+1);
+                    listInt.add(i);
                 }
             }
             if(!listInt.isEmpty()) {
                 int [] index = listInt.stream().mapToInt(i -> i).toArray();
-                JOptionPane.showMessageDialog(rootPane, "Index: " + Arrays.toString(index), "Search results", 0);
+                showSearchResultsSales(index);
             }
             else {
                 lblSearchError.setVisible(true);
@@ -3268,32 +3262,30 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jButtonSearchArraySalesActionPerformed
 
     private void comboBoxModelNumberItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboBoxModelNumberItemStateChanged
-        
-        
-       if(isNew){
-        if(!isEditSales) {
-             String getModelNumber = comboBoxModelNumber.getSelectedItem().toString();
-            if(!getModelNumber.isEmpty()) {
-                for (InventoryManagement im : arraylistInventory) {
-                    if (im.getModelNo().equalsIgnoreCase(getModelNumber)) {
-                        String brand = im.getBrand();
-                        String setBrand = comboBoxBrandSales.getSelectedItem().toString();
-                        if (!brand.equalsIgnoreCase(setBrand)) {
-                            comboBoxBrandSales.setSelectedItem(brand);
-                            return;
-                        }
-                        else if (setBrand.isEmpty()) {
-                            comboBoxBrandSales.setSelectedItem("Apple");
-                            return;
-                        }
-                        else {
-                            return;
+        if(isNew){
+            if(!isEditSales) {
+                String getModelNumber = comboBoxModelNumber.getSelectedItem().toString();
+                if(!getModelNumber.isEmpty()) {
+                    for (InventoryManagement im : arraylistInventory) {
+                        if (im.getModelNo().equalsIgnoreCase(getModelNumber)) {
+                            String brand = im.getBrand();
+                            String setBrand = comboBoxBrandSales.getSelectedItem().toString();
+                            if (!brand.equalsIgnoreCase(setBrand)) {
+                                comboBoxBrandSales.setSelectedItem(brand);
+                                return;
+                            }
+                            else if (setBrand.isEmpty()) {
+                                comboBoxBrandSales.setSelectedItem("Apple");
+                                return;
+                            }
+                            else {
+                                return;
+                            }
                         }
                     }
+                    JOptionPane.showMessageDialog(rootPane, "No such model number exists", "Error!", 0);
                 }
-                JOptionPane.showMessageDialog(rootPane, "No such model number exists", "Error!", 0);
             }
-        }
        }
     }//GEN-LAST:event_comboBoxModelNumberItemStateChanged
 
@@ -3397,15 +3389,49 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 timer.schedule(task, delay);
             }
             else {
-                s.setFirstName(firstName);
-                s.setLastName(lastName);
-                s.setDate(date);
-                s.setModelNumber(modelNumber);
-                s.setBrand(brand);
-                s.setQuantity(quantity);
-                s.setDiscount(discount);
-                s.setTotal(total);
-                JOptionPane.showMessageDialog(rootPane, "Edit Saved.", "Success!", 1);
+                if (s.getQuantity() == quantity) {
+                    editSalesSave(indexEditSales, firstName, lastName, date, modelNumber, brand, quantity, discount, total);
+                }
+                else if (s.getQuantity() > quantity) {
+                    boolean modelExists = false;
+                    int removedQuantity = s.getQuantity() - quantity;
+                    for (InventoryManagement im : arraylistInventory) {
+                        if (im.getModelNo().equalsIgnoreCase(modelNumber) && im.getBrand().equalsIgnoreCase(brand)) {
+                            removedQuantity += im.getQuantity();
+                            im.setQuantity(removedQuantity);
+                            editSalesSave(indexEditSales, firstName, lastName, date, modelNumber, brand, quantity, discount, total);
+                            modelExists = true;
+                            break;
+                        }
+                    }
+                    if (!modelExists){
+                        JOptionPane.showMessageDialog(frameEditSales, modelNumber + " of " + brand + " does not exist anymore.", "Does not exist!", 0);
+                        return;
+                    }
+                }
+                else {
+                    boolean modelExists = false;
+                    int addedQuantity = quantity - s.getQuantity();
+                    for (InventoryManagement im : arraylistInventory) {
+                        if (im.getModelNo().equalsIgnoreCase(modelNumber) && im.getBrand().equalsIgnoreCase(brand)) {
+                            if (im.getQuantity() >= quantity) {
+                                int newInvQuantity = im.getQuantity() - addedQuantity;
+                                im.setQuantity(newInvQuantity);
+                                editSalesSave(indexEditSales, firstName, lastName, date, modelNumber, brand, quantity, discount, total);
+                                modelExists = true;
+                                break;
+                            }
+                            else {
+                                JOptionPane.showMessageDialog(frameEditSales, "Not enough quantity in the stock.", "Does not exist!", 0);
+                                return;
+                            }
+                        }
+                    }
+                    if (!modelExists){
+                        JOptionPane.showMessageDialog(frameEditSales, modelNumber + " of " + brand + " does not exist anymore.", "Does not exist!", 0);
+                        return;
+                    }
+                }
             }
         }       
     }//GEN-LAST:event_jBtnSaveSalesActionPerformed
@@ -3558,6 +3584,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                        comboEditInvBrand.removeItemAt(i);
                        comboBoxBrandSalesEdit.removeItemAt(i);
                        comboBoxSearch.removeItemAt(i);
+                       comboBoxSearchSales.removeItemAt(i);
                        brandFound = true;
                        break;
                     }
@@ -3609,7 +3636,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             }
             if(!listInt.isEmpty()) {
                 int [] index = listInt.stream().mapToInt(i -> i).toArray();
-                JOptionPane.showMessageDialog(rootPane, "Index: " + Arrays.toString(index) + "\nThere are " + index.length + " numbers of " + search + " items.", "Search results", 0);
+                showSearchResultsInventory(index);
             }
             else {
                 lblSearchErrorCombo.setVisible(true);
@@ -3647,18 +3674,18 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
 
     private void jButtonSearchArraySalesComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchArraySalesComboActionPerformed
         List <Integer> listInt = new ArrayList <>();
-        String search = comboBoxSearchCombo.getSelectedItem().toString().trim();
+        String search = comboBoxSearchSales.getSelectedItem().toString().trim();
             
         if(search!=null){
             for (int i = 0; i < arraylistSales.size(); i++) {
                 Sales sales = arraylistSales.get(i);
                 if (sales.getBrand().equals(search)) {
-                    listInt.add(i+1);
+                    listInt.add(i);
                 }
             }
             if(!listInt.isEmpty()) {
                 int [] index = listInt.stream().mapToInt(i -> i).toArray();
-                JOptionPane.showMessageDialog(rootPane, "Index: " + Arrays.toString(index) + "\nThere are " + index.length + " numbers of " + search + " items recorded in the sales table.", "Search results", 0);
+                showSearchResultsSales(index);
             }
             else {
                 lblSearchErrorSalesCombo.setVisible(true);
@@ -3693,13 +3720,19 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         frameSearch.dispose();
     }//GEN-LAST:event_jButtonSearchCancelActionPerformed
 
-    private void comboBoxSearchComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxSearchComboActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboBoxSearchComboActionPerformed
+    private void tfFirstNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFirstNameKeyTyped
+        char key = evt.getKeyChar();
+        if (!Character.isLetter(key)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_tfFirstNameKeyTyped
 
-    private void comboBoxModelNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxModelNumberActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboBoxModelNumberActionPerformed
+    private void tfLastNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfLastNameKeyTyped
+        char key = evt.getKeyChar();
+        if (!Character.isLetter(key)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_tfLastNameKeyTyped
     // sorts the inventory according to the cost price for the binary search
     private void sortInventory () {
         for (int i = 0; i < arraylistInventory.size(); i++) {
@@ -3747,11 +3780,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             int rowCount = tblInventory.getRowCount();
             int nextRow = 0;
             boolean emptyRowFlag = false;
-            String s;
+            String rowChecker;
             // checking all the rows to find the available row to enter the data
             do{
-                s = (String) tblInventory.getValueAt(nextRow, 0);
-                if(s != null && s.length() != 0) {
+                rowChecker = (String) tblInventory.getValueAt(nextRow, 0);
+                if(rowChecker != null && rowChecker.length() != 0) {
                     nextRow++;
                 }
                 else {
@@ -3786,11 +3819,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             int rowCount = tblSales.getRowCount();
             int nextRow = 0;
             boolean emptyRowFlag = false;
-            String s;
+            String rowChecker;
         
             do{
-                s = (String) tblSales.getValueAt(nextRow, 0);
-                if(s != null && s.length() != 0) {
+                rowChecker = (String) tblSales.getValueAt(nextRow, 0);
+                if(rowChecker != null && rowChecker.length() != 0) {
                     nextRow++;
                 }
                 else {
@@ -3830,6 +3863,23 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 tblSales.setValueAt(null, i, j);
                 }
             }
+    }
+    private void editSalesSave(int index, String firstName, String lastName, String date, String modelNumber, String brand, int quantity, int discount, int total) {
+        Sales sales = arraylistSales.get(index);
+        sales.setFirstName(firstName);
+        sales.setLastName(lastName);
+        sales.setDate(date);
+        sales.setModelNumber(modelNumber);
+        sales.setBrand(brand);
+        sales.setQuantity(quantity);
+        sales.setDiscount(discount);
+        sales.setTotal(total);
+        frameEditSales.dispose();
+        clearTableInventory();
+        clearTableSales();
+        addToInventoryTable();
+        addToSalesTable();
+        JOptionPane.showMessageDialog(rootPane, "Edit Saved.", "Success!", 1);
     }
     // reads and returns an array for the brand's combo boxes
     private String[] elementsForComboBoxBrand () {
@@ -4035,6 +4085,54 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         tfQuantity.setText(null);
         
     }
+    // shows search results
+    private void showSearchResultsInventory(int [] array) {
+        String modelNumber = "";
+        String brand = "";
+        String os = "";
+        String costPrice = "";
+        for (int i = 0; i < array.length; i++) {
+            InventoryManagement im = arraylistInventory.get(array[i]);
+            modelNumber += im.getModelNo() + ", ";
+            brand += im.getBrand() + ", ";
+            os += im.getOs() + ", ";
+            costPrice += String.valueOf(im.getCost()) + ", ";
+        }
+        modelNumber = modelNumber.substring(0, modelNumber.length() - 2);
+        brand = brand.substring(0, brand.length() - 2);
+        os = os.substring(0, os.length() - 2);
+        costPrice = costPrice.substring(0, costPrice.length() - 2);
+        frameSearch.dispose();
+        JOptionPane.showMessageDialog(rootPane, array.length + " entries found." + "\nModel Numbers : " + modelNumber + "\nBrands : " + brand + "\nOS : " + os + "\nCost : " + costPrice, "Search Results", JOptionPane.INFORMATION_MESSAGE);
+    }
+    private void showSearchResultsSales(int [] array) {
+        String firstName = "";
+        String lastName = "";
+        String brand = "";
+        String modelNumber = "";
+        String quantity = "";
+        String discount = "";
+        String total = "";
+        for (int i = 0; i < array.length; i++) {
+            Sales sales = arraylistSales.get(array[i]);
+            firstName += sales.getFirstName() + ", ";
+            lastName += sales.getLastName() + ",";
+            brand += sales.getBrand() + ", ";
+            modelNumber += sales.getModelNumber() + ", ";
+            quantity += sales.getQuantity() + ", ";
+            discount += sales.getDiscount() + ", ";
+            total += sales.getTotal() + ", ";
+        }
+        firstName = firstName.substring(0, firstName.length() - 2);
+        lastName = lastName.substring(0, lastName.length() - 2);
+        brand = brand.substring(0, brand.length() - 2);
+        modelNumber = modelNumber.substring(0, modelNumber.length() - 2);
+        quantity = quantity.substring(0, quantity.length() - 2);
+        discount = discount.substring(0, discount.length() - 2);
+        total = total.substring(0, total.length() - 2);
+        frameSearchSales.dispose();
+        JOptionPane.showMessageDialog(rootPane, array.length + " entries found." + "\nFirst Name : " + firstName + "\nLast Name : " + lastName + "\nBrand : " + brand + "\nModel Number : " + modelNumber + "\nQuantity : " + quantity + "\nDiscount : " + discount + "\nTotal : " + total, "Search Results", JOptionPane.INFORMATION_MESSAGE);
+    }
     // calls the operating system's print services
     private void printInvoice (JPanel print) {
         // Using printer to print out the invoice
@@ -4115,7 +4213,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private javax.swing.JComboBox<String> comboBoxModelNumber;
     private javax.swing.JComboBox<String> comboBoxModelNumberEdit;
     private javax.swing.JComboBox<String> comboBoxSearch;
-    private javax.swing.JComboBox<String> comboBoxSearchCombo;
+    private javax.swing.JComboBox<String> comboBoxSearchSales;
     private javax.swing.JComboBox<String> comboEditInvBrand;
     private javax.swing.JComboBox<String> comboEditInvOs;
     private javax.swing.JComboBox<String> comboOs;

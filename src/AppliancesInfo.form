@@ -565,6 +565,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="tfLastName">
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfLastNameKeyTyped"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="tfDate">
               <Properties>
@@ -640,7 +643,6 @@
               </Properties>
               <Events>
                 <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="comboBoxModelNumberItemStateChanged"/>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comboBoxModelNumberActionPerformed"/>
               </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -688,6 +690,9 @@
               </AuxValues>
             </Component>
             <Component class="javax.swing.JTextField" name="tfFirstName">
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfFirstNameKeyTyped"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lblLastName">
               <Properties>
@@ -2372,7 +2377,7 @@
                               <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                               <Component id="lblSearchSalesCombo" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="comboBoxSearchCombo" min="-2" pref="157" max="-2" attributes="0"/>
+                              <Component id="comboBoxSearchSales" min="-2" pref="157" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
@@ -2407,7 +2412,7 @@
                       <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="lblSearchSalesCombo" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="comboBoxSearchCombo" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="comboBoxSearchSales" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -2528,15 +2533,12 @@
                 <Property name="text" type="java.lang.String" value="No Search Results Found"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="comboBoxSearchCombo">
+            <Component class="javax.swing.JComboBox" name="comboBoxSearchSales">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="new DefaultComboBoxModel &lt;&gt; (elementsForComboBoxBrand())" type="code"/>
                 </Property>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comboBoxSearchComboActionPerformed"/>
-              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
