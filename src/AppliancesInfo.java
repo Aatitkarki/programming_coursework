@@ -147,7 +147,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 }
             }
             catch (NullPointerException | NumberFormatException | ArithmeticException e) {
-                if (!tfQuantitySalesEdit.getText().isEmpty() || !tfQuantitySalesEdit.getText().equals("")) {
+                if (tfQuantitySalesEdit != null || !tfQuantitySalesEdit.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(frameEditSales, e, "Error!", 0);
+                }
+                else {
                     JOptionPane.showMessageDialog(frameEditSales, e, "Error!", 0);
                 }
             }
