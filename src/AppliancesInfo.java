@@ -185,49 +185,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         tfQuantitySalesEdit.getDocument().addDocumentListener(docEdit);
         //adding keylistener here because other good ways to initialize the keylistener with the frame was not found
         addKeyListener(this);
-        //creating all the directories for csv files, brands, and images file
-        String csvPath = System.getProperty("user.dir");
-        if(System.getProperty("os.name").equalsIgnoreCase("Windows")){
-           csvPath += "\\resources\\CSV Files";
-        }
-        else {
-            csvPath += "/resources/CSV Files";
-        }
-        File csvDir = new File(csvPath);
-        if(!csvDir.exists()) {
-            csvDir.mkdirs();
-        }
-        String brandPath = System.getProperty("user.dir");
-        if(System.getProperty("os.name").equalsIgnoreCase("Windows")){
-           brandPath += "\\resources\\Brands";
-        }
-        else {
-            brandPath += "/resources/Brands";
-        }
-        File brandDir = new File(brandPath);
-        if(!brandDir.exists()) {
-            try {
-                File brandTxt = new File(brandPath + "brands.txt");
-                if(!brandTxt.exists()) {
-                    brandTxt.createNewFile();
-                }
-                brandDir.mkdirs();
-            }
-            catch (IOException ie) {
-                JOptionPane.showMessageDialog(rootPane, "Error while creating a brands.txt file." + ie, "Error!", 0);
-            }
-        }
-        String imgPath = System.getProperty("user.dir");
-        if(System.getProperty("os.name").equalsIgnoreCase("Windows")){
-           csvPath += "\\resources\\Images";
-        }
-        else {
-            csvPath += "/resources/Images";
-        }
-        File imgDir = new File(imgPath);
-        if(!imgDir.exists()) {
-            imgDir.mkdirs();
-        }
+        checkDirs();
     }
 
     /**
@@ -2363,7 +2321,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jMnuItmOpenActionPerformed
        private String getCSVFilesDirectory(){
        String dir = System.getProperty("user.dir");
-            if (System.getProperty("os.name").equalsIgnoreCase("Windows")) {
+            if (System.getProperty("os.name").contains("Windows")) {
                 dir += "\\resources\\CSV Files";
             }
             else{
@@ -4224,7 +4182,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         Graphics2D graphics = image.createGraphics();
         panel.paint(graphics);
         String imageName = null;
-        if (System.getProperty("os.name").equalsIgnoreCase("Windows")) {
+        if (System.getProperty("os.name").contains("Windows")) {
             imageName += "\\resources\\Images" + first + last + ".png";
         }
         else {
@@ -4237,6 +4195,51 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         }
         catch(IOException | HeadlessException ie) {
             JOptionPane.showMessageDialog(rootPane, "Failed to save.\n" + ie, "Error!", 0);
+        }
+    }
+    private void checkDirs() {
+        //creating all the directories for csv files, brands, and images file
+        String csvPath = System.getProperty("user.dir");
+        if(System.getProperty("os.name").contains("Windows")){
+           csvPath += "\\resources\\CSV Files";
+        }
+        else {
+            csvPath += "/resources/CSV Files";
+        }
+        File csvDir = new File(csvPath);
+        if(!csvDir.exists()) {
+            csvDir.mkdirs();
+        }
+        String brandPath = System.getProperty("user.dir");
+        if(System.getProperty("os.name").contains("Windows")){
+           brandPath += "\\resources\\Brands";
+        }
+        else {
+            brandPath += "/resources/Brands";
+        }
+        File brandDir = new File(brandPath);
+        if(!brandDir.exists()) {
+            try {
+                File brandTxt = new File(brandPath + "brands.txt");
+                if(!brandTxt.exists()) {
+                    brandTxt.createNewFile();
+                }
+                brandDir.mkdirs();
+            }
+            catch (IOException ie) {
+                JOptionPane.showMessageDialog(rootPane, "Error while creating a brands.txt file." + ie, "Error!", 0);
+            }
+        }
+        String imgPath = System.getProperty("user.dir");
+        if(System.getProperty("os.name").contains("Windows")){
+            imgPath += "\\resources\\Images";
+        }
+        else {
+            imgPath += "/resources/Images";
+        }
+        File imgDir = new File(imgPath);
+        if(!imgDir.exists()) {
+            imgDir.mkdirs();
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
