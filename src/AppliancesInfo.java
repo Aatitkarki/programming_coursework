@@ -11,9 +11,11 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -3982,16 +3984,13 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         frameSearchSales.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/search.png")));
     }
     // reads the inventory's csv file and adds to the arraylist
-    private void csvReaderInventory(String pathInventory) {
-        File file= new File(pathInventory);
-        Scanner inputStream;
-        arraylistInventory.clear();
+    private void csvReaderInventory(String pathInventory) { 
         try{
-            inputStream = new Scanner(file);
-
-            while(inputStream.hasNext()){
-                String line= inputStream.next();
-                String [] values = line.split(",");
+            arraylistInventory.clear();
+            BufferedReader csvReader = new BufferedReader(new FileReader(pathInventory));
+            String row = null;
+            while((row = csvReader.readLine()) != null){
+                String [] values = row.split(",");
                 String modelNo = values[0];
                 String modelName = values[1];
                 String brand = values[2];
@@ -4005,21 +4004,21 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 comboBoxModelNumber.addItem(modelNo);
                 comboBoxModelNumberEdit.addItem(modelNo);
             }
-            inputStream.close();
+            csvReader.close();
         }catch (FileNotFoundException | NumberFormatException e) {
             JOptionPane.showMessageDialog(rootPane, "Error Occured " + e, "Error!", 0);
         }
+        catch (IOException ie) {
+            JOptionPane.showMessageDialog(rootPane, "Error Occured " + ie, "Error!", 0);
+        }
     }
     private void csvReaderSales(String pathSales) {
-        File file= new File(pathSales);
-        Scanner inputStream;
-        arraylistSales.clear();
         try{
-            inputStream = new Scanner(file);
-
-            while(inputStream.hasNext()){
-                String line= inputStream.next();
-                String [] values = line.split(",");
+            BufferedReader csvReader = new BufferedReader(new FileReader(pathSales));
+            arraylistSales.clear();
+            String row = null;
+            while((row = csvReader.readLine()) != null){
+                String [] values = row.split(",");
                 String firstName = values[0];
                 String lastName = values[1];
                 String date = values[2];
@@ -4031,11 +4030,14 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 Sales sales = new Sales(firstName, lastName, date, modelNumber, brand, quantity, discount, total);
                 arraylistSales.add(sales);
             }
-
-            inputStream.close();
-        }catch (FileNotFoundException e) {
+            csvReader.close();
+        }
+        catch (FileNotFoundException | NumberFormatException e) {
             JOptionPane.showMessageDialog(rootPane, "Error Occured " + e, "Error!", 0);
-        } 
+        }
+        catch (IOException ie) {
+            JOptionPane.showMessageDialog(rootPane, "Error Occured " + ie, "Error!", 0);
+        }
     }
     // writes the table's data to the csv
     private void csvWriter(String path) {
