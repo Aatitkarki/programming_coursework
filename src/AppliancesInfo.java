@@ -2892,7 +2892,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 for (int i = 0; i < arraylistInventory.size(); i++) {
                     InventoryManagement im = arraylistInventory.get(i);
                     if (im.getModelNo().equals(search)) {
-                        listInt.add(i+1);
+                        listInt.add(i);
                     }
                 }
                 if(!listInt.isEmpty()) {
@@ -3938,7 +3938,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private int binarySearchInventoryCost(int low, int high, int search) {
         int values = -1;
         if (high >= low) {
-            int mid = (low+high) / 2;
+            int mid = (low + high) / 2;
             InventoryManagement im = arraylistInventory.get(mid);
    
             if (im.getCost() == search){
