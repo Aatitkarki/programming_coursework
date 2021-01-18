@@ -809,7 +809,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSalePrice)
                     .addComponent(tfTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 116, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 107, Short.MAX_VALUE)
                 .addGroup(panelAddSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBtnAddSales)
                     .addComponent(jBtnClearSales))
@@ -863,9 +863,9 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         lblEditInvSellingPrice.setForeground(new java.awt.Color(255, 255, 255));
         lblEditInvSellingPrice.setText("Selling Price :");
 
-        comboEditInvBrand.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Samsung", "Apple", "Huawei", "Motorola", "Sony" }));
+        comboEditInvBrand.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
 
-        comboEditInvOs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "iOS", "Android", "Symbian", "Others" }));
+        comboEditInvOs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "iOS", "Android", "Symbian", "Others" }));
 
         btnGrpEditInventory.add(radioBtnEditInvHigh);
         radioBtnEditInvHigh.setForeground(new java.awt.Color(255, 255, 255));
@@ -1040,7 +1040,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         frameEditSales.setTitle("Edit");
         frameEditSales.setAlwaysOnTop(true);
         frameEditSales.setMinimumSize(new java.awt.Dimension(400, 515));
-        frameEditSales.setPreferredSize(new java.awt.Dimension(400, 515));
         frameEditSales.setResizable(false);
         frameEditSales.addWindowFocusListener(new java.awt.event.WindowFocusListener() {
             public void windowGainedFocus(java.awt.event.WindowEvent evt) {
@@ -1244,7 +1243,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         frameInvoice.setTitle("Invoice");
         frameInvoice.setBackground(new java.awt.Color(255, 255, 255));
         frameInvoice.setMinimumSize(new java.awt.Dimension(400, 395));
-        frameInvoice.setPreferredSize(new java.awt.Dimension(400, 395));
         frameInvoice.setResizable(false);
         frameInvoice.addWindowFocusListener(new java.awt.event.WindowFocusListener() {
             public void windowGainedFocus(java.awt.event.WindowEvent evt) {
@@ -1514,7 +1512,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelSearchLayout.createSequentialGroup()
                         .addComponent(radioBtnCostPrice)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelSearchLayout.createSequentialGroup()
                                 .addGap(25, 25, 25)
@@ -2286,7 +2283,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                     File fileSale = new File(pathSales);
 
                     csvReaderInventory(path);
-                    sortInventory();
+                    sortInventoryByPrice();
                     addToInventoryTable();
                     if(fileSale.exists()) {
                         csvReaderSales(pathSales);
@@ -2299,7 +2296,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                     path = pathInventory;
                     File fileInventory = new File(path);
                     csvReaderInventory(path);
-                    sortInventory();
+                    sortInventoryByPrice();
                     csvReaderSales(pathSales);
                     addToInventoryTable();
                     addToSalesTable();  
@@ -2554,11 +2551,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 
                 tfEditInvCostPrice.setText(costOld);               
                 tfEditInvSellingPrice.setText(sellingPriceOld);
-                tfEditInvQuantity.setText(quantityOld);               
+                tfEditInvQuantity.setText(quantityOld);
                 isSaved = false;
             }
             else {
-                JOptionPane.showMessageDialog(rootPane, "No row selected.", "Error", 0);
+                JOptionPane.showMessageDialog(rootPane, "Please select row to edit.", "Error", 0);
             }
         }
         else {
@@ -2588,7 +2585,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                tfTotal.setText(totalOld);
             }
             else {
-                JOptionPane.showMessageDialog(rootPane, "No row selected.", "Error", 0);
+                JOptionPane.showMessageDialog(rootPane, "Please select row to edit.", "Error", 0);
             }
         }
         
@@ -2634,18 +2631,39 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         }
     }//GEN-LAST:event_tabbedPaneTblStateChanged
 
+      private Object[] doesModelOfSameBrandExist(String modelNo,String brand){
+          Object[] data=new Object[2];
+      
+          for(int i = 0; i < arraylistInventory.size(); i++) {
+                    InventoryManagement im = arraylistInventory.get(i);
+                    if (im.getModelNo().equalsIgnoreCase(modelNo) && im.getBrand().equalsIgnoreCase(brand)) {
+                        data[0]=true;
+                        data[1]=i;
+                        System.out.println("data is +"+data[1]);
+                        return data;
+                      
+                    }
+                }
+          data[0]=false;
+          data[1]=-1;
+          return data;
+    
+    }
+    
     private void jButtonAddInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddInventoryActionPerformed
-        String modelNo = null;
-        String modelName = null;
+        String modelNo = tfModelNo.getText().trim();
+        String modelName = tfModelName.getText().trim();
         String brand = null;
         String os = null;
         String range = null;
         int costPrice = 0;
         int sellingPrice = 0;
         int quantity = 0;
+        if(modelNo.isEmpty() ||modelName.isEmpty() || tfCostPrice.getText().isEmpty() || tfSellingPrice.getText().trim().isEmpty() ||tfQuantity.getText().trim().isEmpty() ){
+            JOptionPane.showMessageDialog(frameAddInventory, "Empty fields found! Please check your input!", "Input Error!", JOptionPane.ERROR_MESSAGE);
+        }
+        else{
         try{
-            modelNo = tfModelNo.getText().trim();
-            modelName = tfModelName.getText().trim();
             brand = comboBoxBrand.getSelectedItem().toString().trim();
             os = comboOs.getSelectedItem().toString().trim();
             range = radioBtnHigh.isSelected() == true ? "High" : radioBtnMid.isSelected() == true ? "Mid" : radioBtnLow.isSelected() == true ? "Low" : null;
@@ -2653,25 +2671,25 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             sellingPrice = Integer.parseInt(tfSellingPrice.getText().trim());
             quantity = Integer.parseInt(tfQuantity.getText().trim()); 
             
-            if (arraylistInventory.size() > 0 && arraylistInventory.size() < 12) {
-                int index = 0;
-                boolean modelExists = false;
-                for(int i = 0; i < arraylistInventory.size(); i++) {
-                    InventoryManagement im = arraylistInventory.get(i);
-                    if (im.getModelNo().equalsIgnoreCase(modelNo) && im.getBrand().equalsIgnoreCase(brand)) {
-                        modelExists = true;
-                        index = i;
-                        break;
-                    }
+            if (arraylistInventory.size() >= 0 && arraylistInventory.size() < 12) {
+                int index = -1;
+                boolean modelExists=false;
+                if(arraylistInventory.size()!=0){
+                    Object[] doesModelExist = doesModelOfSameBrandExist(modelNo,brand);
+                modelExists = Boolean.parseBoolean(doesModelExist[0].toString());
+                index = Integer.parseInt(doesModelExist[1].toString());
+                System.out.print(index);
+                
                 }
                 if (!modelExists) {
                     InventoryManagement im = new InventoryManagement(modelNo, modelName, brand, os, range, costPrice, sellingPrice, quantity);
                     arraylistInventory.add(im);
-                    sortInventory();
+                    sortInventoryByPrice();
                     clearTableInventory();
                     addToInventoryTable();
-                    int confirmation = JOptionPane.showConfirmDialog(frameAddInventory, "Do you want to add more?", "New?", JOptionPane.YES_NO_OPTION);
-                    switch (confirmation){
+                    if(arraylistInventory.size()<12){
+                        int confirmation = JOptionPane.showConfirmDialog(frameAddInventory, "Successfully Added the data,Do you want to add more?", "New?", JOptionPane.YES_NO_OPTION);
+                        switch (confirmation){
                         case JOptionPane.YES_OPTION:
                             clearInventoryForm();
                             return;
@@ -2682,13 +2700,22 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         case JOptionPane.CLOSED_OPTION:
                             break;
                     }
+                    
+                    }else{
+                        JOptionPane.showMessageDialog(frameAddInventory, "Successfully Added the data! Cannot add more data!", "Limit Reached", JOptionPane.INFORMATION_MESSAGE);
+                    
+                    }
+                    
                 }
                 else {
-                    if (index != 0) {
+                    if (index != -1) {
                         InventoryManagement im = arraylistInventory.get(index);
                         int newQuantity = im.getQuantity() + quantity;
+                        
+                        JOptionPane.showMessageDialog(frameAddInventory, modelNo + " of the " + brand + " was already in the records.\nOnly Adding the quantity to the existing records.", "Already exists", JOptionPane.INFORMATION_MESSAGE);
                         im.setQuantity(newQuantity);
-                        JOptionPane.showMessageDialog(frameAddInventory, modelNo + " of the " + brand + " was already in the records.\nAdding the quantity to the existing records.", "Already exists", JOptionPane.INFORMATION_MESSAGE);
+                        clearTableInventory();
+                        addToInventoryTable();
                         int confirmation = JOptionPane.showConfirmDialog(frameAddInventory, "Do you want to add more?", "New?", JOptionPane.YES_NO_OPTION);
                         switch (confirmation){
                             case JOptionPane.YES_OPTION:
@@ -2699,6 +2726,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                                 frameAddInventory.dispose();
                                 break;
                             case JOptionPane.CLOSED_OPTION:
+                                clearInventoryForm();
+                                frameAddInventory.dispose();
                                 break;
                         }
                     }
@@ -2707,39 +2736,20 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                     }
                 }
             }
-            else {
-                InventoryManagement im = new InventoryManagement(modelNo, modelName, brand, os, range, costPrice, sellingPrice, quantity);
-                arraylistInventory.add(im);
-                addToInventoryTable();
-                int confirmation = JOptionPane.showConfirmDialog(frameAddInventory, "Do you want to add more?", "New?", JOptionPane.YES_NO_OPTION);
-                switch (confirmation){
-                    case JOptionPane.YES_OPTION:
-                        clearInventoryForm();
-                        return;
-                    case JOptionPane.NO_OPTION:
-                        clearInventoryForm();
-                        frameAddInventory.dispose();
-                        break;
-                    case JOptionPane.CLOSED_OPTION:
-                        break;
-                }
-            }
         isSaved = false;
         isNew=false;
+        System.out.println("ADDDING ITEM MODEL NAME");
         comboBoxModelNumber.addItem(modelName);
         
         frameAddInventory.dispose();
             
             
         }
-        catch (NullPointerException npe) {
-            JOptionPane.showMessageDialog(frameAddInventory,"Check your inputs." + npe, "Error!", 0); 
+        catch (NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(frameAddInventory, "Please enter valid number in number fields.", "Error!", 0);
             return;
         }
-        catch (NumberFormatException nfe) {
-            JOptionPane.showMessageDialog(frameAddInventory, "Check your number inputs." + nfe, "Error!", 0);
-            return;
-        }  
+    }  
     }//GEN-LAST:event_jButtonAddInventoryActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
@@ -2935,7 +2945,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         String modelName = tfEditInvModelName.getText().trim();
         String brand = comboEditInvBrand.getSelectedItem().toString().trim();
         String os = comboEditInvOs.getSelectedItem().toString().trim();
-        String range = radioBtnEditInvHigh.isSelected() == true ? "High" : radioBtnMid.isSelected() == true ? "Mid" : radioBtnLow.isSelected() == true ? "Low" : null;
+        String range = radioBtnEditInvHigh.isSelected() == true ? "High" : radioBtnEditInvMid.isSelected() == true ? "Mid" : radioBtnEditInvLow.isSelected() == true ? "Low" : null;
         int costPrice = Integer.parseInt(tfEditInvCostPrice.getText().trim());
         int sellingPrice = Integer.parseInt(tfEditInvSellingPrice.getText().trim());
         int quantity = Integer.parseInt(tfEditInvQuantity.getText().trim());
@@ -2963,6 +2973,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             im.setCost(costPrice);
             im.setSellingPrice(sellingPrice);
             im.setQuantity(quantity);
+            clearTableInventory();
+                addToInventoryTable();
             frameEditInventory.dispose();
             JOptionPane.showMessageDialog(rootPane, "Edit Saved.", "Success!", 1);
         }
@@ -3034,6 +3046,9 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             jMnuItmAddBrandActionPerformed(evt);
             }
             else {
+                if(!doesBrandExists(newBrand)){
+                
+                
                 String capBrand = newBrand.substring(0, 1).toUpperCase() + newBrand.substring(1);
 
                 BufferedWriter bw = new BufferedWriter(new FileWriter(dir, true));
@@ -3041,7 +3056,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 bw.write(capBrand);
                 bw.close();
                 JOptionPane.showMessageDialog(rootPane, capBrand + " successfully added to brands.", "Success!", JOptionPane.INFORMATION_MESSAGE);
-                // elementsForComboBoxBrand();
+                elementsForComboBoxBrand();
                 comboBoxBrand.addItem(capBrand);
                 comboBoxBrand.revalidate();
                 comboBoxBrand.repaint();
@@ -3054,6 +3069,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 comboBoxSearchSales.addItem(capBrand);
                 comboBoxSearchSales.revalidate();
                 comboBoxSearchSales.repaint();
+            }else{
+                    JOptionPane.showMessageDialog(rootPane, "This brand has been already added to the list", "Success!", JOptionPane.INFORMATION_MESSAGE);
+                
+                }
+            
             }
         }
         catch (IOException ie) {
@@ -3063,7 +3083,17 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         catch (NullPointerException npe) {
         }
     }//GEN-LAST:event_jMnuItmAddBrandActionPerformed
-
+        
+    private boolean doesBrandExists(String newBrandName){
+        for(int i =0;i< comboBoxBrand.getComponentCount();i++){
+            
+            if( comboBoxBrand.getItemAt(i).equalsIgnoreCase(newBrandName) ){
+                    return true;
+        }
+        }
+        return false;
+    }
+    
     private void jBtnAddSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAddSalesActionPerformed
         String firstName = null;
         String lastName = null;
@@ -3280,8 +3310,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jButtonSearchArraySalesActionPerformed
 
     private void comboBoxModelNumberItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboBoxModelNumberItemStateChanged
-        if(!isNew){
-            if(!isEditSales) {
+       
+            if(!isEditSales && !isNew) {
                 String getModelNumber = comboBoxModelNumber.getSelectedItem().toString();
                 if(!getModelNumber.isEmpty()) {
                     for (InventoryManagement im : arraylistInventory) {
@@ -3304,7 +3334,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                     JOptionPane.showMessageDialog(rootPane, "No such model number exists", "Error!", 0);
                 }
             }
-       }
+       
     }//GEN-LAST:event_comboBoxModelNumberItemStateChanged
 
     private void comboBoxDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxDiscountActionPerformed
@@ -3758,7 +3788,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         }
     }//GEN-LAST:event_tfLastNameKeyTyped
     // sorts the inventory according to the cost price for the binary search
-    private void sortInventory () {
+    private void sortInventoryByPrice () {
         for (int i = 0; i < arraylistInventory.size(); i++) {
             for (int j = i + 1 ; j < arraylistInventory.size(); j++) {
                 if (i!= j) {

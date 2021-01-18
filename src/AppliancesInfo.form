@@ -513,7 +513,7 @@
                           <Component id="lblSalePrice" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="tfTotal" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="116" max="32767" attributes="0"/>
+                      <EmptySpace pref="107" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jBtnAddSales" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jBtnClearSales" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -932,15 +932,8 @@
             </Component>
             <Component class="javax.swing.JComboBox" name="comboEditInvBrand">
               <Properties>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="6">
-                    <StringItem index="0" value=""/>
-                    <StringItem index="1" value="Samsung"/>
-                    <StringItem index="2" value="Apple"/>
-                    <StringItem index="3" value="Huawei"/>
-                    <StringItem index="4" value="Motorola"/>
-                    <StringItem index="5" value="Sony"/>
-                  </StringArray>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="new DefaultComboBoxModel &lt;&gt; (elementsForComboBoxBrand())" type="code"/>
                 </Property>
               </Properties>
               <AuxValues>
@@ -950,12 +943,11 @@
             <Component class="javax.swing.JComboBox" name="comboEditInvOs">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="5">
-                    <StringItem index="0" value=""/>
-                    <StringItem index="1" value="iOS"/>
-                    <StringItem index="2" value="Android"/>
-                    <StringItem index="3" value="Symbian"/>
-                    <StringItem index="4" value="Others"/>
+                  <StringArray count="4">
+                    <StringItem index="0" value="iOS"/>
+                    <StringItem index="1" value="Android"/>
+                    <StringItem index="2" value="Symbian"/>
+                    <StringItem index="3" value="Others"/>
                   </StringArray>
                 </Property>
               </Properties>
