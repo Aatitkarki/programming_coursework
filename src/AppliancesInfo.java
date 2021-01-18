@@ -2662,6 +2662,12 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         if(modelNo.isEmpty() ||modelName.isEmpty() || tfCostPrice.getText().isEmpty() || tfSellingPrice.getText().trim().isEmpty() ||tfQuantity.getText().trim().isEmpty() ){
             JOptionPane.showMessageDialog(frameAddInventory, "Empty fields found! Please check your input!", "Input Error!", JOptionPane.ERROR_MESSAGE);
         }
+        else if(!modelNo.matches("[a-zA-Z0-9]*")){
+            JOptionPane.showMessageDialog(frameAddInventory, "Model Number can only have alphabet and number!", "Input Error!", JOptionPane.ERROR_MESSAGE);
+        
+        }else if(!modelName.matches("[a-zA-Z]+")){
+        JOptionPane.showMessageDialog(frameAddInventory, "Model Name can only have alphabet!", "Input Error!", JOptionPane.ERROR_MESSAGE);
+        }
         else{
         try{
             brand = comboBoxBrand.getSelectedItem().toString().trim();
@@ -2869,7 +2875,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 else {
                     frameSearch.dispose();
                     InventoryManagement im = arraylistInventory.get(index);
-                    JOptionPane.showMessageDialog(rootPane, "Model Name : " + im.getModelName() +"\nBrand Name : "+im.getBrand()+"\nOperating System : "+im.getOs()+"\nCost Price : "+im.getCost(), "Search results", 0);
+                    JOptionPane.showMessageDialog(rootPane,"Model Number : " + im.getModelNo()+"\nModel Name : " + im.getModelName() +"\nBrand Name : "+im.getBrand()+"\nOperating System : "+im.getOs()+"\nCost Price : "+im.getCost(), "Search results", 1);
                 }
             }
         }
@@ -2892,7 +2898,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 else {
                     frameSearch.dispose();
                     InventoryManagement im = arraylistInventory.get(index);
-                    JOptionPane.showMessageDialog(rootPane, "Model Name : " + im.getModelName() +"\nBrand Name : "+im.getBrand()+"\nOperating System : "+im.getOs()+"\nCost Price : "+im.getCost(), "Search results", 0);
+                    JOptionPane.showMessageDialog(rootPane,"Model Number : " + im.getModelNo()+"\nModel Name : " + im.getModelName() +"\nBrand Name : "+im.getBrand()+"\nOperating System : "+im.getOs()+"\nCost Price : "+im.getCost(), "Search results", 1);
                 }
             }        
         }
