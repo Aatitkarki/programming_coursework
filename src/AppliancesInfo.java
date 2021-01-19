@@ -18,10 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
@@ -2243,10 +2240,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             System.exit(0);
         }
         else {
-            int confirmation = JOptionPane.showConfirmDialog(rootPane, "File already exists. Overwrite?", "Overwrite?", JOptionPane.YES_NO_OPTION);
+            int confirmation = JOptionPane.showConfirmDialog(rootPane, "Unsaved changes. Save?", "Overwrite?", JOptionPane.YES_NO_OPTION);
             switch (confirmation){
                 case JOptionPane.YES_OPTION:
-                    jButtonClearInventoryActionPerformed(evt);
+                    jMnuItmSaveActionPerformed(evt);
                     break;
                 case JOptionPane.NO_OPTION:
                     AppliancesInfo dash = new AppliancesInfo();
@@ -2346,13 +2343,16 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         int result = jFileSaver.showSaveDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             path = jFileSaver.getSelectedFile().toString();
-            path+=".csv";
+            if (!path.contains(".csv")) {
+                path+=".csv";
+            }
             File newFile = new File(path);
             boolean check;
             try{
                 check = newFile.createNewFile();
                 if (check) {
                     csvWriter(path);
+                    isSaved = true;
                     JOptionPane.showMessageDialog(rootPane, "Saved successfully.", "Saved", JOptionPane.PLAIN_MESSAGE);    
                 }
                 else {
@@ -2360,6 +2360,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                    switch (confirmation){
                         case JOptionPane.YES_OPTION:
                             csvWriter(path);
+                            isSaved = true;
                             break;
                         case JOptionPane.NO_OPTION:
                             AppliancesInfo dash = new AppliancesInfo();
@@ -2463,6 +2464,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private void jMnuItmSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmSaveActionPerformed
         if (path != "" && path != null) {
             csvWriter(path);
+            isSaved = true;
             JOptionPane.showMessageDialog(rootPane, "Saved.", "Success", JOptionPane.PLAIN_MESSAGE);
         }
         else{
@@ -2631,23 +2633,20 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         }
     }//GEN-LAST:event_tabbedPaneTblStateChanged
 
-      private Object[] doesModelOfSameBrandExist(String modelNo,String brand){
-          Object[] data=new Object[2];
+    private Object[] doesModelOfSameBrandExist(String modelNo,String brand){
+        Object[] data=new Object[2];
       
-          for(int i = 0; i < arraylistInventory.size(); i++) {
-                    InventoryManagement im = arraylistInventory.get(i);
-                    if (im.getModelNo().equalsIgnoreCase(modelNo) && im.getBrand().equalsIgnoreCase(brand)) {
-                        data[0]=true;
-                        data[1]=i;
-                        System.out.println("data is +"+data[1]);
-                        return data;
-                      
-                    }
-                }
+        for(int i = 0; i < arraylistInventory.size(); i++) {
+            InventoryManagement im = arraylistInventory.get(i);
+            if (im.getModelNo().equalsIgnoreCase(modelNo) && im.getBrand().equalsIgnoreCase(brand)) {
+                data[0]=true;
+                data[1]=i;
+                return data;  
+            }
+        }
           data[0]=false;
           data[1]=-1;
           return data;
-    
     }
     
     private void jButtonAddInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddInventoryActionPerformed
@@ -3091,11 +3090,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jMnuItmAddBrandActionPerformed
         
     private boolean doesBrandExists(String newBrandName){
-        for(int i =0;i< comboBoxBrand.getComponentCount();i++){
-            
+        for(int i =0;i< comboBoxBrand.getComponentCount();i++){ 
             if( comboBoxBrand.getItemAt(i).equalsIgnoreCase(newBrandName) ){
                     return true;
-        }
+            }
         }
         return false;
     }
