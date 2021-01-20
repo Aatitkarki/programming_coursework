@@ -52,7 +52,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private boolean isInventoryTableSelected = true;
     private boolean isSaved = true;
     private boolean isEditSales = false;
-    private boolean isNew = false;
+    private boolean isNew = true;
     private String path = "";
     private ArrayList <InventoryManagement> arraylistInventory = new ArrayList <> ();
     private ArrayList <Sales> arraylistSales = new ArrayList <> ();
@@ -627,6 +627,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
 
         frameAddSales.setTitle("Add an entry");
         frameAddSales.setAlwaysOnTop(true);
+        frameAddSales.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         frameAddSales.setMinimumSize(new java.awt.Dimension(400, 500));
         frameAddSales.setResizable(false);
         frameAddSales.addWindowFocusListener(new java.awt.event.WindowFocusListener() {
@@ -2260,9 +2261,22 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         jDialogAbout.setSize(300,200);
         jDialogAbout.setVisible(true);
     }//GEN-LAST:event_jMnuItmAboutActionPerformed
-
+    
+    private void clearApplicationData(){
+        clearTableInventory();
+            clearTableSales();
+        arraylistInventory.clear();
+        arraylistSales.clear();
+        comboBoxModelNumber.removeAllItems();
+        comboBoxModelNumberEdit.removeAllItems();
+            
+        
+    
+    }
     private void jMnuItmOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmOpenActionPerformed
         if(isSaved) {
+            clearApplicationData();
+            
             String dir = getCSVFilesDirectory();
             
             try {
@@ -2302,6 +2316,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             catch(NullPointerException npe) {
                 
             }
+            
+            
         }
         else {
             int confirmation = JOptionPane.showConfirmDialog(rootPane, "Unsaved changes. Save?", "Save?", JOptionPane.YES_NO_OPTION);
@@ -2378,6 +2394,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
 
     private void jMnuItmNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmNewActionPerformed
         if(isSaved) {
+            clearApplicationData();
+            
             clearTableInventory();
             clearTableSales();
             arraylistInventory.clear();
@@ -2435,7 +2453,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         else {
             if (!arraylistInventory.isEmpty()) {
                 if (arraylistSales.size() < 12) {
-                    frameAddSales.setVisible(true);
+                    for(InventoryManagement im:arraylistInventory){
+                        comboBoxModelNumber.addItem(im.getModelNo());
+                            }
+                    frameAddSales.setVisible(true);                    
                     frameAddSales.setLocationRelativeTo(null);
                 }
                 else {
@@ -2563,6 +2584,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         else {
             isEditSales = true;
             indexEditSales = tblSales.getSelectedRow();
+            for(InventoryManagement im:arraylistInventory){
+                        comboBoxModelNumberEdit.addItem(im.getModelNo());}
             if (indexEditSales >= 0) {
                lblEditInvMsgSales.setVisible(false);
                frameEditSales.setVisible(true);
@@ -2664,8 +2687,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         else if(!modelNo.matches("[a-zA-Z0-9]*")){
             JOptionPane.showMessageDialog(frameAddInventory, "Model Number can only have alphabet and number!", "Input Error!", JOptionPane.ERROR_MESSAGE);
         
-        }else if(!modelName.matches("[a-zA-Z]+")){
-        JOptionPane.showMessageDialog(frameAddInventory, "Model Name can only have alphabet!", "Input Error!", JOptionPane.ERROR_MESSAGE);
+        }else if(!modelName.matches("[a-zA-Z0-9]*")){
+        JOptionPane.showMessageDialog(frameAddInventory, "Model Number can only have alphabet and number!", "Input Error!", JOptionPane.ERROR_MESSAGE);
         }
         else{
         try{
@@ -2743,8 +2766,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             }
         isSaved = false;
         isNew=false;
-        System.out.println("ADDDING ITEM MODEL NAME");
-        comboBoxModelNumber.addItem(modelName);
         
         frameAddInventory.dispose();
             
@@ -3314,9 +3335,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jButtonSearchArraySalesActionPerformed
 
     private void comboBoxModelNumberItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboBoxModelNumberItemStateChanged
-       
-            if(!isEditSales && !isNew) {
+       if(!arraylistInventory.isEmpty()){
+       if(!isEditSales && isNew) {
                 String getModelNumber = comboBoxModelNumber.getSelectedItem().toString();
+                System.out.println(getModelNumber);
+                
                 if(!getModelNumber.isEmpty()) {
                     for (InventoryManagement im : arraylistInventory) {
                         if (im.getModelNo().equalsIgnoreCase(getModelNumber)) {
@@ -3335,10 +3358,12 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                             }
                         }
                     }
+                    System.out.println("Two");
                     JOptionPane.showMessageDialog(rootPane, "No such model number exists", "Error!", 0);
                 }
             }
-       
+       }
+            
     }//GEN-LAST:event_comboBoxModelNumberItemStateChanged
 
     private void comboBoxDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxDiscountActionPerformed
@@ -3498,6 +3523,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
 
     private void comboBoxModelNumberEditItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboBoxModelNumberEditItemStateChanged
         if (!isNew) {
+            
             isEditSales = false;
             String getModelNumber = comboBoxModelNumber.getSelectedItem().toString();
             if(!getModelNumber.isEmpty()) {
@@ -3518,6 +3544,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         }
                     }
                 }
+                System.out.println("One");
                 JOptionPane.showMessageDialog(rootPane, "No such model number exists", "Error!", 0);
             }
         }
