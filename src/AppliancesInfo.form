@@ -86,11 +86,11 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="lblModelNo" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblModelName" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblRange" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblRecommendation" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblCostPrice" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblSellingPrice" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblBrand" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblOS" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblCategory" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblQuantity" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
@@ -119,7 +119,7 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="radioBtnLow" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="comboOs" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
+                                  <Component id="comboCategory" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
@@ -154,12 +154,12 @@
                               </Group>
                               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="lblOS" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="comboOs" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblCategory" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="comboCategory" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="lblRange" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblRecommendation" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="radioBtnHigh" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="radioBtnMid" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="radioBtnLow" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -221,20 +221,20 @@
                 <Property name="text" type="java.lang.String" value="Brand :"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblOS">
+            <Component class="javax.swing.JLabel" name="lblCategory">
               <Properties>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Operating System :"/>
+                <Property name="text" type="java.lang.String" value="Category :"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblRange">
+            <Component class="javax.swing.JLabel" name="lblRecommendation">
               <Properties>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Range :"/>
+                <Property name="text" type="java.lang.String" value="Recommendation :"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblCostPrice">
@@ -276,14 +276,13 @@
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JComboBox" name="comboOs">
+            <Component class="javax.swing.JComboBox" name="comboCategory">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="4">
-                    <StringItem index="0" value="iOS"/>
-                    <StringItem index="1" value="Android"/>
-                    <StringItem index="2" value="Symbian"/>
-                    <StringItem index="3" value="Others"/>
+                  <StringArray count="3">
+                    <StringItem index="0" value="Basic Phone"/>
+                    <StringItem index="1" value="Feature Phone"/>
+                    <StringItem index="2" value="Smartphone"/>
                   </StringArray>
                 </Property>
               </Properties>
@@ -755,11 +754,11 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="lblEditInvModelNo" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblEditInvModelName" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblEditInvRange" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblEditInvRecommendation" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblEditInvCostPrice" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblEditInvSellingPrice" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblEditInvBrand" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblEditInvOS" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblEditInvCategory" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblEditInvQuantity" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
@@ -788,7 +787,7 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="radioBtnEditInvLow" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="comboEditInvOs" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
+                                  <Component id="comboEditInvCategory" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
@@ -828,12 +827,12 @@
                               </Group>
                               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="lblEditInvOS" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="comboEditInvOs" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblEditInvCategory" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="comboEditInvCategory" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="lblEditInvRange" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblEditInvRecommendation" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="radioBtnEditInvHigh" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="radioBtnEditInvMid" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="radioBtnEditInvLow" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -897,20 +896,20 @@
                 <Property name="text" type="java.lang.String" value="Brand :"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblEditInvOS">
+            <Component class="javax.swing.JLabel" name="lblEditInvCategory">
               <Properties>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Operating System :"/>
+                <Property name="text" type="java.lang.String" value="Category :"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblEditInvRange">
+            <Component class="javax.swing.JLabel" name="lblEditInvRecommendation">
               <Properties>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Range :"/>
+                <Property name="text" type="java.lang.String" value="Recommendation :"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblEditInvCostPrice">
@@ -943,14 +942,13 @@
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JComboBox" name="comboEditInvOs">
+            <Component class="javax.swing.JComboBox" name="comboEditInvCategory">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="4">
-                    <StringItem index="0" value="iOS"/>
-                    <StringItem index="1" value="Android"/>
-                    <StringItem index="2" value="Symbian"/>
-                    <StringItem index="3" value="Others"/>
+                  <StringArray count="3">
+                    <StringItem index="0" value="Basic Phone"/>
+                    <StringItem index="1" value="Feature Phone"/>
+                    <StringItem index="2" value="Smartphone"/>
                   </StringArray>
                 </Property>
               </Properties>
@@ -2703,7 +2701,10 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="panelBg" min="-2" max="-2" attributes="0"/>
+          <Group type="102" attributes="0">
+              <Component id="panelBg" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -2726,8 +2727,9 @@
               <Group type="102" attributes="0">
                   <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
                   <Component id="panelButtons" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-                  <Component id="tabbedPaneTbl" min="-2" pref="690" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="tabbedPaneTbl" min="-2" pref="791" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -2912,7 +2914,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="scrlPaneInventory" min="-2" pref="685" max="-2" attributes="0"/>
+                      <Component id="scrlPaneInventory" alignment="0" pref="786" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -2936,8 +2938,8 @@
                             <Column editable="false" title="Model Number" type="java.lang.Object"/>
                             <Column editable="false" title="Name" type="java.lang.Object"/>
                             <Column editable="false" title="Brand" type="java.lang.Object"/>
-                            <Column editable="false" title="OS" type="java.lang.Object"/>
-                            <Column editable="false" title="Range" type="java.lang.Object"/>
+                            <Column editable="false" title="Category" type="java.lang.Object"/>
+                            <Column editable="false" title="Recommendation" type="java.lang.Object"/>
                             <Column editable="false" title="Cost Price" type="java.lang.Object"/>
                             <Column editable="false" title="Selling Price" type="java.lang.Object"/>
                             <Column editable="false" title="Quantity" type="java.lang.Object"/>
@@ -3009,7 +3011,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="scrlPaneSales" min="-2" pref="685" max="-2" attributes="0"/>
+                      <Component id="scrlPaneSales" alignment="0" pref="786" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">

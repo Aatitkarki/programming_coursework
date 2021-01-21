@@ -1,12 +1,12 @@
 class InventoryManagement {
-	private String modelNo, modelName, brand, os, range;
+	private String modelNo, modelName, brand, category, recommendation;
 	private int cost, sellingPrice, quantity;
-	InventoryManagement(String modelNo, String modelName, String brand, String os, String range, int cost, int sellingPrice, int quantity) {
+	InventoryManagement(String modelNo, String modelName, String brand,String category, String recommendation, int cost, int sellingPrice, int quantity) {
 		this.modelNo = modelNo;
 		this.modelName = modelName;
-		this.brand = brand;
-		this.os = os;
-		this.range = range;
+		this.category = category;
+                this.brand = brand;
+		this.recommendation = recommendation;
 		this.cost = cost;
 		this.sellingPrice = sellingPrice;
 		this.quantity = quantity;
@@ -20,11 +20,11 @@ class InventoryManagement {
 	public String getBrand() {
 		return this.brand;
 	}
-	public String getOs() {
-		return this.os;
+	public String getCategory() {
+		return this.category;
 	}
-	public String getRange() {
-		return this.range;
+	public String getRecommendation() {
+		return this.recommendation;
 	}
 	public int getCost() {
 		return this.cost;
@@ -44,11 +44,11 @@ class InventoryManagement {
 	public void setBrand(String brand) {
 		this.brand = brand;
 	}
-	public void setOs(String os) {
-		this.os = os;
+	public void setCategory(String category) {
+		this.category = category;
 	}
-	public void setRange(String range) {
-		this.range = range;
+	public void setRecommendation(String recommendation) {
+		this.recommendation = recommendation;
 	}
 	public void setCost(int cost) {
 		this.cost = cost;

@@ -207,14 +207,14 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         lblModelNo = new javax.swing.JLabel();
         lblModelName = new javax.swing.JLabel();
         lblBrand = new javax.swing.JLabel();
-        lblOS = new javax.swing.JLabel();
-        lblRange = new javax.swing.JLabel();
+        lblCategory = new javax.swing.JLabel();
+        lblRecommendation = new javax.swing.JLabel();
         lblCostPrice = new javax.swing.JLabel();
         lblSellingPrice = new javax.swing.JLabel();
         tfModelNo = new javax.swing.JTextField();
         tfModelName = new javax.swing.JTextField();
         comboBoxBrand = new javax.swing.JComboBox<>();
-        comboOs = new javax.swing.JComboBox<>();
+        comboCategory = new javax.swing.JComboBox<>();
         radioBtnHigh = new javax.swing.JRadioButton();
         radioBtnMid = new javax.swing.JRadioButton();
         radioBtnLow = new javax.swing.JRadioButton();
@@ -249,14 +249,14 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         lblEditInvModelNo = new javax.swing.JLabel();
         lblEditInvModelName = new javax.swing.JLabel();
         lblEditInvBrand = new javax.swing.JLabel();
-        lblEditInvOS = new javax.swing.JLabel();
-        lblEditInvRange = new javax.swing.JLabel();
+        lblEditInvCategory = new javax.swing.JLabel();
+        lblEditInvRecommendation = new javax.swing.JLabel();
         lblEditInvCostPrice = new javax.swing.JLabel();
         lblEditInvSellingPrice = new javax.swing.JLabel();
         tfEditInvModelNo = new javax.swing.JTextField();
         tfEditInvModelName = new javax.swing.JTextField();
         comboEditInvBrand = new javax.swing.JComboBox<>();
-        comboEditInvOs = new javax.swing.JComboBox<>();
+        comboEditInvCategory = new javax.swing.JComboBox<>();
         radioBtnEditInvHigh = new javax.swing.JRadioButton();
         radioBtnEditInvMid = new javax.swing.JRadioButton();
         radioBtnEditInvLow = new javax.swing.JRadioButton();
@@ -431,11 +431,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         lblBrand.setForeground(new java.awt.Color(255, 255, 255));
         lblBrand.setText("Brand :");
 
-        lblOS.setForeground(new java.awt.Color(255, 255, 255));
-        lblOS.setText("Operating System :");
+        lblCategory.setForeground(new java.awt.Color(255, 255, 255));
+        lblCategory.setText("Category :");
 
-        lblRange.setForeground(new java.awt.Color(255, 255, 255));
-        lblRange.setText("Range :");
+        lblRecommendation.setForeground(new java.awt.Color(255, 255, 255));
+        lblRecommendation.setText("Recommendation :");
 
         lblCostPrice.setForeground(new java.awt.Color(255, 255, 255));
         lblCostPrice.setText("Cost Price :");
@@ -462,7 +462,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
 
         comboBoxBrand.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
 
-        comboOs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "iOS", "Android", "Symbian", "Others" }));
+        comboCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Basic Phone", "Feature Phone", "Smartphone" }));
 
         btnGrpAddInventory.add(radioBtnHigh);
         radioBtnHigh.setForeground(new java.awt.Color(255, 255, 255));
@@ -531,11 +531,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblModelNo)
                             .addComponent(lblModelName)
-                            .addComponent(lblRange)
+                            .addComponent(lblRecommendation)
                             .addComponent(lblCostPrice)
                             .addComponent(lblSellingPrice)
                             .addComponent(lblBrand)
-                            .addComponent(lblOS)
+                            .addComponent(lblCategory)
                             .addComponent(lblQuantity))
                         .addGap(35, 35, 35))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAddInventoryLayout.createSequentialGroup()
@@ -558,7 +558,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                                 .addComponent(radioBtnMid)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(radioBtnLow))
-                            .addComponent(comboOs, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(comboCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(tfQuantity)
                     .addComponent(tfSellingPrice, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -584,11 +584,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                             .addComponent(comboBoxBrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(20, 20, 20)
                         .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblOS)
-                            .addComponent(comboOs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblCategory)
+                            .addComponent(comboCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(20, 20, 20)
                         .addGroup(panelAddInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblRange)
+                            .addComponent(lblRecommendation)
                             .addComponent(radioBtnHigh)
                             .addComponent(radioBtnMid)
                             .addComponent(radioBtnLow))
@@ -849,11 +849,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         lblEditInvBrand.setForeground(new java.awt.Color(255, 255, 255));
         lblEditInvBrand.setText("Brand :");
 
-        lblEditInvOS.setForeground(new java.awt.Color(255, 255, 255));
-        lblEditInvOS.setText("Operating System :");
+        lblEditInvCategory.setForeground(new java.awt.Color(255, 255, 255));
+        lblEditInvCategory.setText("Category :");
 
-        lblEditInvRange.setForeground(new java.awt.Color(255, 255, 255));
-        lblEditInvRange.setText("Range :");
+        lblEditInvRecommendation.setForeground(new java.awt.Color(255, 255, 255));
+        lblEditInvRecommendation.setText("Recommendation :");
 
         lblEditInvCostPrice.setForeground(new java.awt.Color(255, 255, 255));
         lblEditInvCostPrice.setText("Cost Price :");
@@ -863,7 +863,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
 
         comboEditInvBrand.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
 
-        comboEditInvOs.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "iOS", "Android", "Symbian", "Others" }));
+        comboEditInvCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Basic Phone", "Feature Phone", "Smartphone" }));
 
         btnGrpEditInventory.add(radioBtnEditInvHigh);
         radioBtnEditInvHigh.setForeground(new java.awt.Color(255, 255, 255));
@@ -935,11 +935,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         .addGroup(panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblEditInvModelNo)
                             .addComponent(lblEditInvModelName)
-                            .addComponent(lblEditInvRange)
+                            .addComponent(lblEditInvRecommendation)
                             .addComponent(lblEditInvCostPrice)
                             .addComponent(lblEditInvSellingPrice)
                             .addComponent(lblEditInvBrand)
-                            .addComponent(lblEditInvOS)
+                            .addComponent(lblEditInvCategory)
                             .addComponent(lblEditInvQuantity))
                         .addGap(35, 35, 35))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEditInventoryLayout.createSequentialGroup()
@@ -962,7 +962,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                                 .addComponent(radioBtnEditInvMid)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(radioBtnEditInvLow))
-                            .addComponent(comboEditInvOs, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(comboEditInvCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(tfEditInvQuantity)
                     .addComponent(tfEditInvSellingPrice, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -992,11 +992,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                             .addComponent(comboEditInvBrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(20, 20, 20)
                         .addGroup(panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblEditInvOS)
-                            .addComponent(comboEditInvOs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblEditInvCategory)
+                            .addComponent(comboEditInvCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(20, 20, 20)
                         .addGroup(panelEditInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblEditInvRange)
+                            .addComponent(lblEditInvRecommendation)
                             .addComponent(radioBtnEditInvHigh)
                             .addComponent(radioBtnEditInvMid)
                             .addComponent(radioBtnEditInvLow))
@@ -2006,7 +2006,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Model Number", "Name", "Brand", "OS", "Range", "Cost Price", "Selling Price", "Quantity"
+                "Model Number", "Name", "Brand", "Category", "Recommendation", "Cost Price", "Selling Price", "Quantity"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -2024,7 +2024,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         tblPnlInventory.setLayout(tblPnlInventoryLayout);
         tblPnlInventoryLayout.setHorizontalGroup(
             tblPnlInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrlPaneInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 685, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(scrlPaneInventory, javax.swing.GroupLayout.DEFAULT_SIZE, 786, Short.MAX_VALUE)
         );
         tblPnlInventoryLayout.setVerticalGroup(
             tblPnlInventoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2067,7 +2067,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         tblPnlSales.setLayout(tblPnlSalesLayout);
         tblPnlSalesLayout.setHorizontalGroup(
             tblPnlSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrlPaneSales, javax.swing.GroupLayout.PREFERRED_SIZE, 685, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(scrlPaneSales, javax.swing.GroupLayout.DEFAULT_SIZE, 786, Short.MAX_VALUE)
         );
         tblPnlSalesLayout.setVerticalGroup(
             tblPnlSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2083,8 +2083,9 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             .addGroup(panelBgLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addComponent(panelButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6)
-                .addComponent(tabbedPaneTbl, javax.swing.GroupLayout.PREFERRED_SIZE, 690, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tabbedPaneTbl, javax.swing.GroupLayout.PREFERRED_SIZE, 791, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         panelBgLayout.setVerticalGroup(
             panelBgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2190,7 +2191,9 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelBg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(panelBg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2551,8 +2554,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 String modelNoOld = imOld.getModelNo();
                 String modelNameOld = imOld.getModelName();
                 String brandOld = imOld.getBrand();
-                String osOld = imOld.getOs();
-                String rangeOld = imOld.getRange();
+                String categoryOld = imOld.getCategory();
+                String recommendationOld = imOld.getRecommendation();
                 String costOld = String.valueOf(imOld.getCost());
                 String sellingPriceOld = String.valueOf(imOld.getSellingPrice());
                 String quantityOld = String.valueOf(imOld.getQuantity());
@@ -2560,12 +2563,12 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 tfEditInvModelNo.setText(modelNoOld);
                 tfEditInvModelName.setText(modelNameOld);               
                 comboEditInvBrand.setSelectedItem(brandOld);
-                comboEditInvOs.setSelectedItem(osOld);
+                comboEditInvCategory.setSelectedItem(categoryOld);
                 
-                if (rangeOld.equals("High")) {
+                if (recommendationOld.equals("High")) {
                     radioBtnEditInvHigh.setSelected(true);
                 }
-                else if (rangeOld.equals("Mid")) {
+                else if (recommendationOld.equals("Mid")) {
                     radioBtnEditInvMid.setSelected(true);
                 }
                 else {
@@ -2676,8 +2679,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         String modelNo = tfModelNo.getText().trim();
         String modelName = tfModelName.getText().trim();
         String brand = null;
-        String os = null;
-        String range = null;
+        String category = null;
+        String recommendation = null;
         int costPrice = 0;
         int sellingPrice = 0;
         int quantity = 0;
@@ -2693,8 +2696,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         else{
         try{
             brand = comboBoxBrand.getSelectedItem().toString().trim();
-            os = comboOs.getSelectedItem().toString().trim();
-            range = radioBtnHigh.isSelected() == true ? "High" : radioBtnMid.isSelected() == true ? "Mid" : radioBtnLow.isSelected() == true ? "Low" : null;
+            category = comboCategory.getSelectedItem().toString().trim();
+            recommendation = radioBtnHigh.isSelected() == true ? "High" : radioBtnMid.isSelected() == true ? "Mid" : radioBtnLow.isSelected() == true ? "Low" : null;
             costPrice = Integer.parseInt(tfCostPrice.getText().trim());
             sellingPrice = Integer.parseInt(tfSellingPrice.getText().trim());
             quantity = Integer.parseInt(tfQuantity.getText().trim()); 
@@ -2710,7 +2713,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 
                 }
                 if (!modelExists) {
-                    InventoryManagement im = new InventoryManagement(modelNo, modelName, brand, os, range, costPrice, sellingPrice, quantity);
+                    InventoryManagement im = new InventoryManagement(modelNo, modelName, brand,category, recommendation, costPrice, sellingPrice, quantity);
                     arraylistInventory.add(im);
                     sortInventoryByPrice();
                     clearTableInventory();
@@ -2895,7 +2898,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 else {
                     frameSearch.dispose();
                     InventoryManagement im = arraylistInventory.get(index);
-                    JOptionPane.showMessageDialog(rootPane,"Model Number : " + im.getModelNo()+"\nModel Name : " + im.getModelName() +"\nBrand Name : "+im.getBrand()+"\nOperating System : "+im.getOs()+"\nCost Price : "+im.getCost(), "Search results", 1);
+                    JOptionPane.showMessageDialog(rootPane,"Model Number : " + im.getModelNo()+"\nModel Name : " + im.getModelName() +"\nCategory : "+im.getCategory()+"\nBrand Name : "+im.getBrand()+"\nCost Price : "+im.getCost(), "Search results", 1);
                 }
             }
         }
@@ -2918,7 +2921,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 else {
                     frameSearch.dispose();
                     InventoryManagement im = arraylistInventory.get(index);
-                    JOptionPane.showMessageDialog(rootPane,"Model Number : " + im.getModelNo()+"\nModel Name : " + im.getModelName() +"\nBrand Name : "+im.getBrand()+"\nOperating System : "+im.getOs()+"\nCost Price : "+im.getCost(), "Search results", 1);
+                    JOptionPane.showMessageDialog(rootPane,"Model Number : " + im.getModelNo()+"\nModel Name : " + im.getModelName()+"\nCategory : "+im.getCategory() +"\nBrand Name : "+im.getBrand()+"\nCost Price : "+im.getCost(), "Search results", 1);
                 }
             }        
         }
@@ -2970,15 +2973,15 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         String modelNo = tfEditInvModelNo.getText().trim();
         String modelName = tfEditInvModelName.getText().trim();
         String brand = comboEditInvBrand.getSelectedItem().toString().trim();
-        String os = comboEditInvOs.getSelectedItem().toString().trim();
-        String range = radioBtnEditInvHigh.isSelected() == true ? "High" : radioBtnEditInvMid.isSelected() == true ? "Mid" : radioBtnEditInvLow.isSelected() == true ? "Low" : null;
+        String category = comboEditInvCategory.getSelectedItem().toString().trim();
+        String recommendation = radioBtnEditInvHigh.isSelected() == true ? "High" : radioBtnEditInvMid.isSelected() == true ? "Mid" : radioBtnEditInvLow.isSelected() == true ? "Low" : null;
         int costPrice = Integer.parseInt(tfEditInvCostPrice.getText().trim());
         int sellingPrice = Integer.parseInt(tfEditInvSellingPrice.getText().trim());
         int quantity = Integer.parseInt(tfEditInvQuantity.getText().trim());
         
         InventoryManagement im = arraylistInventory.get(indexEditInv);
         if (modelNo.equalsIgnoreCase(im.getModelNo()) && modelName.equalsIgnoreCase(im.getModelName()) && brand.equalsIgnoreCase(im.getBrand()) && 
-        os.equalsIgnoreCase(im.getOs()) && range.equalsIgnoreCase(im.getRange()) && costPrice == im.getCost() && sellingPrice == im.getSellingPrice() &&
+        category.equalsIgnoreCase(im.getCategory()) && recommendation.equalsIgnoreCase(im.getRecommendation()) && costPrice == im.getCost() && sellingPrice == im.getSellingPrice() &&
         quantity == im.getQuantity()) {
             lblEditInvMsg.setVisible(true);
             TimerTask task = new TimerTask () {
@@ -2994,8 +2997,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             im.setModelNo(modelNo);
             im.setModelName(modelName);
             im.setBrand(brand);
-            im.setOs(os);
-            im.setRange(range);
+            im.setCategory(category);
+            im.setRecommendation(recommendation);
             im.setCost(costPrice);
             im.setSellingPrice(sellingPrice);
             im.setQuantity(quantity);
@@ -3153,7 +3156,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
           return;
         }
         else{
-            if (arraylistInventory.size() > 0 && arraylistInventory.size() < 12) {
+            if (arraylistSales.size() > 0 && arraylistSales.size() < 12) {
                 for(InventoryManagement im : arraylistInventory) {
                     if(im.getModelNo().equalsIgnoreCase(modelNumber) && im.getBrand().equalsIgnoreCase(brand)) {
                         if(im.getQuantity() >= quantity) {
@@ -3856,8 +3859,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             arrayForTable[0] = im.getModelNo();
             arrayForTable[1] = im.getModelName();
             arrayForTable[2] = im.getBrand();
-            arrayForTable[3] = im.getOs();
-            arrayForTable[4] = im.getRange();
+            arrayForTable[3] = im.getCategory();
+            arrayForTable[4] = im.getRecommendation();
             arrayForTable[5] = String.valueOf(im.getCost());
             arrayForTable[6] = String.valueOf(im.getSellingPrice());
             arrayForTable[7] = String.valueOf(im.getQuantity());
@@ -4111,8 +4114,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 lines = im.getModelNo();
                 lines += "," + im.getModelName();
                 lines += "," + im.getBrand();
-                lines += "," + im.getOs();
-                lines += "," + im.getRange();
+                lines += "," + im.getCategory();
+                lines += "," + im.getRecommendation();
                 lines += "," + String.valueOf(im.getCost());
                 lines += "," + String.valueOf(im.getSellingPrice());
                 lines += "," + String.valueOf(im.getQuantity());
@@ -4163,7 +4166,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         tfModelNo.setText(null);
         tfModelName.setText(null);
         comboBoxBrand.setSelectedIndex(0);
-        comboOs.setSelectedIndex(0);
+        comboCategory.setSelectedIndex(0);
         btnGrpAddInventory.clearSelection();
         radioBtnHigh.setSelected(true);
         tfCostPrice.setText(null);
@@ -4181,7 +4184,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             InventoryManagement im = arraylistInventory.get(array[i]);
             modelNumber += im.getModelNo() + ", ";
             brand += im.getBrand() + ", ";
-            os += im.getOs() + ", ";
+            os += im.getCategory()+ ", ";
             costPrice += String.valueOf(im.getCost()) + ", ";
         }
         modelNumber = modelNumber.substring(0, modelNumber.length() - 2);
@@ -4345,9 +4348,9 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private javax.swing.JComboBox<String> comboBoxModelNumberEdit;
     private javax.swing.JComboBox<String> comboBoxSearch;
     private javax.swing.JComboBox<String> comboBoxSearchSales;
+    private javax.swing.JComboBox<String> comboCategory;
     private javax.swing.JComboBox<String> comboEditInvBrand;
-    private javax.swing.JComboBox<String> comboEditInvOs;
-    private javax.swing.JComboBox<String> comboOs;
+    private javax.swing.JComboBox<String> comboEditInvCategory;
     private javax.swing.JFrame frameAddInventory;
     private javax.swing.JFrame frameAddSales;
     private javax.swing.JFrame frameEditInventory;
@@ -4385,20 +4388,21 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private javax.swing.JLabel lblBrand;
     private javax.swing.JLabel lblBrandSales;
     private javax.swing.JLabel lblBrandSalesEdit;
+    private javax.swing.JLabel lblCategory;
     private javax.swing.JLabel lblCostPrice;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblDateEdit;
     private javax.swing.JLabel lblDiscount;
     private javax.swing.JLabel lblDiscountEdit;
     private javax.swing.JLabel lblEditInvBrand;
+    private javax.swing.JLabel lblEditInvCategory;
     private javax.swing.JLabel lblEditInvCostPrice;
     private javax.swing.JLabel lblEditInvModelName;
     private javax.swing.JLabel lblEditInvModelNo;
     private javax.swing.JLabel lblEditInvMsg;
     private javax.swing.JLabel lblEditInvMsgSales;
-    private javax.swing.JLabel lblEditInvOS;
     private javax.swing.JLabel lblEditInvQuantity;
-    private javax.swing.JLabel lblEditInvRange;
+    private javax.swing.JLabel lblEditInvRecommendation;
     private javax.swing.JLabel lblEditInvSellingPrice;
     private javax.swing.JLabel lblFirstName;
     private javax.swing.JLabel lblFirstNameEdit;
@@ -4417,11 +4421,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private javax.swing.JLabel lblModelNo;
     private javax.swing.JLabel lblModelNoSales;
     private javax.swing.JLabel lblModelNoSalesEdit;
-    private javax.swing.JLabel lblOS;
     private javax.swing.JLabel lblQuantity;
     private javax.swing.JLabel lblQuantitySales;
     private javax.swing.JLabel lblQuantitySalesEdit;
-    private javax.swing.JLabel lblRange;
+    private javax.swing.JLabel lblRecommendation;
     private javax.swing.JLabel lblSalePrice;
     private javax.swing.JLabel lblSalePriceEdit;
     private javax.swing.JLabel lblSearch;
