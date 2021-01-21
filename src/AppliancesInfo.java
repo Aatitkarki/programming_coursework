@@ -1,16 +1,9 @@
 import java.awt.CardLayout;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
-import java.awt.print.PageFormat;
-import java.awt.print.Printable;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -19,17 +12,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.TimerTask;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.util.Timer;
-import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -53,7 +43,9 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private boolean isSaved = true;
     private boolean isEditSales = false;
     private boolean isNew = true;
+    private boolean isWindowOpen = false;
     private String path = "";
+    private byte openedWindow = 0;
     private ArrayList <InventoryManagement> arraylistInventory = new ArrayList <> ();
     private ArrayList <Sales> arraylistSales = new ArrayList <> ();
     private ArrayList <InventoryManagement> temp = new ArrayList <> ();
@@ -175,6 +167,25 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         frameSearch.setResizable(false);
         frameSearch.setLocationRelativeTo(null);
         frameSearch.add(panelCard);
+        frameSearch.setFocusableWindowState(true);
+        //Adding window listener to the frame and creating a windowclosing event
+        frameSearch.addWindowListener(new WindowAdapter () {
+            @Override
+            public void windowClosing(WindowEvent we) {
+                isWindowOpen = false;
+                openedWindow = 0;
+            }
+            @Override
+            public void windowLostFocus(WindowEvent we) {
+                frameSearch.requestFocus();
+                frameSearch.toFront();
+            }
+            @Override
+            public void windowDeactivated(WindowEvent we) {
+                frameSearch.requestFocus();
+                frameSearch.toFront();
+            }
+        });
         panelCardSales.setLayout(clSales);
         panelCardSales.add(panelSearchSales, "1");
         panelCardSales.add(panelSearchSalesCombo, "2");
@@ -183,6 +194,24 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         frameSearchSales.setResizable(false);
         frameSearchSales.setLocationRelativeTo(null);
         frameSearchSales.add(panelCardSales);
+        frameSearch.setFocusableWindowState(true);
+        frameSearchSales.addWindowListener(new WindowAdapter () {
+            @Override
+            public void windowClosing(WindowEvent we) {
+                isWindowOpen = false;
+                openedWindow = 0;
+            }
+            @Override
+            public void windowLostFocus(WindowEvent we) {
+                frameSearchSales.requestFocus();
+                frameSearchSales.toFront();
+            }
+            @Override
+            public void windowDeactivated(WindowEvent we) {
+                frameSearchSales.requestFocus();
+                frameSearchSales.toFront();
+            }
+        });
         //Adding keylistener and document listeners to the constructor 
         tfQuantitySales.getDocument().addDocumentListener(doc);
         tfQuantitySalesEdit.getDocument().addDocumentListener(docEdit);
@@ -417,6 +446,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             }
             public void windowLostFocus(java.awt.event.WindowEvent evt) {
                 frameAddInventoryWindowLostFocus(evt);
+            }
+        });
+        frameAddInventory.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                frameAddInventoryWindowClosing(evt);
             }
         });
 
@@ -837,6 +871,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 frameEditInventoryWindowLostFocus(evt);
             }
         });
+        frameEditInventory.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                frameEditInventoryWindowClosing(evt);
+            }
+        });
 
         panelEditInventory.setBackground(new java.awt.Color(0, 0, 51));
         panelEditInventory.setForeground(new java.awt.Color(255, 255, 255));
@@ -1047,6 +1086,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 frameEditSalesWindowLostFocus(evt);
             }
         });
+        frameEditSales.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                frameEditSalesWindowClosing(evt);
+            }
+        });
 
         panelEditSales.setBackground(new java.awt.Color(0, 0, 51));
         panelEditSales.setForeground(new java.awt.Color(255, 255, 255));
@@ -1248,6 +1292,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             }
             public void windowLostFocus(java.awt.event.WindowEvent evt) {
                 frameInvoiceWindowLostFocus(evt);
+            }
+        });
+        frameInvoice.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                frameInvoiceWindowClosing(evt);
             }
         });
 
@@ -2437,35 +2486,16 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jMnuItmNewActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        if (isInventoryTableSelected == true) {
-            if (arraylistInventory.size() < 12) {
-                frameAddInventory.setVisible(true);
-                frameAddInventory.setLocationRelativeTo(null);
-            }
-            else {
-                int confirmation = JOptionPane.showConfirmDialog(rootPane, "Max limit for inventory table reached. Create new file?", "New File?", JOptionPane.YES_NO_OPTION);
-                   switch (confirmation){
-                        case JOptionPane.YES_OPTION:
-                            jMnuItmNewActionPerformed(evt);
-                            break;
-                        case JOptionPane.NO_OPTION:
-                            break;
-                        case JOptionPane.CLOSED_OPTION:
-                            break;
-                   }
-            }
-        }
-        else {
-            if (!arraylistInventory.isEmpty()) {
-                if (arraylistSales.size() < 12) {
-                    for(InventoryManagement im:arraylistInventory){
-                        comboBoxModelNumber.addItem(im.getModelNo());
-                            }
-                    frameAddSales.setVisible(true);                    
-                    frameAddSales.setLocationRelativeTo(null);
+        if (!isWindowOpen) {
+                if (isInventoryTableSelected == true) {
+                if (arraylistInventory.size() < 12) {
+                    frameAddInventory.setVisible(true);
+                    frameAddInventory.setLocationRelativeTo(null);
+                    openedWindow = 1;
+                    isWindowOpen = true;
                 }
                 else {
-                    int confirmation = JOptionPane.showConfirmDialog(rootPane, "Max limit for sales table reached. Create new file?", "New File?", JOptionPane.YES_NO_OPTION);
+                    int confirmation = JOptionPane.showConfirmDialog(rootPane, "Max limit for inventory table reached. Create new file?", "New File?", JOptionPane.YES_NO_OPTION);
                        switch (confirmation){
                             case JOptionPane.YES_OPTION:
                                 jMnuItmNewActionPerformed(evt);
@@ -2478,8 +2508,36 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 }
             }
             else {
-                JOptionPane.showMessageDialog(rootPane,"There is nothing in the inventory", "Error!", 0);
+                if (!arraylistInventory.isEmpty()) {
+                    if (arraylistSales.size() < 12) {
+                        for(InventoryManagement im:arraylistInventory){
+                            comboBoxModelNumber.addItem(im.getModelNo());
+                        }
+                        frameAddSales.setVisible(true);                    
+                        frameAddSales.setLocationRelativeTo(null);
+                        openedWindow = 2;
+                        isWindowOpen = true;
+                    }
+                    else {
+                        int confirmation = JOptionPane.showConfirmDialog(rootPane, "Max limit for sales table reached. Create new file?", "New File?", JOptionPane.YES_NO_OPTION);
+                           switch (confirmation){
+                                case JOptionPane.YES_OPTION:
+                                    jMnuItmNewActionPerformed(evt);
+                                    break;
+                                case JOptionPane.NO_OPTION:
+                                    break;
+                                case JOptionPane.CLOSED_OPTION:
+                                    break;
+                           }
+                    }
+                }
+                else {
+                    JOptionPane.showMessageDialog(rootPane,"There is nothing in the inventory.", "Error!", 0);
+                }
             }
+        }
+        else {
+            windowOpenedError();
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
@@ -2500,127 +2558,142 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_jMnuItmSaveActionPerformed
 
     private void btnInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInvoiceActionPerformed
-        if (!arraylistSales.isEmpty()) {
-            if(tblSales.getSelectedRow() >= 0) {
-                int selection = tblSales.getSelectedRow();
-                Sales sales = arraylistSales.get(selection);
-                String firstName = null;
-                String lastName = null;
-                String date = null;
-                String modelNumber = null;
-                String brand = null;
-                String quantity = null;
-                String discount = null;
-                String total = null;
-                try {
-                    firstName = sales.getFirstName();
-                    lastName = sales.getLastName();
-                    date = sales.getDate();
-                    modelNumber = sales.getModelNumber();
-                    brand = sales.getBrand();
-                    quantity = String.valueOf(sales.getQuantity());
-                    discount = String.valueOf(sales.getDiscount()) + "%";
-                    total = String.valueOf(sales.getTotal());
+        if (!isWindowOpen) {
+            if (!arraylistSales.isEmpty()) {
+                if(tblSales.getSelectedRow() >= 0) {
+                    int selection = tblSales.getSelectedRow();
+                    Sales sales = arraylistSales.get(selection);
+                    String firstName = null;
+                    String lastName = null;
+                    String date = null;
+                    String modelNumber = null;
+                    String brand = null;
+                    String quantity = null;
+                    String discount = null;
+                    String total = null;
+                    try {
+                        firstName = sales.getFirstName();
+                        lastName = sales.getLastName();
+                        date = sales.getDate();
+                        modelNumber = sales.getModelNumber();
+                        brand = sales.getBrand();
+                        quantity = String.valueOf(sales.getQuantity());
+                        discount = String.valueOf(sales.getDiscount()) + "%";
+                        total = String.valueOf(sales.getTotal());
+                    }
+                    catch (NullPointerException npe) {
+                        JOptionPane.showMessageDialog(rootPane, npe, "Error!", 0); 
+                        return;
+                    }
+                    lblSetFirstName.setText(firstName);
+                    lblSetLastName.setText(lastName);
+                    lblSetDate.setText(date);
+                    lblSetModelNumber.setText(modelNumber);
+                    lblSetBrand.setText(brand);
+                    lblSetDiscount.setText(discount);
+                    lblSetQuantity.setText(quantity);
+                    lblSetTotal.setText(total);
+                    frameInvoice.setVisible(true);
+                    frameInvoice.setLocationRelativeTo(null);
+                    isWindowOpen = true;
+                    openedWindow = 5;
                 }
-                catch (NullPointerException npe) {
-                    JOptionPane.showMessageDialog(rootPane, npe, "Error!", 0); 
-                    return;
+                else {
+                JOptionPane.showMessageDialog(rootPane, "No row is selected in the sales table.", "Error!", 0);
                 }
-                lblSetFirstName.setText(firstName);
-                lblSetLastName.setText(lastName);
-                lblSetDate.setText(date);
-                lblSetModelNumber.setText(modelNumber);
-                lblSetBrand.setText(brand);
-                lblSetDiscount.setText(discount);
-                lblSetQuantity.setText(quantity);
-                lblSetTotal.setText(total);
-                frameInvoice.setVisible(true);
-                frameInvoice.setLocationRelativeTo(null);
             }
             else {
-            JOptionPane.showMessageDialog(rootPane, "No row is selected in the sales table.", "Error!", 0);
+                JOptionPane.showMessageDialog(rootPane, "No entry in  the sales list to create an invoice.", "Error!", 0);
             }
         }
         else {
-            JOptionPane.showMessageDialog(rootPane, "No entry in  the sales list to create an invoice..", "Error!", 0);
+            windowOpenedError();
         }
     }//GEN-LAST:event_btnInvoiceActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        if (isInventoryTableSelected == true) {
-            indexEditInv = tblInventory.getSelectedRow();
-            if (indexEditInv >= 0) {
-                lblEditInvMsg.setVisible(false);
-                frameEditInventory.setVisible(true);
-                frameEditInventory.setLocationRelativeTo(null);
-                InventoryManagement imOld = arraylistInventory.get(indexEditInv);
-                String modelNoOld = imOld.getModelNo();
-                String modelNameOld = imOld.getModelName();
-                String brandOld = imOld.getBrand();
-                String categoryOld = imOld.getCategory();
-                String recommendationOld = imOld.getRecommendation();
-                String costOld = String.valueOf(imOld.getCost());
-                String sellingPriceOld = String.valueOf(imOld.getSellingPrice());
-                String quantityOld = String.valueOf(imOld.getQuantity());
-                
-                tfEditInvModelNo.setText(modelNoOld);
-                tfEditInvModelName.setText(modelNameOld);               
-                comboEditInvBrand.setSelectedItem(brandOld);
-                comboEditInvCategory.setSelectedItem(categoryOld);
-                
-                if (recommendationOld.equals("High")) {
-                    radioBtnEditInvHigh.setSelected(true);
-                }
-                else if (recommendationOld.equals("Mid")) {
-                    radioBtnEditInvMid.setSelected(true);
+        if (!isWindowOpen) {
+            if (isInventoryTableSelected == true) {
+                indexEditInv = tblInventory.getSelectedRow();
+                if (indexEditInv >= 0) {
+                    lblEditInvMsg.setVisible(false);
+                    frameEditInventory.setVisible(true);
+                    frameEditInventory.setLocationRelativeTo(null);
+                    isWindowOpen = true;
+                    openedWindow = 3;
+                    InventoryManagement imOld = arraylistInventory.get(indexEditInv);
+                    String modelNoOld = imOld.getModelNo();
+                    String modelNameOld = imOld.getModelName();
+                    String brandOld = imOld.getBrand();
+                    String categoryOld = imOld.getCategory();
+                    String recommendationOld = imOld.getRecommendation();
+                    String costOld = String.valueOf(imOld.getCost());
+                    String sellingPriceOld = String.valueOf(imOld.getSellingPrice());
+                    String quantityOld = String.valueOf(imOld.getQuantity());
+
+                    tfEditInvModelNo.setText(modelNoOld);
+                    tfEditInvModelName.setText(modelNameOld);               
+                    comboEditInvBrand.setSelectedItem(brandOld);
+                    comboEditInvCategory.setSelectedItem(categoryOld);
+
+                    if (recommendationOld.equals("High")) {
+                        radioBtnEditInvHigh.setSelected(true);
+                    }
+                    else if (recommendationOld.equals("Mid")) {
+                        radioBtnEditInvMid.setSelected(true);
+                    }
+                    else {
+                        radioBtnEditInvLow.setSelected(true);
+                    }
+
+                    tfEditInvCostPrice.setText(costOld);               
+                    tfEditInvSellingPrice.setText(sellingPriceOld);
+                    tfEditInvQuantity.setText(quantityOld);
+                    isSaved = false;
                 }
                 else {
-                    radioBtnEditInvLow.setSelected(true);
+                    JOptionPane.showMessageDialog(rootPane, "Please select row to edit.", "Error", 0);
                 }
-                
-                tfEditInvCostPrice.setText(costOld);               
-                tfEditInvSellingPrice.setText(sellingPriceOld);
-                tfEditInvQuantity.setText(quantityOld);
-                isSaved = false;
             }
             else {
-                JOptionPane.showMessageDialog(rootPane, "Please select row to edit.", "Error", 0);
+                isEditSales = true;
+                indexEditSales = tblSales.getSelectedRow();
+                for(InventoryManagement im:arraylistInventory){
+                    comboBoxModelNumberEdit.addItem(im.getModelNo());
+                }
+                if (indexEditSales >= 0) {
+                   lblEditInvMsgSales.setVisible(false);
+                   frameEditSales.setVisible(true);
+                   frameEditSales.setLocationRelativeTo(null);
+                   isWindowOpen = true;
+                   openedWindow = 4;
+                   Sales sales = arraylistSales.get(indexEditSales);
+                   String firstNameOld = sales.getFirstName();
+                   String lastNameOld = sales.getLastName();
+                   String dateOld = sales.getDate();
+                   String modelNumberOld = sales.getModelNumber();
+                   String brandOld = sales.getBrand();
+                   String discountOld = String.valueOf(sales.getDiscount());
+                   String quantityOld = String.valueOf(sales.getQuantity());
+                   String totalOld = String.valueOf(sales.getTotal());
+
+                   tfFirstNameEdit.setText(firstNameOld);
+                   tfLastNameEdit.setText(lastNameOld);
+                   tfDateEdit.setText(dateOld);
+                   comboBoxModelNumberEdit.setSelectedItem(modelNumberOld);
+                   comboBoxBrandSalesEdit.setSelectedItem(brandOld);
+                   tfQuantitySalesEdit.setText(quantityOld);
+                   comboBoxDiscountEdit.setSelectedItem(discountOld);
+                   tfTotal.setText(totalOld);
+                }
+                else {
+                    JOptionPane.showMessageDialog(rootPane, "Please select row to edit.", "Error", 0);
+                }
             }
         }
         else {
-            isEditSales = true;
-            indexEditSales = tblSales.getSelectedRow();
-            for(InventoryManagement im:arraylistInventory){
-                        comboBoxModelNumberEdit.addItem(im.getModelNo());}
-            if (indexEditSales >= 0) {
-               lblEditInvMsgSales.setVisible(false);
-               frameEditSales.setVisible(true);
-               frameEditSales.setLocationRelativeTo(null);
-               Sales sales = arraylistSales.get(indexEditSales);
-               String firstNameOld = sales.getFirstName();
-               String lastNameOld = sales.getLastName();
-               String dateOld = sales.getDate();
-               String modelNumberOld = sales.getModelNumber();
-               String brandOld = sales.getBrand();
-               String discountOld = String.valueOf(sales.getDiscount());
-               String quantityOld = String.valueOf(sales.getQuantity());
-               String totalOld = String.valueOf(sales.getTotal());
-               
-               tfFirstNameEdit.setText(firstNameOld);
-               tfLastNameEdit.setText(lastNameOld);
-               tfDateEdit.setText(dateOld);
-               comboBoxModelNumberEdit.setSelectedItem(modelNumberOld);
-               comboBoxBrandSalesEdit.setSelectedItem(brandOld);
-               tfQuantitySalesEdit.setText(quantityOld);
-               comboBoxDiscountEdit.setSelectedItem(discountOld);
-               tfTotal.setText(totalOld);
-            }
-            else {
-                JOptionPane.showMessageDialog(rootPane, "Please select row to edit.", "Error", 0);
-            }
+            windowOpenedError();
         }
-        
-        
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void tfCostPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCostPriceKeyTyped
@@ -2711,10 +2784,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 boolean modelExists=false;
                 if(arraylistInventory.size()!=0){
                     Object[] doesModelExist = doesModelOfSameBrandExist(modelNo,brand);
-                modelExists = Boolean.parseBoolean(doesModelExist[0].toString());
-                index = Integer.parseInt(doesModelExist[1].toString());
-                System.out.print(index);
-                
+                    modelExists = Boolean.parseBoolean(doesModelExist[0].toString());
+                    index = Integer.parseInt(doesModelExist[1].toString());
                 }
                 if (!modelExists) {
                     InventoryManagement im = new InventoryManagement(modelNo, modelName, brand,category, recommendation, costPrice, sellingPrice, quantity);
@@ -2829,24 +2900,33 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        if(!arraylistInventory.isEmpty() && isInventoryTableSelected == true) {
-            lblSearchErrorCombo.setVisible(false);
-            lblSearchError.setVisible(false);
-            frameSearch.setVisible(true);
-            frameSearch.setLocationRelativeTo(null);
+        if (!isWindowOpen) {
+            if(!arraylistInventory.isEmpty() && isInventoryTableSelected == true) {
+                lblSearchErrorCombo.setVisible(false);
+                lblSearchError.setVisible(false);
+                frameSearch.setVisible(true);
+                frameSearch.setLocationRelativeTo(null);
+                isWindowOpen = true;
+                openedWindow = 6;
 
-        }
-        else if (!arraylistSales.isEmpty() && isInventoryTableSelected == false) {
-            lblSearchErrorSalesCombo.setVisible(false);
-            lblSearchErrorSales.setVisible(false);
-            frameSearchSales.setVisible(true);
-            frameSearchSales.setLocationRelativeTo(null);
-        }
-        else if (arraylistSales.isEmpty() && isInventoryTableSelected == true) {
-            JOptionPane.showMessageDialog(rootPane, "There is no inventory data to perform search operation.", "Error", 0);
+            }
+            else if (!arraylistSales.isEmpty() && isInventoryTableSelected == false) {
+                lblSearchErrorSalesCombo.setVisible(false);
+                lblSearchErrorSales.setVisible(false);
+                frameSearchSales.setVisible(true);
+                frameSearchSales.setLocationRelativeTo(null);
+                isWindowOpen = true;
+                openedWindow = 7;
+            }
+            else if (arraylistSales.isEmpty() && isInventoryTableSelected == true) {
+                JOptionPane.showMessageDialog(rootPane, "There are no inventory data to perform search operation.", "Error", 0);
+            }
+            else {
+                JOptionPane.showMessageDialog(rootPane, "There are no sales data to perform search operation.", "Error", 0);
+            }
         }
         else {
-            JOptionPane.showMessageDialog(rootPane, "There is no sales data to perform search operation.", "Error", 0);
+            windowOpenedError();
         }
     }//GEN-LAST:event_btnSearchActionPerformed
 
@@ -3339,8 +3419,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
        if(!arraylistInventory.isEmpty()){
        if(!isEditSales && isNew) {
                 String getModelNumber = comboBoxModelNumber.getSelectedItem().toString();
-                System.out.println(getModelNumber);
-                
                 if(!getModelNumber.isEmpty()) {
                     for (InventoryManagement im : arraylistInventory) {
                         if (im.getModelNo().equalsIgnoreCase(getModelNumber)) {
@@ -3359,7 +3437,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                             }
                         }
                     }
-                    System.out.println("Two");
                     JOptionPane.showMessageDialog(rootPane, "No such model number exists", "Error!", 0);
                 }
             }
@@ -3545,7 +3622,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         }
                     }
                 }
-                System.out.println("One");
                 JOptionPane.showMessageDialog(rootPane, "No such model number exists", "Error!", 0);
             }
         }
@@ -3624,8 +3700,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_tfDateEditKeyTyped
 
     private void frameAddSalesWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameAddSalesWindowClosing
-        clearSalesForm();
-        frameAddSales.dispose();
+        isWindowOpen = false;
+        openedWindow = 0;
     }//GEN-LAST:event_frameAddSalesWindowClosing
 
     private void frameInvoiceWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameInvoiceWindowLostFocus
@@ -3806,6 +3882,26 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             evt.consume();
         }
     }//GEN-LAST:event_tfLastNameKeyTyped
+
+    private void frameAddInventoryWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameAddInventoryWindowClosing
+        isWindowOpen = false;
+        openedWindow = 0;
+    }//GEN-LAST:event_frameAddInventoryWindowClosing
+
+    private void frameEditInventoryWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameEditInventoryWindowClosing
+        isWindowOpen = false;
+        openedWindow = 0;
+    }//GEN-LAST:event_frameEditInventoryWindowClosing
+
+    private void frameEditSalesWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameEditSalesWindowClosing
+        isWindowOpen = false;
+        openedWindow = 0;
+    }//GEN-LAST:event_frameEditSalesWindowClosing
+
+    private void frameInvoiceWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameInvoiceWindowClosing
+        isWindowOpen = false;
+        openedWindow = 0;
+    }//GEN-LAST:event_frameInvoiceWindowClosing
     // adds inventory's arraylist data to the inventory table
     private void addToInventoryTable () {
         String [] arrayForTable = {null, null, null, null, null, null, null, null};
@@ -4059,8 +4155,33 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         radioBtnHigh.setSelected(true);
         tfCostPrice.setText(null);
         tfSellingPrice.setText(null);
-        tfQuantity.setText(null);
-        
+        tfQuantity.setText(null); 
+    }
+    private void windowOpenedError() {
+        if (openedWindow == 1) {
+            JOptionPane.showMessageDialog(frameAddInventory,"A Window is already opened.", "Error!", 0);
+        }
+        else if (openedWindow == 2) {
+            JOptionPane.showMessageDialog(frameAddSales,"A Window is already opened.", "Error!", 0);
+        }
+        else if (openedWindow == 3) {
+            JOptionPane.showMessageDialog(frameEditInventory,"A Window is already opened.", "Error!", 0);
+        }
+        else if (openedWindow == 4) {
+            JOptionPane.showMessageDialog(frameEditSales,"A Window is already opened.", "Error!", 0);
+        }
+        else if (openedWindow == 5) {
+            JOptionPane.showMessageDialog(frameInvoice,"A Window is already opened.", "Error!", 0);
+        }
+        else if (openedWindow == 6) {
+            JOptionPane.showMessageDialog(frameSearch,"A Window is already opened.", "Error!", 0);
+        }
+        else if (openedWindow == 7) {
+            JOptionPane.showMessageDialog(frameSearchSales,"A Window is already opened.", "Error!", 0);
+        }
+        else {
+            JOptionPane.showMessageDialog(null,"Unexpected Error.", "Error!", 0);
+        }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
