@@ -1800,7 +1800,7 @@
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace pref="70" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1930,7 +1930,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Brand"/>
+                <Property name="text" type="java.lang.String" value="Category"/>
               </Properties>
               <Events>
                 <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="radioBtnBrandItemStateChanged"/>

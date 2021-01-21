@@ -1487,7 +1487,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         radioBtnBrand.setBackground(new java.awt.Color(0, 0, 51));
         btnGroupSearch.add(radioBtnBrand);
         radioBtnBrand.setForeground(new java.awt.Color(255, 255, 255));
-        radioBtnBrand.setText("Brand");
+        radioBtnBrand.setText("Category");
         radioBtnBrand.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 radioBtnBrandItemStateChanged(evt);
@@ -1526,7 +1526,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                                         .addComponent(jButtonSearchArray)
                                         .addGap(18, 18, 18)
                                         .addComponent(jButtonSearchCancel)))))))
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelSearchLayout.setVerticalGroup(
             panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
