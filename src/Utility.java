@@ -248,20 +248,28 @@ class Utility {
     public void showSearchResultsInventory(int [] array, ArrayList <InventoryManagement> arraylistInventory) {
         String modelNumber = "";
         String brand = "";
-        String os = "";
+        String category = "";
         String costPrice = "";
         for (int i = 0; i < array.length; i++) {
             InventoryManagement im = arraylistInventory.get(array[i]);
             modelNumber += im.getModelNo() + ", ";
             brand += im.getBrand() + ", ";
-            os += im.getCategory()+ ", ";
+            if(i==0){
+             category = im.getCategory();   
+            }
             costPrice += String.valueOf(im.getCost()) + ", ";
         }
         modelNumber = modelNumber.substring(0, modelNumber.length() - 2);
         brand = brand.substring(0, brand.length() - 2);
-        os = os.substring(0, os.length() - 2);
         costPrice = costPrice.substring(0, costPrice.length() - 2);
-        JOptionPane.showMessageDialog(null, array.length + " entries found." + "\nModel Numbers : " + modelNumber + "\nBrands : " + brand + "\nOS : " + os + "\nCost : " + costPrice, "Search Results", JOptionPane.INFORMATION_MESSAGE);
+        if(array.length==1){
+            JOptionPane.showMessageDialog(null, array.length + " entry found of Category "+category+"\nModel Number : " + modelNumber + "\nBrand : " + brand + "\nCost : " + costPrice, "Search Results", JOptionPane.INFORMATION_MESSAGE);
+        
+        }else{
+            JOptionPane.showMessageDialog(null, array.length + " entries found of Category "+category+"\nModel Numbers : " + modelNumber + "\nBrands : " + brand + "\nCost : " + costPrice, "Search Results", JOptionPane.INFORMATION_MESSAGE);
+        
+        }
+       
     }
     //Multiple search output display method
     public void showSearchResultsSales(int [] array, ArrayList <Sales> arraylistSales) {
