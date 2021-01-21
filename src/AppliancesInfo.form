@@ -1780,27 +1780,27 @@
                               <Component id="radioBtnCostPrice" min="-2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                                      <Component id="jButtonSearchArray" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="jButtonSearchCancel" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="1" attributes="0">
-                                          <Component id="lblSearchError" min="-2" max="-2" attributes="0"/>
-                                          <Group type="102" attributes="0">
-                                              <Component id="radioBtnSellingPrice" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
-                                              <Component id="radioBtnModelName" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
+                                      <Component id="radioBtnSellingPrice" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                                      <Component id="radioBtnModelName" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="radioBtnBrand" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="lblSearchError" min="-2" max="-2" attributes="0"/>
+                                          <Group type="102" attributes="0">
+                                              <Component id="jButtonSearchArray" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              <Component id="jButtonSearchCancel" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
                                   </Group>
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace pref="68" max="32767" attributes="0"/>
+                      <EmptySpace pref="70" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1987,7 +1987,7 @@
                                       <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                                       <Component id="radioBtnModelNameCombo" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="radioBtnBrandCombo" min="-2" max="-2" attributes="0"/>
+                                      <Component id="radioBtnCategoryCombo" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="21" pref="21" max="-2" attributes="0"/>
@@ -2017,7 +2017,7 @@
                           <Component id="radioBtnCostPriceCombo" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="radioBtnSellingPriceCombo" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="radioBtnModelNameCombo" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="radioBtnBrandCombo" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="radioBtnCategoryCombo" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                       <Component id="lblSearchErrorCombo" min="-2" max="-2" attributes="0"/>
@@ -2065,7 +2065,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Smartphone of a Brand"/>
+                <Property name="text" type="java.lang.String" value="SmartPhone by Category"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonSearchArrayComboActionPerformed"/>
@@ -2105,7 +2105,7 @@
                 <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="radioBtnModelNameComboItemStateChanged"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JRadioButton" name="radioBtnBrandCombo">
+            <Component class="javax.swing.JRadioButton" name="radioBtnCategoryCombo">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="33" green="0" red="0" type="rgb"/>
@@ -2117,7 +2117,7 @@
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="selected" type="boolean" value="true"/>
-                <Property name="text" type="java.lang.String" value="Brand"/>
+                <Property name="text" type="java.lang.String" value="Category"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblSearchErrorCombo">
@@ -2133,8 +2133,12 @@
             </Component>
             <Component class="javax.swing.JComboBox" name="comboBoxSearch">
               <Properties>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new DefaultComboBoxModel &lt;&gt; (elementsForComboBoxBrand())" type="code"/>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="3">
+                    <StringItem index="0" value="Basic Phone"/>
+                    <StringItem index="1" value="Feature Phone"/>
+                    <StringItem index="2" value="Smartphone"/>
+                  </StringArray>
                 </Property>
               </Properties>
               <AuxValues>
@@ -2669,7 +2673,7 @@
     <Property name="defaultCloseOperation" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
       <Connection code="DO_NOTHING_ON_CLOSE" type="code"/>
     </Property>
-    <Property name="title" type="java.lang.String" value="Mobile Inventory Management"/>
+    <Property name="title" type="java.lang.String" value="Appliances Info"/>
     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
       <Color blue="fa" green="fa" red="ff" type="rgb"/>
     </Property>

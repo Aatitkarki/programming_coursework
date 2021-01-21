@@ -188,7 +188,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         tfQuantitySalesEdit.getDocument().addDocumentListener(docEdit);
         //adding keylistener here because other good ways to initialize the keylistener with the frame was not found
         addKeyListener(this);
-        checkDirs();
+        Utility util = new Utility();
+        util.checkDirs();
     }
 
     /**
@@ -332,7 +333,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         jButtonSearchArrayCombo = new javax.swing.JButton();
         radioBtnSellingPriceCombo = new javax.swing.JRadioButton();
         radioBtnModelNameCombo = new javax.swing.JRadioButton();
-        radioBtnBrandCombo = new javax.swing.JRadioButton();
+        radioBtnCategoryCombo = new javax.swing.JRadioButton();
         lblSearchErrorCombo = new javax.swing.JLabel();
         comboBoxSearch = new javax.swing.JComboBox<>();
         panelCardSales = new javax.swing.JPanel();
@@ -1512,20 +1513,20 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         .addComponent(radioBtnCostPrice)
                         .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelSearchLayout.createSequentialGroup()
-                                .addGap(25, 25, 25)
-                                .addComponent(jButtonSearchArray)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButtonSearchCancel))
+                                .addComponent(radioBtnSellingPrice)
+                                .addGap(16, 16, 16)
+                                .addComponent(radioBtnModelName)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(radioBtnBrand))
                             .addGroup(panelSearchLayout.createSequentialGroup()
-                                .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGap(25, 25, 25)
+                                .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblSearchError)
                                     .addGroup(panelSearchLayout.createSequentialGroup()
-                                        .addComponent(radioBtnSellingPrice)
-                                        .addGap(16, 16, 16)
-                                        .addComponent(radioBtnModelName)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(radioBtnBrand)))))
-                .addContainerGap(68, Short.MAX_VALUE))
+                                        .addComponent(jButtonSearchArray)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jButtonSearchCancel)))))))
+                .addContainerGap(70, Short.MAX_VALUE))
         );
         panelSearchLayout.setVerticalGroup(
             panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1571,7 +1572,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         jButtonSearchArrayCombo.setBackground(new java.awt.Color(0, 0, 51));
         jButtonSearchArrayCombo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jButtonSearchArrayCombo.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonSearchArrayCombo.setText("Smartphone of a Brand");
+        jButtonSearchArrayCombo.setText("SmartPhone by Category");
         jButtonSearchArrayCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSearchArrayComboActionPerformed(evt);
@@ -1598,17 +1599,17 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             }
         });
 
-        radioBtnBrandCombo.setBackground(new java.awt.Color(0, 0, 51));
-        btnGrpSearchCombo.add(radioBtnBrandCombo);
-        radioBtnBrandCombo.setForeground(new java.awt.Color(255, 255, 255));
-        radioBtnBrandCombo.setSelected(true);
-        radioBtnBrandCombo.setText("Brand");
+        radioBtnCategoryCombo.setBackground(new java.awt.Color(0, 0, 51));
+        btnGrpSearchCombo.add(radioBtnCategoryCombo);
+        radioBtnCategoryCombo.setForeground(new java.awt.Color(255, 255, 255));
+        radioBtnCategoryCombo.setSelected(true);
+        radioBtnCategoryCombo.setText("Category");
 
         lblSearchErrorCombo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblSearchErrorCombo.setForeground(new java.awt.Color(255, 255, 255));
         lblSearchErrorCombo.setText("No Search Results Found");
 
-        comboBoxSearch.setModel(new DefaultComboBoxModel <> (elementsForComboBoxBrand()));
+        comboBoxSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Basic Phone", "Feature Phone", "Smartphone" }));
 
         javax.swing.GroupLayout panelSearchComboLayout = new javax.swing.GroupLayout(panelSearchCombo);
         panelSearchCombo.setLayout(panelSearchComboLayout);
@@ -1630,7 +1631,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                                 .addGap(16, 16, 16)
                                 .addComponent(radioBtnModelNameCombo)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(radioBtnBrandCombo))
+                                .addComponent(radioBtnCategoryCombo))
                             .addGroup(panelSearchComboLayout.createSequentialGroup()
                                 .addGap(21, 21, 21)
                                 .addComponent(lblSearchErrorCombo))
@@ -1651,7 +1652,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                     .addComponent(radioBtnCostPriceCombo)
                     .addComponent(radioBtnSellingPriceCombo)
                     .addComponent(radioBtnModelNameCombo)
-                    .addComponent(radioBtnBrandCombo))
+                    .addComponent(radioBtnCategoryCombo))
                 .addGap(15, 15, 15)
                 .addComponent(lblSearchErrorCombo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1882,7 +1883,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         panelCardSales.add(panelSearchSalesCombo, "card2");
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        setTitle("Mobile Inventory Management");
+        setTitle("Appliances Info");
         setBackground(new java.awt.Color(255, 250, 250));
         setMinimumSize(new java.awt.Dimension(360, 230));
         setResizable(false);
@@ -2279,9 +2280,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private void jMnuItmOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmOpenActionPerformed
         if(isSaved) {
             clearApplicationData();
-            
+            Utility util = new Utility();
             String dir = getCSVFilesDirectory();
-            
             try {
                 FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
                 JFileChooser jChooser = new JFileChooser(dir);
@@ -2297,7 +2297,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                     File fileSale = new File(pathSales);
 
                     csvReaderInventory(path);
-                    sortInventoryByPrice();
+                    arraylistInventory = util.sortInventoryByCost(arraylistInventory);
                     addToInventoryTable();
                     if(fileSale.exists()) {
                         csvReaderSales(pathSales);
@@ -2310,7 +2310,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                     path = pathInventory;
                     File fileInventory = new File(path);
                     csvReaderInventory(path);
-                    sortInventoryByPrice();
+                    arraylistInventory = util.sortInventoryByCost(arraylistInventory);
                     csvReaderSales(pathSales);
                     addToInventoryTable();
                     addToSalesTable();  
@@ -2370,7 +2370,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             try{
                 check = newFile.createNewFile();
                 if (check) {
-                    csvWriter(path);
+                    Utility util = new Utility();
+                    util.csvWriter(path, arraylistInventory, arraylistSales);
                     isSaved = true;
                     JOptionPane.showMessageDialog(rootPane, "Saved successfully.", "Saved", JOptionPane.PLAIN_MESSAGE);    
                 }
@@ -2378,7 +2379,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                    int confirmation = JOptionPane.showConfirmDialog(rootPane, "File already exists. Overwrite?", "Overwrite?", JOptionPane.YES_NO_OPTION);
                    switch (confirmation){
                         case JOptionPane.YES_OPTION:
-                            csvWriter(path);
+                            Utility util = new Utility();
+                            util.csvWriter(path, arraylistInventory, arraylistSales);
                             isSaved = true;
                             break;
                         case JOptionPane.NO_OPTION:
@@ -2487,7 +2489,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
 
     private void jMnuItmSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmSaveActionPerformed
         if (path != "" && path != null) {
-            csvWriter(path);
+            Utility util = new Utility();
+            util.csvWriter(path, arraylistInventory, arraylistSales);
             isSaved = true;
             JOptionPane.showMessageDialog(rootPane, "Saved.", "Success", JOptionPane.PLAIN_MESSAGE);
         }
@@ -2681,6 +2684,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         String brand = null;
         String category = null;
         String recommendation = null;
+        Utility util = new Utility();
         int costPrice = 0;
         int sellingPrice = 0;
         int quantity = 0;
@@ -2715,7 +2719,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 if (!modelExists) {
                     InventoryManagement im = new InventoryManagement(modelNo, modelName, brand,category, recommendation, costPrice, sellingPrice, quantity);
                     arraylistInventory.add(im);
-                    sortInventoryByPrice();
+                    arraylistInventory = util.sortInventoryByCost(arraylistInventory);
                     clearTableInventory();
                     addToInventoryTable();
                     if(arraylistInventory.size()<12){
@@ -2879,11 +2883,12 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         return data;
     }
     private void jButtonSearchArrayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchArrayActionPerformed
+        Utility util = new Utility();
         String searchSelection = radioBtnCostPrice.isSelected() == true ? "Cost" : radioBtnSellingPrice.isSelected() == true ? "Selling" : radioBtnModelName.isSelected() == true ? "Model" : radioBtnBrand.isSelected() == true? "Brand" : null;
         if(searchSelection.equals("Cost")) { 
             int search = getIntFromTextField(tfSearch);
             if(search > -1){
-                int index = binarySearchInventoryCost(0, arraylistInventory.size() - 1, search);
+                int index = binarySearch(true, search);
                 if (index == -1) {
                     lblSearchError.setVisible(true);
                     TimerTask task = new TimerTask () {
@@ -2897,6 +2902,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 }
                 else {
                     frameSearch.dispose();
+                    tfSearch.setText(null);
                     InventoryManagement im = arraylistInventory.get(index);
                     JOptionPane.showMessageDialog(rootPane,"Model Number : " + im.getModelNo()+"\nModel Name : " + im.getModelName() +"\nCategory : "+im.getCategory()+"\nBrand Name : "+im.getBrand()+"\nCost Price : "+im.getCost(), "Search results", 1);
                 }
@@ -2905,8 +2911,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         else if (searchSelection.equals("Selling")) {
             int search = getIntFromTextField(tfSearch);
             if(search > -1){
-            sortInventoryTemp();
-            int index = binarySearchSelling(0, temp.size() - 1, search);
+                temp = util.sortInventoryTemp(arraylistInventory, temp);
+                int index = binarySearch(false, search);
                 if (index == -1) {
                     lblSearchError.setVisible(true);
                     TimerTask task = new TimerTask () {
@@ -2920,6 +2926,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 }
                 else {
                     frameSearch.dispose();
+                    tfSearch.setText(null);
                     InventoryManagement im = arraylistInventory.get(index);
                     JOptionPane.showMessageDialog(rootPane,"Model Number : " + im.getModelNo()+"\nModel Name : " + im.getModelName()+"\nCategory : "+im.getCategory() +"\nBrand Name : "+im.getBrand()+"\nCost Price : "+im.getCost(), "Search results", 1);
                 }
@@ -2928,17 +2935,13 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         else {
             List <Integer> listInt = new ArrayList <>();
             String search = getStringFromTextfield(tfSearch);
-            
             if(search!=null){
-                for (int i = 0; i < arraylistInventory.size(); i++) {
-                    InventoryManagement im = arraylistInventory.get(i);
-                    if (im.getModelNo().equals(search)) {
-                        listInt.add(i);
-                    }
-                }
+                listInt = util.searchInventory(false, search, arraylistInventory);
                 if(!listInt.isEmpty()) {
                     int [] index = listInt.stream().mapToInt(i -> i).toArray();
-                    showSearchResultsInventory(index);
+                    util.showSearchResultsInventory(index, arraylistInventory);
+                    frameSearch.dispose();
+                    tfSearch.setText(null);
                 }
                 else {
                     lblSearchError.setVisible(true);
@@ -3003,7 +3006,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             im.setSellingPrice(sellingPrice);
             im.setQuantity(quantity);
             clearTableInventory();
-                addToInventoryTable();
+            addToInventoryTable();
+            isSaved = false;
             frameEditInventory.dispose();
             JOptionPane.showMessageDialog(rootPane, "Edit Saved.", "Success!", 1);
         }
@@ -3162,6 +3166,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         if(im.getQuantity() >= quantity) {
                             Sales sales = new Sales(firstName, lastName, date, modelNumber, brand, quantity, discount, total);
                             arraylistSales.add(sales);
+                            isSaved = false;
                             clearTableSales();
                             addToSalesTable();
                             int newQuantity =im.getQuantity()-quantity;
@@ -3194,6 +3199,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         if(im.getQuantity() >= quantity) {
                             Sales sales = new Sales(firstName, lastName, date, modelNumber, brand, discount, quantity, total);
                             arraylistSales.add(sales);
+                            isSaved = false;
                             addToSalesTable();
                             int newQuantity = im.getQuantity()-quantity;
                             im.setQuantity(newQuantity);
@@ -3203,7 +3209,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                             switch (confirmation){
                             case JOptionPane.YES_OPTION:
                                 clearSalesForm();
-                                break;
+                                return;
                             case JOptionPane.NO_OPTION:
                                 clearSalesForm();
                                 frameAddSales.dispose();
@@ -3239,6 +3245,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
 
     private void jButtonSearchArraySalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchArraySalesActionPerformed
         String searchSelection = radioBtnTotal.isSelected() == true ? "Total" : radioBtnCustomerName.isSelected() == true ? "Last" : radioBtnModelNumberSales.isSelected() == true ? "Model" : radioBtnBrandSales.isSelected() == true? "Brand" : null;
+        Utility util = new Utility();
         if (searchSelection.equals("Total")) {
             List <Integer> listInt = new ArrayList <>();
             int search = 0;
@@ -3249,15 +3256,12 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 JOptionPane.showMessageDialog(frameSearch, "Integer input required.\n" + nfe, "Error!", 0);
                 return;
             }
-            for (int i = 0; i < arraylistInventory.size(); i++) {
-                Sales sales = arraylistSales.get(i);
-                if (sales.getTotal() == search) {
-                    listInt.add(i);
-                }
-            }
+            listInt = util.searchSales((byte) 1, String.valueOf(search), arraylistSales);
             if(!listInt.isEmpty()) {
                 int [] index = listInt.stream().mapToInt(i -> i).toArray();
-                showSearchResultsSales(index);
+                util.showSearchResultsSales(index, arraylistSales);
+                frameSearchSales.dispose();
+                tfSearchSales.setText(null);
             }
             else {
                 lblSearchError.setVisible(true);
@@ -3281,15 +3285,12 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 JOptionPane.showMessageDialog(frameSearch, "Check your inputs.\n" + npe, "Error!", 0);
                 return;
             }
-            for (int i = 0; i < arraylistInventory.size(); i++) {
-                Sales sales = arraylistSales.get(i);
-                if (search.equals(sales.getLastName())) {
-                    listInt.add(i);
-                }
-            }
+            listInt = util.searchSales((byte) 2, String.valueOf(search), arraylistSales);
             if(!listInt.isEmpty()) {
                 int [] index = listInt.stream().mapToInt(i -> i).toArray();
-                showSearchResultsSales(index);
+                util.showSearchResultsSales(index, arraylistSales);
+                frameSearchSales.dispose();
+                tfSearchSales.setText(null);
             }
             else {
                 lblSearchError.setVisible(true);
@@ -3313,15 +3314,12 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 JOptionPane.showMessageDialog(frameSearch, "Check your inputs.\n" + npe, "Error!", 0);
                 return;
             }
-            for (int i = 0; i < arraylistInventory.size(); i++) {
-                Sales sales = arraylistSales.get(i);
-                if (search.equals(sales.getModelNumber())) {
-                    listInt.add(i);
-                }
-            }
+            listInt = util.searchSales((byte) 3, search, arraylistSales);
             if(!listInt.isEmpty()) {
                 int [] index = listInt.stream().mapToInt(i -> i).toArray();
-                showSearchResultsSales(index);
+                util.showSearchResultsSales(index, arraylistSales);
+                frameSearchSales.dispose();
+                tfSearchSales.setText(null);
             }
             else {
                 lblSearchError.setVisible(true);
@@ -3635,27 +3633,20 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     }//GEN-LAST:event_frameInvoiceWindowLostFocus
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
-        printInvoice(panelInvoice);
+        Utility util = new Utility();
+        util.printInvoice(panelInvoice);
+        frameInvoice.dispose();
     }//GEN-LAST:event_btnPrintActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        savePicture(panelInvoice, lblSetFirstName.getText(), lblSetLastName.getText());
+        Utility util = new Utility();
+        util.savePicture(panelInvoice, lblSetFirstName.getText(), lblSetLastName.getText());
     }//GEN-LAST:event_btnSaveActionPerformed
 
-    private String getBrandFilePath(){
-        String dir = System.getProperty("user.dir");
-        if (System.getProperty("user.dir").equalsIgnoreCase("Windows")) {
-               dir += "\\resources\\Brands\\brands.txt";
-        }
-        else {
-               dir += "/resources/Brands/brands.txt";
-        }
-        return dir;
-        
-    }
     private void jMnuItmRemoveBrandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmRemoveBrandActionPerformed
         String delBrand = null;
-        String dir = getBrandFilePath();
+        Utility util = new Utility();
+        String dir = util.getBrandFilePath();
         try {
             delBrand = JOptionPane.showInputDialog(rootPane, "Delete a brand", "Delete", JOptionPane.INFORMATION_MESSAGE).trim();
             if(!delBrand.matches("^[a-zA-Z]*$") || delBrand.trim().isEmpty()){
@@ -3708,23 +3699,20 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
 
     private void radioBtnBrandItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_radioBtnBrandItemStateChanged
         cl.show(panelCard, "2");
-        radioBtnBrandCombo.setSelected(true);
+        radioBtnCategoryCombo.setSelected(true);
     }//GEN-LAST:event_radioBtnBrandItemStateChanged
 
     private void jButtonSearchArrayComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchArrayComboActionPerformed
         List <Integer> listInt = new ArrayList <>();
-        String search = comboBoxSearch.getSelectedItem().toString().trim();
-            
+        String search = comboBoxSearch.getSelectedItem().toString().trim();  
+        Utility util = new Utility ();
         if(search!=null){
-            for (int i = 0; i < arraylistInventory.size(); i++) {
-                InventoryManagement im = arraylistInventory.get(i);
-                if (im.getBrand().equals(search)) {
-                    listInt.add(i);
-                }
-            }
+            listInt = util.searchInventory(true, search, arraylistInventory);
             if(!listInt.isEmpty()) {
-                int [] index = listInt.stream().mapToInt(i -> i).toArray();
-                showSearchResultsInventory(index);
+                int [] index = listInt.stream().mapToInt(i -> i).toArray(); 
+                util.showSearchResultsInventory(index, arraylistInventory);
+                frameSearch.dispose();
+                comboBoxSearch.setSelectedIndex(0);
             }
             else {
                 lblSearchErrorCombo.setVisible(true);
@@ -3763,17 +3751,14 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private void jButtonSearchArraySalesComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchArraySalesComboActionPerformed
         List <Integer> listInt = new ArrayList <>();
         String search = comboBoxSearchSales.getSelectedItem().toString().trim();
-            
+        Utility util = new Utility();   
         if(search!=null){
-            for (int i = 0; i < arraylistSales.size(); i++) {
-                Sales sales = arraylistSales.get(i);
-                if (sales.getBrand().equals(search)) {
-                    listInt.add(i);
-                }
-            }
+            listInt = util.searchSales((byte) 4, search, arraylistSales);
             if(!listInt.isEmpty()) {
                 int [] index = listInt.stream().mapToInt(i -> i).toArray();
-                showSearchResultsSales(index);
+                util.showSearchResultsSales(index, arraylistSales);
+                frameSearchSales.dispose();
+                comboBoxSearchSales.setSelectedIndex(0);
             }
             else {
                 lblSearchErrorSalesCombo.setVisible(true);
@@ -3821,36 +3806,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             evt.consume();
         }
     }//GEN-LAST:event_tfLastNameKeyTyped
-    // sorts the inventory according to the cost price for the binary search
-    private void sortInventoryByPrice () {
-        for (int i = 0; i < arraylistInventory.size(); i++) {
-            for (int j = i + 1 ; j < arraylistInventory.size(); j++) {
-                if (i!= j) {
-                    InventoryManagement imFirst = arraylistInventory.get(i);
-                    InventoryManagement imSecond = arraylistInventory.get(j);
-                    if (imFirst.getCost() > imSecond.getCost()) {
-                        Collections.swap(arraylistInventory, i, j);
-                    }
-                }
-            }
-        }
-    }
-    // sorts data for the arraylist for the binary search of selling price
-    private void sortInventoryTemp() {
-        temp.addAll(arraylistInventory);
-//        Collections.copy(temp, arraylistInventory);
-        for (int i = 0; i < temp.size(); i++) {
-            for (int j = i + 1 ; j < temp.size(); j++) {
-                if (i != j) {
-                    InventoryManagement imFirst = temp.get(i);
-                    InventoryManagement imSecond = temp.get(j);
-                    if (imFirst.getSellingPrice() > imSecond.getSellingPrice()) {
-                    Collections.swap(temp, i, j);
-                    }
-                }
-            }
-        }
-    }
     // adds inventory's arraylist data to the inventory table
     private void addToInventoryTable () {
         String [] arrayForTable = {null, null, null, null, null, null, null, null};
@@ -3968,12 +3923,14 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         addToInventoryTable();
         addToSalesTable();
         JOptionPane.showMessageDialog(rootPane, "Edit Saved.", "Success!", 1);
+        isSaved = false;
     }
     // reads and returns an array for the brand's combo boxes
     private String[] elementsForComboBoxBrand () {
         String [] comboStrings = {};
         List <String> listStrings = new ArrayList <>();
-        String dir = getBrandFilePath();
+        Utility util = new Utility();
+        String dir = util.getBrandFilePath();
         try {
             File file= new File(dir);
             if(file.createNewFile()){
@@ -4001,41 +3958,16 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         return comboStrings;
     }
     // binary search method for cost price
-    private int binarySearchInventoryCost(int low, int high, int search) {
-        int values = -1;
-        if (high >= low) {
-            int mid = (low + high) / 2;
-            InventoryManagement im = arraylistInventory.get(mid);
-   
-            if (im.getCost() == search){
-                values = mid;
-                return values;
-            }
-
-            if (im.getCost() > search) 
-                return binarySearchInventoryCost(low, mid - 1, search);
-            
-            
-            return binarySearchInventoryCost(mid + 1, high, search);
-            
+    private int binarySearch(boolean selection, int search) {
+        int value = -1;
+        Utility util = new Utility();
+        if(selection) {
+            value = util.binarySearchInventoryCost(0, arraylistInventory.size() - 1, search, arraylistInventory);
         }
-        return values;
-    }
-    // binary search method for selling price
-    private int binarySearchSelling(int low, int high, int search) {
-        int values = -1;
-        if (high >= low) {
-            int mid = (low+high) / 2;
-            InventoryManagement im = temp.get(mid);
-            if (im.getSellingPrice() == search){
-                values = mid;
-                return values;
-            }
-            if (im.getCost() > search) 
-                return binarySearchSelling(low, mid - 1, search);
-            return binarySearchSelling(mid + 1, high, search);
+        else {
+            value = util.binarySearchInventorySelling(0, temp.size() - 1, search, temp);
         }
-        return values;
+        return value;
     }
     // setting icons for the dialog boxes and frames
     private void setIcon() {
@@ -4103,50 +4035,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             JOptionPane.showMessageDialog(rootPane, "Error Occured " + ie, "Error!", 0);
         }
     }
-    // writes the table's data to the csv
-    private void csvWriter(String path) {
-        try {
-            String pathSales = path.replace(".csv", "_sales.csv");
-            BufferedWriter bw = new BufferedWriter(new FileWriter(path, false));
-            BufferedWriter bws = new BufferedWriter(new FileWriter(pathSales, false));
-            for (InventoryManagement im : arraylistInventory) {
-                String lines = null;
-                lines = im.getModelNo();
-                lines += "," + im.getModelName();
-                lines += "," + im.getBrand();
-                lines += "," + im.getCategory();
-                lines += "," + im.getRecommendation();
-                lines += "," + String.valueOf(im.getCost());
-                lines += "," + String.valueOf(im.getSellingPrice());
-                lines += "," + String.valueOf(im.getQuantity());
-                bw.write(lines);
-                bw.newLine();
-            }
-            bw.close();
-            if (!arraylistSales.isEmpty()) {
-                for (Sales sales : arraylistSales) {
-                    String lines = null;
-                    lines = sales.getFirstName();
-                    lines += "," + sales.getLastName();
-                    lines += "," + sales.getDate();
-                    lines += "," + sales.getModelNumber();
-                    lines += "," + sales.getBrand();
-                    lines += "," + String.valueOf(sales.getQuantity());
-                    lines += "," + String.valueOf(sales.getDiscount());
-                    lines += "," + String.valueOf(sales.getTotal());
-                    bws.write(lines);
-                    bws.newLine();
-                }
-            }
-            bws.close();
-        }
-        catch (FileNotFoundException f) {
-            JOptionPane.showMessageDialog(rootPane, "File not found.\n" + f, "Error!", 0);
-        }
-        catch (IOException ie) {
-            JOptionPane.showMessageDialog(rootPane, "IO Exception.\n" + ie, "Error!", 0);
-        }
-    }
     // clear's sales frame's components
     private void clearSalesForm() {
         tfFirstName.setText(null);
@@ -4173,157 +4061,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         tfSellingPrice.setText(null);
         tfQuantity.setText(null);
         
-    }
-    // shows search results
-    private void showSearchResultsInventory(int [] array) {
-        String modelNumber = "";
-        String brand = "";
-        String os = "";
-        String costPrice = "";
-        for (int i = 0; i < array.length; i++) {
-            InventoryManagement im = arraylistInventory.get(array[i]);
-            modelNumber += im.getModelNo() + ", ";
-            brand += im.getBrand() + ", ";
-            os += im.getCategory()+ ", ";
-            costPrice += String.valueOf(im.getCost()) + ", ";
-        }
-        modelNumber = modelNumber.substring(0, modelNumber.length() - 2);
-        brand = brand.substring(0, brand.length() - 2);
-        os = os.substring(0, os.length() - 2);
-        costPrice = costPrice.substring(0, costPrice.length() - 2);
-        frameSearch.dispose();
-        JOptionPane.showMessageDialog(rootPane, array.length + " entries found." + "\nModel Numbers : " + modelNumber + "\nBrands : " + brand + "\nOS : " + os + "\nCost : " + costPrice, "Search Results", JOptionPane.INFORMATION_MESSAGE);
-    }
-    private void showSearchResultsSales(int [] array) {
-        String firstName = "";
-        String lastName = "";
-        String brand = "";
-        String modelNumber = "";
-        String quantity = "";
-        String discount = "";
-        String total = "";
-        for (int i = 0; i < array.length; i++) {
-            Sales sales = arraylistSales.get(array[i]);
-            firstName += sales.getFirstName() + ", ";
-            lastName += sales.getLastName() + ",";
-            brand += sales.getBrand() + ", ";
-            modelNumber += sales.getModelNumber() + ", ";
-            quantity += sales.getQuantity() + ", ";
-            discount += sales.getDiscount() + ", ";
-            total += sales.getTotal() + ", ";
-        }
-        firstName = firstName.substring(0, firstName.length() - 2);
-        lastName = lastName.substring(0, lastName.length() - 2);
-        brand = brand.substring(0, brand.length() - 2);
-        modelNumber = modelNumber.substring(0, modelNumber.length() - 2);
-        quantity = quantity.substring(0, quantity.length() - 2);
-        discount = discount.substring(0, discount.length() - 2);
-        total = total.substring(0, total.length() - 2);
-        frameSearchSales.dispose();
-        JOptionPane.showMessageDialog(rootPane, array.length + " entries found." + "\nFirst Name : " + firstName + "\nLast Name : " + lastName + "\nBrand : " + brand + "\nModel Number : " + modelNumber + "\nQuantity : " + quantity + "\nDiscount : " + discount + "\nTotal : " + total, "Search Results", JOptionPane.INFORMATION_MESSAGE);
-    }
-    // calls the operating system's print services
-    private void printInvoice (JPanel print) {
-        // Using printer to print out the invoice
-        PrinterJob printer = PrinterJob.getPrinterJob();
-        printer.setJobName("Invoice");
-        printer.setPrintable(new Printable () {
-            @Override
-            public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
-                //Checks if there are printable content or not
-                if (pageIndex > 0) {
-                        return Printable.NO_SUCH_PAGE;
-                }
-                // making,setting, and scaling 2d graphics to map the panel
-                Graphics2D graphics2D = (Graphics2D)graphics;
-                graphics2D.translate(pageFormat.getImageableX()*2, pageFormat.getImageableY());
-                graphics2D.scale(0.5, 0.5);
-                // painting panel
-                print.paint(graphics2D);
-                // Returns if page exists
-                return Printable.PAGE_EXISTS;
-            }
-        });
-        boolean returnedResult = printer.printDialog();
-        if (returnedResult) {
-            try {
-                // Send job to the operating system's printer services
-                printer.print();
-                frameInvoice.dispose();
-            }
-            catch (PrinterException pe) {
-                JOptionPane.showMessageDialog(rootPane, "Print error.\n" + pe.getMessage(), "Error!", 0);
-            }
-        }
-    }
-    // saves the invoice as a picture
-    private void savePicture(JPanel panel, String first, String last) {
-        //getting the size of the panel and setting the image size to it
-        Dimension size = panel.getSize();
-        BufferedImage image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
-        //using graphics2d to create the graphics
-        Graphics2D graphics = image.createGraphics();
-        panel.paint(graphics);
-        String imagePath = System.getProperty("user.dir");
-        if (System.getProperty("os.name").contains("Windows")) {
-            imagePath += "\\resources\\Images\\" + first + last + ".png";
-        }
-        else {
-            imagePath += "/resources/Images/" + first + last + ".png";
-        }
-        try {
-            ImageIO.write(image, "png", new File(imagePath));
-            JOptionPane.showMessageDialog(rootPane, "Invoice saved as image", "Saved!", 0);
-            frameInvoice.dispose();
-        }
-        catch(IOException | HeadlessException ie) {
-            JOptionPane.showMessageDialog(rootPane, "Failed to save.\n" + ie, "Error!", 0);
-        }
-    }
-    private void checkDirs() {
-        //creating all the directories for csv files, brands, and images file
-        String csvPath = System.getProperty("user.dir");
-        if(System.getProperty("os.name").contains("Windows")){
-           csvPath += "\\resources\\CSV Files";
-        }
-        else {
-            csvPath += "/resources/CSV Files";
-        }
-        File csvDir = new File(csvPath);
-        if(!csvDir.exists()) {
-            csvDir.mkdirs();
-        }
-        String brandPath = System.getProperty("user.dir");
-        if(System.getProperty("os.name").contains("Windows")){
-           brandPath += "\\resources\\Brands";
-        }
-        else {
-            brandPath += "/resources/Brands";
-        }
-        File brandDir = new File(brandPath);
-        if(!brandDir.exists()) {
-            try {
-                File brandTxt = new File(brandPath + "brands.txt");
-                if(!brandTxt.exists()) {
-                    brandTxt.createNewFile();
-                }
-                brandDir.mkdirs();
-            }
-            catch (IOException ie) {
-                JOptionPane.showMessageDialog(rootPane, "Error while creating a brands.txt file." + ie, "Error!", 0);
-            }
-        }
-        String imgPath = System.getProperty("user.dir");
-        if(System.getProperty("os.name").contains("Windows")){
-            imgPath += "\\resources\\Images";
-        }
-        else {
-            imgPath += "/resources/Images";
-        }
-        File imgDir = new File(imgPath);
-        if(!imgDir.exists()) {
-            imgDir.mkdirs();
-        }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -4460,9 +4197,9 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private javax.swing.JPanel panelSearchSales;
     private javax.swing.JPanel panelSearchSalesCombo;
     private javax.swing.JRadioButton radioBtnBrand;
-    private javax.swing.JRadioButton radioBtnBrandCombo;
     private javax.swing.JRadioButton radioBtnBrandSales;
     private javax.swing.JRadioButton radioBtnBrandSalesCombo;
+    private javax.swing.JRadioButton radioBtnCategoryCombo;
     private javax.swing.JRadioButton radioBtnCostPrice;
     private javax.swing.JRadioButton radioBtnCostPriceCombo;
     private javax.swing.JRadioButton radioBtnCustomerName;
