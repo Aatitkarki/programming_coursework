@@ -2339,42 +2339,16 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     
     }
     private void jMnuItmOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmOpenActionPerformed
-        if(isSaved) {
+       if(isSaved) {
             clearApplicationData();
             Utility util = new Utility();
             String dir = getCSVFilesDirectory();
             try {
                 FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
-                JFileChooser jChooser = new JFileChooser();
-                jChooser.setCurrentDirectory(new File(dir));
+                JFileChooser jChooser = new JFileChooser(dir);
                 jChooser.setDialogTitle("Open");
                 jChooser.setAcceptAllFileFilterUsed(false);
                 jChooser.setFileFilter(filter);
-<<<<<<< HEAD
-                int result = jChooser.showOpenDialog(rootPane);
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    File file = jChooser.getSelectedFile();
-                    path = file.getAbsolutePath();
-                    if (!path.contains("sales.csv")) {
-                        String pathSales = path.replace(".csv", "_sales.csv");
-                        File fileSale = new File(pathSales);
-
-                        csvReaderInventory(path);
-                        arraylistInventory = util.sortInventoryByCost(arraylistInventory);
-                        addToInventoryTable();
-                        if(fileSale.exists()) {
-                            csvReaderSales(pathSales);
-                            addToSalesTable();
-                        }
-                    }
-                    else {
-                        String pathSales = path;
-                        String pathInventory = path.replace("_sales.csv", ".csv");
-                        path = pathInventory;
-                        File fileInventory = new File(path);
-                        csvReaderInventory(path);
-                        arraylistInventory = util.sortInventoryByCost(arraylistInventory);
-=======
                 jChooser.showOpenDialog(null);
 
                 File file = jChooser.getSelectedFile();
@@ -2386,24 +2360,25 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                     csvReaderInventory(path);
                     arraylistInventory = util.sortInventoryByCost(arraylistInventory);
                     addToInventoryTable();
-                    JOptionPane.showMessageDialog(rootPane, "Imported successfully.", "Success", JOptionPane.PLAIN_MESSAGE);
                     if(fileSale.exists()) {
->>>>>>> 95edd52a1d43d19b9c734af13d6065323869f31a
                         csvReaderSales(pathSales);
-                        addToInventoryTable();
-                        addToSalesTable();  
+                        addToSalesTable();
                     }
                 }
-                else if (result == JFileChooser.CANCEL_OPTION) {
-                    return;
+                else {
+                    String pathSales = path;
+                    String pathInventory = path.replace("_sales.csv", ".csv");
+                    path = pathInventory;
+                    File fileInventory = new File(path);
+                    csvReaderInventory(path);
+                    arraylistInventory = util.sortInventoryByCost(arraylistInventory);
+                    csvReaderSales(pathSales);
+                    addToInventoryTable();
+                    addToSalesTable();  
                 }
             }
-<<<<<<< HEAD
-            catch(NullPointerException npe) {    
-=======
             catch(NullPointerException npe) {
-               
->>>>>>> 95edd52a1d43d19b9c734af13d6065323869f31a
+                
             }
             
             
@@ -2426,6 +2401,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                     break;
             }
         }
+     
+      
     }//GEN-LAST:event_jMnuItmOpenActionPerformed
        private String getCSVFilesDirectory(){
        String dir = System.getProperty("user.dir");
