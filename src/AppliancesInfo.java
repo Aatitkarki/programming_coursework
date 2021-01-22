@@ -1564,7 +1564,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelSearchLayout.createSequentialGroup()
                                 .addComponent(radioBtnSellingPrice)
-                                .addGap(16, 16, 16)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(radioBtnModelName)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(radioBtnBrand))
@@ -1576,7 +1576,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                                         .addComponent(jButtonSearchArray)
                                         .addGap(18, 18, 18)
                                         .addComponent(jButtonSearchCancel)))))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
         panelSearchLayout.setVerticalGroup(
             panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1648,6 +1648,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 radioBtnModelNameComboItemStateChanged(evt);
             }
         });
+        radioBtnModelNameCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioBtnModelNameComboActionPerformed(evt);
+            }
+        });
 
         radioBtnCategoryCombo.setBackground(new java.awt.Color(0, 0, 51));
         btnGrpSearchCombo.add(radioBtnCategoryCombo);
@@ -1674,21 +1679,21 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         .addComponent(comboBoxSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelSearchComboLayout.createSequentialGroup()
                         .addComponent(radioBtnCostPriceCombo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(panelSearchComboLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelSearchComboLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(radioBtnSellingPriceCombo)
-                                .addGap(16, 16, 16)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(radioBtnModelNameCombo)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(radioBtnCategoryCombo))
                             .addGroup(panelSearchComboLayout.createSequentialGroup()
-                                .addGap(21, 21, 21)
+                                .addGap(23, 23, 23)
                                 .addComponent(lblSearchErrorCombo))
                             .addGroup(panelSearchComboLayout.createSequentialGroup()
-                                .addGap(17, 17, 17)
+                                .addGap(19, 19, 19)
                                 .addComponent(jButtonSearchArrayCombo)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
         panelSearchComboLayout.setVerticalGroup(
             panelSearchComboLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1707,7 +1712,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 .addComponent(lblSearchErrorCombo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButtonSearchArrayCombo)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         panelCard.add(panelSearchCombo, "card3");
@@ -2349,6 +2354,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                     csvReaderInventory(path);
                     arraylistInventory = util.sortInventoryByCost(arraylistInventory);
                     addToInventoryTable();
+                    JOptionPane.showMessageDialog(rootPane, "Imported successfully.", "Success", JOptionPane.PLAIN_MESSAGE);
                     if(fileSale.exists()) {
                         csvReaderSales(pathSales);
                         addToSalesTable();
@@ -2367,7 +2373,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 }
             }
             catch(NullPointerException npe) {
-                
+               
             }
             
             
@@ -3903,6 +3909,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         isWindowOpen = false;
         openedWindow = 0;
     }//GEN-LAST:event_frameInvoiceWindowClosing
+
+    private void radioBtnModelNameComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBtnModelNameComboActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_radioBtnModelNameComboActionPerformed
     // adds inventory's arraylist data to the inventory table
     private void addToInventoryTable () {
         String [] arrayForTable = {null, null, null, null, null, null, null, null};
