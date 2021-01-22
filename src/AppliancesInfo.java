@@ -184,6 +184,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 openedWindow = 0;
             }
             @Override
+            public void windowClosing(WindowEvent we) {
+                isWindowOpen = false;
+                openedWindow = 0;
+            }
+            @Override
             public void windowLostFocus(WindowEvent we) {
                 frameSearch.requestFocus();
                 frameSearch.toFront();
@@ -206,6 +211,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         frameSearchSales.addWindowListener(new WindowAdapter () {
             @Override
             public void windowClosed(WindowEvent we) {
+                isWindowOpen = false;
+                openedWindow = 0;
+            }
+            public void windowClosing(WindowEvent we) {
                 isWindowOpen = false;
                 openedWindow = 0;
             }
@@ -2345,17 +2354,19 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             String dir = getCSVFilesDirectory();
             try {
                 FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
-                JFileChooser jFileSaver = new JFileChooser(dir);
-                jFileSaver.setDialogTitle("Save as");
-                jFileSaver.setDialogType(JFileChooser.SAVE_DIALOG);
-                jFileSaver.setFileFilter(filter);
-        // Stuff like setting the required file extension, the title, ...
-                int result = jFileSaver.showSaveDialog(rootPane);
+                JFileChooser jChooser = new JFileChooser(dir);
+                jChooser.setDialogTitle("Open");
+                jChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+                jChooser.setAcceptAllFileFilterUsed(false);
+                jChooser.setFileFilter(filter);
+                int result = jChooser.showOpenDialog(rootPane);
+                File file = jChooser.getSelectedFile();
                 if (result == JFileChooser.APPROVE_OPTION) {
+                    path = file.getAbsolutePath();
+                    System.out.println(path);
                     if (!path.contains("sales.csv")) {
                         String pathSales = path.replace(".csv", "_sales.csv");
                         File fileSale = new File(pathSales);
-
                         csvReaderInventory(path);
                         arraylistInventory = util.sortInventoryByCost(arraylistInventory);
                         addToInventoryTable();
@@ -2375,33 +2386,33 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         addToInventoryTable();
                         addToSalesTable();  
                     }
-                }
                 
+                   }
             }
             catch(NullPointerException npe) {
+                    JOptionPane.showMessageDialog(rootPane, "Null pointer exception.\n" + npe, "Error!", 0);
+            }
+
 
             }
-            
-            
-        }
-        else {
-            int confirmation = JOptionPane.showConfirmDialog(rootPane, "Unsaved changes. Save?", "Save?", JOptionPane.YES_NO_OPTION);
-            switch (confirmation){
-                case JOptionPane.YES_OPTION:
-                    jMnuItmSaveActionPerformed(evt);
-                    break;
-                case JOptionPane.NO_OPTION:
-                    isSaved = true;
-                    clearTableInventory();
-                    clearTableSales();
-                    arraylistInventory.clear();
-                    arraylistSales.clear();
-                    jMnuItmOpenActionPerformed(evt);
-                    break;
-                case JOptionPane.CLOSED_OPTION:
-                    break;
+            else {
+                int confirmation = JOptionPane.showConfirmDialog(rootPane, "Unsaved changes. Save?", "Save?", JOptionPane.YES_NO_OPTION);
+                switch (confirmation){
+                    case JOptionPane.YES_OPTION:
+                        jMnuItmSaveActionPerformed(evt);
+                        break;
+                    case JOptionPane.NO_OPTION:
+                        isSaved = true;
+                        clearTableInventory();
+                        clearTableSales();
+                        arraylistInventory.clear();
+                        arraylistSales.clear();
+                        jMnuItmOpenActionPerformed(evt);
+                        break;
+                    case JOptionPane.CLOSED_OPTION:
+                        break;
+                }
             }
-        }
     }//GEN-LAST:event_jMnuItmOpenActionPerformed
        private String getCSVFilesDirectory(){
        String dir = System.getProperty("user.dir");
