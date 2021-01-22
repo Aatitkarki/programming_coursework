@@ -3026,8 +3026,8 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 listInt = util.searchInventory(false, search, arraylistInventory);
                 if(!listInt.isEmpty()) {
                     int [] index = listInt.stream().mapToInt(i -> i).toArray();
-                    util.showSearchResultsInventory(index, arraylistInventory);
                     frameSearch.dispose();
+                    util.showSearchResultsInventory(index, arraylistInventory);
                     tfSearch.setText(null);
                 }
                 else {
@@ -3792,9 +3792,9 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         if(search!=null){
             listInt = util.searchInventory(true, search, arraylistInventory);
             if(!listInt.isEmpty()) {
-                int [] index = listInt.stream().mapToInt(i -> i).toArray(); 
-                util.showSearchResultsInventory(index, arraylistInventory);
+                int [] index = listInt.stream().mapToInt(i -> i).toArray();
                 frameSearch.dispose();
+                util.showSearchResultsInventory(index, arraylistInventory);
                 comboBoxSearch.setSelectedIndex(0);
             }
             else {
