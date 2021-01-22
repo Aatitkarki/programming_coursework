@@ -1575,7 +1575,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         panelSearchLayout.setHorizontalGroup(
             panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelSearchLayout.createSequentialGroup()
-                .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(panelSearchLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(lblSearch)
@@ -1588,7 +1588,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                                 .addComponent(radioBtnSellingPrice)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(radioBtnModelName)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(radioBtnBrand))
                             .addGroup(panelSearchLayout.createSequentialGroup()
                                 .addGap(25, 25, 25)
@@ -1705,7 +1705,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                             .addGroup(panelSearchComboLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(radioBtnSellingPriceCombo)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(radioBtnModelNameCombo)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(radioBtnCategoryCombo))
@@ -1715,7 +1715,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                             .addGroup(panelSearchComboLayout.createSequentialGroup()
                                 .addGap(19, 19, 19)
                                 .addComponent(jButtonSearchArrayCombo)))))
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
         panelSearchComboLayout.setVerticalGroup(
             panelSearchComboLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2392,7 +2392,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         addToInventoryTable();
                         addToSalesTable();  
                     }
-                
+                JOptionPane.showMessageDialog(rootPane, "Imported successfully.", "Success", JOptionPane.PLAIN_MESSAGE);
                    }
             }
             catch(NullPointerException npe) {
@@ -2521,6 +2521,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                 if (arraylistInventory.size() < 12) {
                     frameAddInventory.setVisible(true);
                     frameAddInventory.setLocationRelativeTo(null);
+                    tfModelNo.requestFocus();
                     openedWindow = 1;
                     isWindowOpen = true;
                 }
@@ -2545,6 +2546,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                         }
                         frameAddSales.setVisible(true);                    
                         frameAddSales.setLocationRelativeTo(null);
+                        tfFirstName.requestFocus();
                         openedWindow = 2;
                         isWindowOpen = true;
                     }
@@ -2649,6 +2651,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                     lblEditInvMsg.setVisible(false);
                     frameEditInventory.setVisible(true);
                     frameEditInventory.setLocationRelativeTo(null);
+                    tfEditInvModelNo.requestFocus();
                     isWindowOpen = true;
                     openedWindow = 3;
                     InventoryManagement imOld = arraylistInventory.get(indexEditInv);
@@ -2695,6 +2698,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
                    lblEditInvMsgSales.setVisible(false);
                    frameEditSales.setVisible(true);
                    frameEditSales.setLocationRelativeTo(null);
+                   tfFirstNameEdit.requestFocus();
                    isWindowOpen = true;
                    openedWindow = 4;
                    Sales sales = arraylistSales.get(indexEditSales);
@@ -3917,7 +3921,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private void frameAddInventoryWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameAddInventoryWindowClosing
         isWindowOpen = false;
         openedWindow = 0;
-        clearSalesForm();
+        clearInventoryForm();
     }//GEN-LAST:event_frameAddInventoryWindowClosing
 
     private void frameEditInventoryWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameEditInventoryWindowClosing
