@@ -167,12 +167,11 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         frameSearch.setResizable(false);
         frameSearch.setLocationRelativeTo(null);
         frameSearch.add(panelCard);
-        frameSearch.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frameSearch.setFocusableWindowState(true);
         //Adding window listener to the frame and creating a windowclosing event
         frameSearch.addWindowListener(new WindowAdapter () {
             @Override
-            public void windowClosed(WindowEvent we) {
-                System.out.println("Closing");
+            public void windowClosing(WindowEvent we) {
                 isWindowOpen = false;
                 openedWindow = 0;
             }
@@ -195,10 +194,10 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         frameSearchSales.setResizable(false);
         frameSearchSales.setLocationRelativeTo(null);
         frameSearchSales.add(panelCardSales);
-        frameSearch.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frameSearch.setFocusableWindowState(true);
         frameSearchSales.addWindowListener(new WindowAdapter () {
             @Override
-            public void windowClosed(WindowEvent we) {
+            public void windowClosing(WindowEvent we) {
                 isWindowOpen = false;
                 openedWindow = 0;
             }
