@@ -1,5 +1,10 @@
+import java.awt.AWTException;
 import java.awt.CardLayout;
+import java.awt.Image;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
 import java.awt.Toolkit;
+import java.awt.TrayIcon;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
@@ -25,6 +30,9 @@ import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import java.awt.MenuItem;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -2290,7 +2298,6 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
 
     
     private void jMnuItmExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuItmExitActionPerformed
-        // TODO add your handling code here:
         if(isSaved) {
             System.exit(0);
         }
@@ -2334,40 +2341,44 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             String dir = getCSVFilesDirectory();
             try {
                 FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files (*csv)", "csv");
-                JFileChooser jChooser = new JFileChooser(dir);
+                JFileChooser jChooser = new JFileChooser();
+                jChooser.setCurrentDirectory(new File(dir));
                 jChooser.setDialogTitle("Open");
                 jChooser.setAcceptAllFileFilterUsed(false);
                 jChooser.setFileFilter(filter);
-                jChooser.showOpenDialog(null);
+                int result = jChooser.showOpenDialog(rootPane);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File file = jChooser.getSelectedFile();
+                    path = file.getAbsolutePath();
+                    if (!path.contains("sales.csv")) {
+                        String pathSales = path.replace(".csv", "_sales.csv");
+                        File fileSale = new File(pathSales);
 
-                File file = jChooser.getSelectedFile();
-                path = file.getAbsolutePath();
-                if (!path.contains("sales.csv")) {
-                    String pathSales = path.replace(".csv", "_sales.csv");
-                    File fileSale = new File(pathSales);
-
-                    csvReaderInventory(path);
-                    arraylistInventory = util.sortInventoryByCost(arraylistInventory);
-                    addToInventoryTable();
-                    if(fileSale.exists()) {
+                        csvReaderInventory(path);
+                        arraylistInventory = util.sortInventoryByCost(arraylistInventory);
+                        addToInventoryTable();
+                        if(fileSale.exists()) {
+                            csvReaderSales(pathSales);
+                            addToSalesTable();
+                        }
+                    }
+                    else {
+                        String pathSales = path;
+                        String pathInventory = path.replace("_sales.csv", ".csv");
+                        path = pathInventory;
+                        File fileInventory = new File(path);
+                        csvReaderInventory(path);
+                        arraylistInventory = util.sortInventoryByCost(arraylistInventory);
                         csvReaderSales(pathSales);
-                        addToSalesTable();
+                        addToInventoryTable();
+                        addToSalesTable();  
                     }
                 }
-                else {
-                    String pathSales = path;
-                    String pathInventory = path.replace("_sales.csv", ".csv");
-                    path = pathInventory;
-                    File fileInventory = new File(path);
-                    csvReaderInventory(path);
-                    arraylistInventory = util.sortInventoryByCost(arraylistInventory);
-                    csvReaderSales(pathSales);
-                    addToInventoryTable();
-                    addToSalesTable();  
+                else if (result == JFileChooser.CANCEL_OPTION) {
+                    return;
                 }
             }
-            catch(NullPointerException npe) {
-                
+            catch(NullPointerException npe) {    
             }
             
             
@@ -2409,7 +2420,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
         jFileSaver.setDialogType(JFileChooser.SAVE_DIALOG);
         jFileSaver.setFileFilter(filter);
         // Stuff like setting the required file extension, the title, ...
-        int result = jFileSaver.showSaveDialog(this);
+        int result = jFileSaver.showSaveDialog(rootPane);
         if (result == JFileChooser.APPROVE_OPTION) {
             path = jFileSaver.getSelectedFile().toString();
             if (!path.contains(".csv")) {
