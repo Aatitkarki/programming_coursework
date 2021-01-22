@@ -34,7 +34,7 @@ import javax.swing.SwingUtilities;
 
 /**
  *
- * @author anish, ashesh, roshani, suresh
+ * @author anish kc, ashesh rai, roshani karki, suresh Karki
  */
 public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private int indexEditInv;
