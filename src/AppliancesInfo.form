@@ -51,6 +51,7 @@
       </Properties>
       <Events>
         <EventHandler event="windowLostFocus" listener="java.awt.event.WindowFocusListener" parameters="java.awt.event.WindowEvent" handler="frameAddInventoryWindowLostFocus"/>
+        <EventHandler event="windowClosed" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="frameAddInventoryWindowClosed"/>
         <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="frameAddInventoryWindowClosing"/>
       </Events>
 
@@ -406,6 +407,7 @@
       </Properties>
       <Events>
         <EventHandler event="windowLostFocus" listener="java.awt.event.WindowFocusListener" parameters="java.awt.event.WindowEvent" handler="frameAddSalesWindowLostFocus"/>
+        <EventHandler event="windowClosed" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="frameAddSalesWindowClosed"/>
         <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="frameAddSalesWindowClosing"/>
       </Events>
 

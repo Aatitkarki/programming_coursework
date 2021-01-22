@@ -466,6 +466,9 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             }
         });
         frameAddInventory.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                frameAddInventoryWindowClosed(evt);
+            }
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 frameAddInventoryWindowClosing(evt);
             }
@@ -690,6 +693,9 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
             }
         });
         frameAddSales.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                frameAddSalesWindowClosed(evt);
+            }
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 frameAddSalesWindowClosing(evt);
             }
@@ -3726,6 +3732,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private void frameAddSalesWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameAddSalesWindowClosing
         isWindowOpen = false;
         openedWindow = 0;
+        clearSalesForm();
     }//GEN-LAST:event_frameAddSalesWindowClosing
 
     private void frameInvoiceWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameInvoiceWindowLostFocus
@@ -3910,6 +3917,7 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private void frameAddInventoryWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameAddInventoryWindowClosing
         isWindowOpen = false;
         openedWindow = 0;
+        clearSalesForm();
     }//GEN-LAST:event_frameAddInventoryWindowClosing
 
     private void frameEditInventoryWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameEditInventoryWindowClosing
@@ -3930,6 +3938,18 @@ public class AppliancesInfo extends javax.swing.JFrame implements KeyListener{
     private void radioBtnModelNameComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBtnModelNameComboActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_radioBtnModelNameComboActionPerformed
+
+    private void frameAddInventoryWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameAddInventoryWindowClosed
+        isWindowOpen = false;
+        openedWindow = 0;
+        clearInventoryForm();
+    }//GEN-LAST:event_frameAddInventoryWindowClosed
+
+    private void frameAddSalesWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frameAddSalesWindowClosed
+        isWindowOpen = false;
+        openedWindow = 0;
+        clearSalesForm();
+    }//GEN-LAST:event_frameAddSalesWindowClosed
     // adds inventory's arraylist data to the inventory table
     private void addToInventoryTable () {
         String [] arrayForTable = {null, null, null, null, null, null, null, null};
